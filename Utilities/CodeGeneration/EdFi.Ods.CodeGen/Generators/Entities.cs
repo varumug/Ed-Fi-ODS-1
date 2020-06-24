@@ -160,7 +160,7 @@ namespace EdFi.Ods.CodeGen.Generators
                     IsDerivedExtensionEntityOfConcreteBase = entity.IsDerived
                         && !entity.BaseEntity.IsAbstractRequiringNoCompositeId()
                         && entity.IsExtensionEntity,
-                    HasAlternateKeyValues = entity.Name == "Descriptor", // Legacy template semantics used here
+                    HasAlternateKeyValues = GetAlternateIdentifier() != null,
                     AllowsPrimaryKeyUpdates = entity.Identifier.IsUpdatable,
                     BaseAggregateRootRelativeNamespace = entity.IsDerived
                         ? entity.BaseEntity.GetRelativeEntityNamespace(
@@ -255,7 +255,7 @@ namespace EdFi.Ods.CodeGen.Generators
                                     IsDateTime = IsDateTimeProperty(p),
                                     IsString = p.PropertyType.ToCSharp() == "string",
                                     NoWhitespaceEnforced = p.PropertyType.ToCSharp() == "string",
-                                    p.PropertyType.MaxLength,
+                                    MaxLength = p.PropertyType.MaxLength,
                                     IsStandardProperty = !(p.IsLookup
                                         || UniqueIdSpecification.IsUSI(p.PropertyName)
                                         || IsUniqueIdPropertyOnPersonEntity(entity, p)
@@ -400,9 +400,11 @@ namespace EdFi.Ods.CodeGen.Generators
                                 CSharpSafePropertyName = p.PropertyName.MakeSafeForCSharpClass(entity.Name)
                             })
                     },
-                    AlternateKeyProperties = entity.Name == "Descriptor" // Added only for equivalence to legacy templates
-                        ? entity.AlternateIdentifiers.FirstOrDefault().Properties.Select(p => new {p.PropertyName})
-                        : _notRendered,
+                    AlternateKeyProperties = GetAlternateIdentifier()?.Properties
+                        .Select(p => new
+                        {
+                            PropertyName = p.PropertyName
+                        }), 
                     HasParent = entity.ParentAssociation != null,
                     EntityParentClassName = GetEntityParentClassName(entity),
                     EntityParentClassNamespacePrefix = GetEntityParentClassNamespacePrefix(entity),
@@ -479,6 +481,12 @@ namespace EdFi.Ods.CodeGen.Generators
                                 MappedReferenceDataHasDiscriminator = x.OtherEntity.HasDiscriminator()
                             })
                 };
+            }
+
+            EntityIdentifier GetAlternateIdentifier()
+            {
+                return entity.AlternateIdentifiers
+                    .FirstOrDefault(i => i.Properties.All(p => p.PropertyName != "Id"));
             }
         }
 
@@ -587,7 +595,8 @@ namespace EdFi.Ods.CodeGen.Generators
                         UniqueIdFieldName = "_" + p.PropertyName.ToCamelCase(),
                         UsiPropertyName = p.PropertyName.ReplaceSuffix("UniqueId", "USI"),
                         UsiFieldName = "_" + p.PropertyName.ReplaceSuffix("UniqueId", "USI").ToCamelCase(),
-                        PersonType = UniqueIdSpecification.GetUniqueIdPersonType(p.PropertyName)
+                        PersonType = UniqueIdSpecification.GetUniqueIdPersonType(p.PropertyName),
+                        IsPersonEntity = entity.IsPersonEntity()
                     }
                     : _notRendered,
                 DateOnlyProperty = IsNonDerivedDateProperty(entity, p)
