@@ -41,7 +41,7 @@ namespace EdFi.Ods.CodeGen.Tests.Approval_Tests
         /// requires that the approved files would be renamed.
         /// </summary>
         /// <param name="approvalFileInfo"></param>
-        [Explicit("Run this test after codegen has been run.")]
+        //[Explicit("Run this test after codegen has been run.")]
         [Test, TestCaseSource(nameof(ApprovalFileInfos))]
         public void Verify_All(ApprovalFileInfo approvalFileInfo)
         {
