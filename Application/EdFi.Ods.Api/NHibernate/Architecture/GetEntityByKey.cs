@@ -36,10 +36,24 @@ namespace EdFi.Ods.Api.NHibernate.Architecture
             {
                 TEntity persistedEntity = null;
 
-                // Look up by composite key
-                var entityWithKeyValues = specification as IHasPrimaryKeyValues;
+                // Does entity have an alternate key?
+                if (specification is IHasAlternateKeyValues entityWithAlternateKeyValues)
+                {
+                    var alternateKeyValues = entityWithAlternateKeyValues.GetAlternateKeyValues();
 
-                if (entityWithKeyValues == null)
+                    // Look up by alternate key
+                    if (alternateKeyValues.Count > 0)
+                    {
+                        persistedEntity = (await GetAggregateResultsAsync(
+                                GetWhereClause(alternateKeyValues), q => q.SetParameters(alternateKeyValues), cancellationToken))
+                            .SingleOrDefault();
+
+                        return persistedEntity;
+                    }
+                }
+
+                // Look up by composite key
+                if (!(specification is IHasPrimaryKeyValues entityWithKeyValues))
                 {
                     throw new BadRequestException(
                         $"The '{typeof(TEntity).Name}' entity does not support accessing primary key values.");
@@ -59,24 +73,6 @@ namespace EdFi.Ods.Api.NHibernate.Architecture
                 if (persistedEntity != null)
                 {
                     return persistedEntity;
-                }
-
-                // Does entity have an alternate key?
-                var entityWithAlternateKeyValues = specification as IHasAlternateKeyValues;
-
-                if (entityWithAlternateKeyValues == null)
-                {
-                    return null;
-                }
-
-                var alternateKeyValues = entityWithAlternateKeyValues.GetAlternateKeyValues();
-
-                // Look up by alternate key
-                if (alternateKeyValues.Count > 0)
-                {
-                    persistedEntity = (await GetAggregateResultsAsync(
-                            GetWhereClause(alternateKeyValues), q => q.SetParameters(alternateKeyValues), cancellationToken))
-                        .SingleOrDefault();
                 }
 
                 return persistedEntity;
