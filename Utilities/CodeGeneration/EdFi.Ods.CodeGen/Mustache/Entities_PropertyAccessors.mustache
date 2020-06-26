@@ -44,7 +44,8 @@
             } 
             set
             {
-                {{UsiFieldName}} = value;
+                if ({{UsiFieldName}} != value)
+                    {{UsiFieldName}} = default({{CSharpDeclaredType}});               
             }
         }
 
