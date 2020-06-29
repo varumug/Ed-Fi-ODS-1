@@ -44,8 +44,7 @@
             } 
             set
             {
-                if ({{UsiFieldName}} != value)
-                    {{UsiFieldName}} = default({{CSharpDeclaredType}});               
+                {{UsiFieldName}} = value;           
             }
         }
 
@@ -69,6 +68,11 @@
             }
             set
             {
+                {{#UsiProperty}}
+                if ({{UniqueIdFieldName}} != value)
+                        {{UsiFieldName}} = default({{CSharpDeclaredType}});
+                {{/UsiProperty}}
+ 
                 {{UniqueIdFieldName}} = value;
             }
         }
