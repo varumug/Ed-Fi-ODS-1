@@ -25,6 +25,30 @@
   },
   {
     "SchemaOwner": "auth",
+    "Name": "CommunityProviderIdToStaffUSI",
+    "Columns": [
+      {
+        "Name": "CommunityProviderId",
+        "DbDataType": "int",
+        "IsPrimaryKey": false,
+        "Length": null,
+        "Precision": 10,
+        "Scale": 0,
+        "Nullable": false
+      },
+      {
+        "Name": "StaffUSI",
+        "DbDataType": "int",
+        "IsPrimaryKey": false,
+        "Length": null,
+        "Precision": 10,
+        "Scale": 0,
+        "Nullable": false
+      }
+    ]
+  },
+  {
+    "SchemaOwner": "auth",
     "Name": "EducationOrganizationIdentifiers",
     "Columns": [
       {
@@ -626,6 +650,30 @@
         "Precision": 19,
         "Scale": 0,
         "Nullable": true
+      }
+    ]
+  },
+  {
+    "SchemaOwner": "auth",
+    "Name": "PostSecondaryInstitutionIdToStaffUSI",
+    "Columns": [
+      {
+        "Name": "PostSecondaryInstitutionId",
+        "DbDataType": "int",
+        "IsPrimaryKey": false,
+        "Length": null,
+        "Precision": 10,
+        "Scale": 0,
+        "Nullable": false
+      },
+      {
+        "Name": "StaffUSI",
+        "DbDataType": "int",
+        "IsPrimaryKey": false,
+        "Length": null,
+        "Precision": 10,
+        "Scale": 0,
+        "Nullable": false
       }
     ]
   },
