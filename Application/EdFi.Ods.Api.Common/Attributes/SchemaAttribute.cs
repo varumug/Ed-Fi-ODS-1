@@ -5,7 +5,7 @@
 
 using System;
 
-namespace EdFi.Ods.Api.NHibernate
+namespace EdFi.Ods.Api.Common.Attributes
 {
     [AttributeUsage(AttributeTargets.Class, Inherited = false)]
     public sealed class SchemaAttribute : Attribute

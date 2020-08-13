@@ -8,7 +8,7 @@ using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
 using EdFi.Ods.Common.Configuration;
 
-namespace EdFi.Ods.Api.Startup.Features.Installers
+namespace EdFi.Ods.Api._Installers
 {
     public class ApiModeProviderInstaller : IWindsorInstaller
     {

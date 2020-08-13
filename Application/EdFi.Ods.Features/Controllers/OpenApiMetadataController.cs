@@ -1,172 +1,144 @@
-﻿// SPDX-License-Identifier: Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
 // Licensed to the Ed-Fi Alliance under one or more agreements.
 // The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
 // See the LICENSE and NOTICES files in the project root for more information.
 
+#if NETCOREAPP
 using System;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Web.Http;
-using EdFi.Ods.Api.Services.Metadata.Factories;
-using EdFi.Ods.Api.Services.Metadata.Providers;
-using EdFi.Ods.Common.Configuration;
+using EdFi.Ods.Api.Common.Configuration;
+using EdFi.Ods.Api.Common.Constants;
+using EdFi.Ods.Api.Common.Models;
+using EdFi.Ods.Api.Common.Providers;
+using EdFi.Ods.Api.NetCore.Extensions;
 using EdFi.Ods.Common.Extensions;
-using EdFi.Ods.Common.Http.Extensions;
 using EdFi.Ods.Common.Security.Helpers;
+using EdFi.Ods.Features.OpenApiMetadata.Factories;
+using EdFi.Ods.Features.OpenApiMetadata.Models;
 using log4net;
-using Newtonsoft.Json;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
-namespace EdFi.Ods.Api.Services.Metadata.Controllers
+namespace EdFi.Ods.Features.Controllers
 {
-    public class OpenApiMetadataController : ApiController
+    [ApiController]
+    [Produces("application/json")]
+    [Route("metadata")]
+    [AllowAnonymous]
+    public class OpenApiMetadataController : ControllerBase
     {
-        private const string UseReverseProxyHeadersConfigKey = "UseReverseProxyHeaders";
         private readonly ILog _logger = LogManager.GetLogger(typeof(OpenApiMetadataController));
 
         private readonly IOpenApiMetadataCacheProvider _openApiMetadataCacheProvider;
         private readonly bool _useProxyHeaders;
+        private readonly bool _isEnabled;
 
-        public OpenApiMetadataController(IOpenApiMetadataCacheProvider openApiMetadataCacheProvider,
-                                         IConfigValueProvider configValueProvider)
+        public OpenApiMetadataController(
+            IOpenApiMetadataCacheProvider openApiMetadataCacheProvider,
+            ApiSettings apiSettings)
         {
             _openApiMetadataCacheProvider = openApiMetadataCacheProvider;
-            bool tempConfigValue;
-
-            _useProxyHeaders = bool.TryParse(
-                                   configValueProvider.GetValue(UseReverseProxyHeadersConfigKey),
-                                   out tempConfigValue) && tempConfigValue;
+            _useProxyHeaders = apiSettings.UseReverseProxyHeaders.HasValue && apiSettings.UseReverseProxyHeaders.Value;
+            _isEnabled = apiSettings.IsFeatureEnabled(ApiFeature.OpenApiMetadata.GetConfigKeyName());
         }
 
-        public HttpResponseMessage Get([FromUri] OpenApiMetadataRequest request)
+        [HttpGet]
+        [Route("")]
+        public IActionResult Get([FromQuery] OpenApiMetadataSectionRequest request)
         {
-            _logger.Info($"Looking up document for feedname = {request.GetFeedName()}");
-
-            var openApiContent = _openApiMetadataCacheProvider.GetOpenApiContentByFeedName(request.GetFeedName());
-
-            if (openApiContent == null)
+            if (!IsFeatureEnabled())
             {
-                _logger.Warn($"Unable to load swagger document for {request.GetFeedName()}");
-                return new HttpResponseMessage(HttpStatusCode.NotFound);
+                return NotFound();
             }
 
-            var metadata = GetMetadataForContent(openApiContent, request);
+            var content = _openApiMetadataCacheProvider.GetAllSectionDocuments(request.Sdk)
+                    .Select(GetSwaggerSectionDetailsForCacheItem)
+                    .ToList();
 
-            var etag = new EntityTagHeaderValue(
-                HashHelper.GetSha256Hash(metadata)
-                          .ToHexString()
-                          .DoubleQuoted());
+            var eTag = HashHelper.GetSha256Hash(content.ToString())
+                .ToHexString()
+                .DoubleQuoted();
 
-            if (ActionContext.Request.Headers.IfNoneMatch.Contains(etag))
+            if (Request.TryGetRequestHeader(HeaderConstants.IfNoneMatch, out string headerValue))
             {
-                return new HttpResponseMessage(HttpStatusCode.NotModified);
+                if (headerValue.EqualsIgnoreCase(eTag))
+                {
+                    return StatusCode((int) HttpStatusCode.NotModified);
+                }
             }
 
-            var result = new HttpResponseMessage(HttpStatusCode.OK)
-                         {
-                             Headers =
-                             {
-                                 ETag = etag
-                             },
-                             Content = new StringContent(metadata)
-                         };
+            Response.Headers[HeaderConstants.ETag] = eTag;
 
-            result.Content.Headers.ContentType = new MediaTypeHeaderValue(SwaggerDocumentHelper.ContentType);
+            return Ok(content);
 
-            return result;
-        }
-
-        public HttpResponseMessage GetSections([FromUri] OpenApiMetadaSectionsRequest request)
-        {
-            var content = new StringContent(
-                JsonConvert.SerializeObject(
-                    _openApiMetadataCacheProvider.GetAllSectionDocuments(request.Sdk)
-                                                 .Select(x => GetSwaggerSectionDetailsForCacheItem(x, request))));
-
-            var eTag = new EntityTagHeaderValue(HashHelper.GetSha256Hash(content.ToString()).ToHexString().DoubleQuoted());
-
-            if (ActionContext.Request.Headers.IfNoneMatch.Contains(eTag))
+            OpenApiMetadataSectionDetails GetSwaggerSectionDetailsForCacheItem(OpenApiContent apiContent)
             {
-                return new HttpResponseMessage(HttpStatusCode.NotModified);
+                // Construct fully qualified metadata url
+                var url =
+                    new Uri(
+                        new Uri(
+                            new Uri(Request.RootUrl(_useProxyHeaders).EnsureSuffixApplied("/")),
+                            "metadata/"),
+                        GetMetadataUrlSegmentForCacheItem(apiContent, request.SchoolYearFromRoute));
+
+                return new OpenApiMetadataSectionDetails
+                {
+                    EndpointUri = url.AbsoluteUri,
+                    Name = apiContent.Name.NormalizeCompositeTermForDisplay('-')
+                        .Replace(" ", "-"),
+                    Prefix =
+                        apiContent.Section.EqualsIgnoreCase(OpenApiMetadataSections.SwaggerUi)
+                            ? string.Empty
+                            : apiContent.Section
+                };
             }
 
-            var result = new HttpResponseMessage(HttpStatusCode.OK)
-                         {
-                             Content = content, Headers =
-                             {
-                                 ETag = eTag
-                             }
-                         };
-
-            result.Content.Headers.ContentType = new MediaTypeHeaderValue(SwaggerDocumentHelper.ContentType);
-
-            return result;
-        }
-
-        private string GetMetadataForContent(OpenApiContent content, OpenApiMetadataRequest request)
-        {
-            string basePath = Request.VirtualPath()
-                                     .EnsureSuffixApplied("/") + GetBasePath(content, request.SchoolYearFromRoute);
-
-            return content.Metadata
-                          .Replace("%HOST%", $"{Request.Host(_useProxyHeaders)}:{Request.Port(_useProxyHeaders)}")
-                          .Replace("%TOKEN_URL%", TokenUrl())
-                          .Replace("%BASE_PATH%", basePath);
-        }
-
-        private SwaggerSectionDetails GetSwaggerSectionDetailsForCacheItem(OpenApiContent apiContent,
-                                                                           OpenApiMetadaSectionsRequest request)
-        {
-            // Construct fully qualified metadata url
-            var url =
-                new Uri(
-                    new Uri(new Uri(Request.RootUrl(_useProxyHeaders).EnsureSuffixApplied("/")), "metadata/"),
-                    GetMetadataUrlSegmentForCacheItem(apiContent, request.SchoolYearFromRoute));
-
-            return new SwaggerSectionDetails
-                   {
-                       EndpointUri = url.AbsoluteUri, Name = apiContent.Name.NormalizeCompositeTermForDisplay('-').Replace(" ", "-"), Prefix =
-                           apiContent.Section.EqualsIgnoreCase(OpenApiMetadataSections.SwaggerUi)
-                               ? string.Empty
-                               : apiContent.Section
-                   };
-        }
-
-        private string TokenUrl() => $"{Request.RootUrl(_useProxyHeaders)}/oauth/token";
-
-        private string GetMetadataUrlSegmentForCacheItem(OpenApiContent apiContent, int? schoolYear)
-        {
-            // 'Other' sections (Identity) do not live under 'ods' as other metadata endpoints do.
-            // eg identity/v1/2017/swagger.json,
-            // eg identity/v1/swagger.json,
-            // SDKgen All
-            // eg data/v3/2017/swagger.json,
-            // eg data/v3/swagger.json,
-            var basePath = GetBasePath(apiContent, schoolYear);
-
-            // Profiles and composites endpoints have an extra url segment (profiles or composites).
-            // eg data/v3/2017/profiles/assessment/swagger.json
-            // eg data/v3/profiles/assessment/swagger.json
-            // eg composites/v1/2017/ed-fi/swagger.json
-            // eg composites/v1/ed-fi/assessment/swagger.json
-            var relativeSectionUri = string.IsNullOrWhiteSpace(apiContent.RelativeSectionPath)
-                ? string.Empty
-                : apiContent.RelativeSectionPath.EnsureSuffixApplied("/");
-
-            return $"{basePath}/{relativeSectionUri}{SwaggerDocumentHelper.SwaggerJson}".ToLowerInvariant();
-        }
-
-        private string GetBasePath(OpenApiContent apiContent, int? schoolYear)
-        {
-            string basePath = $"{apiContent.BasePath}";
-
-            if (schoolYear.HasValue)
+            string GetMetadataUrlSegmentForCacheItem(OpenApiContent apiContent, int? schoolYear)
             {
-                basePath += $"/{schoolYear.Value}";
+                // 'Other' sections (Identity) do not live under 'ods' as other metadata endpoints do.
+                // eg identity/v1/2017/swagger.json,
+                // eg identity/v1/swagger.json,
+                // SDKgen All
+                // eg data/v3/2017/swagger.json,
+                // eg data/v3/swagger.json,
+                var basePath = GetBasePath(apiContent, schoolYear);
+
+                // Profiles and composites endpoints have an extra url segment (profiles or composites).
+                // eg data/v3/2017/profiles/assessment/swagger.json
+                // eg data/v3/profiles/assessment/swagger.json
+                // eg composites/v1/2017/ed-fi/swagger.json
+                // eg composites/v1/ed-fi/assessment/swagger.json
+                var relativeSectionUri = string.IsNullOrWhiteSpace(apiContent.RelativeSectionPath)
+                    ? string.Empty
+                    : apiContent.RelativeSectionPath.EnsureSuffixApplied("/");
+
+                return $"{basePath}/{relativeSectionUri}{SwaggerDocumentHelper.SwaggerJson}".ToLowerInvariant();
             }
 
-            return basePath;
+            string GetBasePath(OpenApiContent apiContent, int? schoolYear)
+            {
+                string basePath = $"{apiContent.BasePath}";
+
+                if (schoolYear.HasValue)
+                {
+                    basePath += $"/{schoolYear.Value}";
+                }
+
+                return basePath;
+            }
+
+            bool IsFeatureEnabled()
+            {
+                if (_isEnabled)
+                {
+                    return true;
+                }
+
+                _logger.Info("Open Api Metadata is disabled.");
+                return false;
+            }
         }
     }
 }
+#endif

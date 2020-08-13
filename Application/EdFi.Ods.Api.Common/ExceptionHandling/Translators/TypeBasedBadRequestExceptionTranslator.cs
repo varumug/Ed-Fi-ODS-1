@@ -7,10 +7,11 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Net;
+using EdFi.Ods.Api.Common.Models;
 using EdFi.Ods.Common.Exceptions;
 using EdFi.Ods.Common.Extensions;
 
-namespace EdFi.Ods.Api.ExceptionHandling.Translators
+namespace EdFi.Ods.Api.Common.ExceptionHandling.Translators
 {
     public class TypeBasedBadRequestExceptionTranslator : IExceptionTranslator
     {

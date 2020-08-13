@@ -6,17 +6,18 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using EdFi.Ods.Api.Constants;
+using EdFi.Ods.Api.Common.Constants;
+using EdFi.Ods.Api.Common.Models;
+using EdFi.Ods.Api.Common.Providers;
 using EdFi.Ods.Api.Services.Metadata;
-using EdFi.Ods.Api.Services.Metadata.Factories;
-using EdFi.Ods.Api.Services.Metadata.Models;
-using EdFi.Ods.Api.Services.Metadata.Providers;
-using EdFi.Ods.Api.Services.Metadata.Strategies.ResourceStrategies;
 using EdFi.Ods.Common;
 using EdFi.Ods.Common.Metadata;
 using EdFi.Ods.Common.Models;
+using EdFi.Ods.Features.OpenApiMetadata.Dtos;
+using EdFi.Ods.Features.OpenApiMetadata.Factories;
+using EdFi.Ods.Features.OpenApiMetadata.Strategies.ResourceStrategies;
 
-namespace EdFi.Ods.Api.Startup.Features
+namespace EdFi.Ods.Features.Composites
 {
     public class CompositesOpenApiContentProvider : IOpenApiContentProvider
     {

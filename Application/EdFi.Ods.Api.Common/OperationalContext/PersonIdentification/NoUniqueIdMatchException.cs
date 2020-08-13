@@ -6,7 +6,7 @@
 using System;
 using System.Runtime.Serialization;
 
-namespace EdFi.Ods.Api.OperationalContext.PersonIdentification
+namespace EdFi.Ods.Api.Common.OperationalContext.PersonIdentification
 {
     /// <summary>
     /// Thrown when the client-supplied unique Id value cannot be resolved to any person.

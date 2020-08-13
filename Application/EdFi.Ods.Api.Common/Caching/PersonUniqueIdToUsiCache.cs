@@ -8,15 +8,15 @@ using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
-using EdFi.Ods.Api.IdentityValueMappers;
+using EdFi.Ods.Api.Common.IdentityValueMappers;
+using EdFi.Ods.Api.Common.Providers;
 using EdFi.Ods.Common.Caching;
 using EdFi.Ods.Common.Context;
 using EdFi.Ods.Common.Extensions;
-using EdFi.Ods.Common.Http.Context;
 using EdFi.Ods.Common.Specifications;
 using log4net;
 
-namespace EdFi.Ods.Api.Caching
+namespace EdFi.Ods.Api.Common.Caching
 {
     public class PersonUniqueIdToUsiCache : IPersonUniqueIdToUsiCache
     {
@@ -431,7 +431,7 @@ namespace EdFi.Ods.Api.Caching
 
         private string GetUsiKeyTokenContext()
         {
-            return string.Format("from_{0}", _edFiOdsInstanceIdentificationProvider.GetInstanceIdentification());
+            return string.Format((string) "from_{0}", (object) _edFiOdsInstanceIdentificationProvider.GetInstanceIdentification());
         }
 
         private class IdentityValueMaps

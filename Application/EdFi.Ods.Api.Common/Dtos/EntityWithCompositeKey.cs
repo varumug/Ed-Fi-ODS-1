@@ -7,9 +7,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using EdFi.Ods.Api.Common.Extensions;
 using Newtonsoft.Json.Linq;
 
-namespace EdFi.Ods.Api.NHibernate.Architecture
+namespace EdFi.Ods.Api.Common.Dtos
 {
     /// <summary>
     ///     For a discussion of this object, see

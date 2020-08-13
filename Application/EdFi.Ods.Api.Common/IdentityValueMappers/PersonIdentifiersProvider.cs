@@ -14,7 +14,7 @@ using NHibernate;
 using NHibernate.Criterion;
 using NHibernate.Transform;
 
-namespace EdFi.Ods.Api.IdentityValueMappers
+namespace EdFi.Ods.Api.Common.IdentityValueMappers
 {
     /// <summary>
     /// Implements an <see cref="IPersonIdentifiersProvider"/> that is optimized around retrieving only

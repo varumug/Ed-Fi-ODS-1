@@ -4,10 +4,10 @@
 // See the LICENSE and NOTICES files in the project root for more information.
 
 using System;
-using EdFi.Ods.Api.Services.Metadata.Models;
 using EdFi.Ods.Common.Models.Resource;
+using EdFi.Ods.Features.OpenApiMetadata.Dtos;
 
-namespace EdFi.Ods.Api.Services.Metadata.Strategies.FactoryStrategies
+namespace EdFi.Ods.Features.OpenApiMetadata.Strategies.FactoryStrategies
 {
     public class SwaggerFactoryResourceFilterSchemaStrategy : ISwaggerFactoryResourceFilterStrategy
     {

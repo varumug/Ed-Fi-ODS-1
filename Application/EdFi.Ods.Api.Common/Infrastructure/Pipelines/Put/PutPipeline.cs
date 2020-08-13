@@ -4,9 +4,8 @@
 // See the LICENSE and NOTICES files in the project root for more information.
 
 using EdFi.Ods.Common;
-using EdFi.Ods.Pipelines.Common;
 
-namespace EdFi.Ods.Pipelines.Put
+namespace EdFi.Ods.Api.Common.Infrastructure.Pipelines.Put
 {
     public class PutPipeline<TResourceModel, TEntityModel> : PipelineBase<PutContext<TResourceModel, TEntityModel>, PutResult>
         where TResourceModel : IHasETag

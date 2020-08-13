@@ -6,7 +6,7 @@
 using System;
 using EdFi.Ods.Common.Models.Resource;
 
-namespace EdFi.Ods.Api.Services.Metadata.Strategies.FactoryStrategies
+namespace EdFi.Ods.Features.OpenApiMetadata.Strategies.FactoryStrategies
 {
     public class SwaggerFactoryResourceFilterDefaultStrategy : ISwaggerFactoryResourceFilterStrategy
     {

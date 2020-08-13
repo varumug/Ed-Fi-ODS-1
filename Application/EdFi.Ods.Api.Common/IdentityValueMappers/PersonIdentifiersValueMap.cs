@@ -5,7 +5,7 @@
 
 using System;
 
-namespace EdFi.Ods.Api.IdentityValueMappers
+namespace EdFi.Ods.Api.Common.IdentityValueMappers
 {
     /// <summary>
     /// Holds values of the various identifiers used to identify a person.

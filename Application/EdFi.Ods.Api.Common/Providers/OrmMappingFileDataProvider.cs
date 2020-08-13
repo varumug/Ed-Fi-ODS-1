@@ -4,10 +4,12 @@
 // See the LICENSE and NOTICES files in the project root for more information.
 
 using System;
+using EdFi.Ods.Api.Common.Constants;
+using EdFi.Ods.Api.Common.Dtos;
 using EdFi.Ods.Common;
 using EdFi.Ods.Common.Configuration;
 
-namespace EdFi.Ods.Api.NHibernate.Architecture
+namespace EdFi.Ods.Api.Common.Providers
 {
     public class OrmMappingFileDataProvider : IOrmMappingFileDataProvider
     {

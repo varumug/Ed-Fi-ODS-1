@@ -3,10 +3,7 @@
 // The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
 // See the LICENSE and NOTICES files in the project root for more information.
 
-using EdFi.Ods.Api.Pipelines;
-using EdFi.Ods.Pipelines;
-
-namespace EdFi.Ods.Api.ChangeQueries.Pipelines.GetDeletedResource
+namespace EdFi.Ods.Api.Common.Infrastructure.Pipelines.GetDeletedResource
 {
     public class GetDeletedResourceResult: PipelineResultBase, IHasResourceChangeDetails
     {

@@ -12,7 +12,7 @@ using EdFi.Ods.Common.Validation;
 using NHibernate;
 using NHibernate.Context;
 
-namespace EdFi.Ods.Api.NHibernate.Architecture
+namespace EdFi.Ods.Api.Common.Infrastructure.Repositories
 {
     /// <summary>
     /// Provides session management for NHibernate-based repository implementations.

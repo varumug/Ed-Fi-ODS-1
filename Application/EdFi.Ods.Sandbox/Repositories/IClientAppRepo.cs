@@ -3,7 +3,6 @@
 // The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
 // See the LICENSE and NOTICES files in the project root for more information.
 
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using EdFi.Admin.DataAccess;
@@ -32,6 +31,8 @@ namespace EdFi.Ods.Sandbox.Repositories
 
         ApiClient GetClient(string key);
 
+        Task<ApiClient> GetClientAsync(string key);
+
         ApiClient GetClient(string key, string secret);
 
         ApiClient UpdateClient(ApiClient client);
@@ -39,6 +40,8 @@ namespace EdFi.Ods.Sandbox.Repositories
         void DeleteClient(string key);
 
         ClientAccessToken AddClientAccessToken(int apiClientId, string tokenRequestScope = null);
+
+        Task<ClientAccessToken> AddClientAccessTokenAsync(int apiClientId, string tokenRequestScope = null);
 
         void SetDefaultVendorOnUserFromEmailAndName(string userEmail, string userName);
 
@@ -61,5 +64,7 @@ namespace EdFi.Ods.Sandbox.Repositories
         void Reset();
 
         void SetDefaultVendorOnUserFromEmailAndName(string userEmail, string userName, IEnumerable<string> namespacePrefixes);
+
+        void AddLeaIdsToApplication(List<int> localEducationAgencyIds, int applicationId);
     }
 }

@@ -1,45 +1,54 @@
-// SPDX-License-Identifier: Apache-2.0
+﻿// SPDX-License-Identifier: Apache-2.0
 // Licensed to the Ed-Fi Alliance under one or more agreements.
 // The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
 // See the LICENSE and NOTICES files in the project root for more information.
 
+#if NETCOREAPP
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http.Headers;
-using System.Web.Http;
-using EdFi.Ods.Api.Constants;
-using EdFi.Ods.Common;
+using EdFi.Ods.Api.Common.Configuration;
+using EdFi.Ods.Api.Common.Constants;
+using EdFi.Ods.Api.Common.Models.GraphML;
 using EdFi.Ods.Common.Extensions;
 using EdFi.Ods.Common.Models.Graphs;
 using EdFi.Ods.Common.Models.Resource;
 using log4net;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using QuickGraph;
 
-namespace EdFi.Ods.Api.Services.Metadata.Controllers
+namespace EdFi.Ods.Features.Controllers
 {
-    public class AggregateDependencyController : ApiController
+    [ApiController]
+    [Route("dependencies")]
+    [AllowAnonymous]
+    public class AggregateDependencyController : ControllerBase
     {
         private readonly IResourceLoadGraphFactory _resourceLoadGraphFactory;
 
         private readonly ILog _logger = LogManager.GetLogger(typeof(AggregateDependencyController));
+        private readonly bool _isEnabled;
 
-        public AggregateDependencyController(IResourceLoadGraphFactory resourceLoadGraphFactory)
+        public AggregateDependencyController(ApiSettings apiSettings, IResourceLoadGraphFactory resourceLoadGraphFactory)
         {
-            _resourceLoadGraphFactory = Preconditions.ThrowIfNull(resourceLoadGraphFactory, nameof(resourceLoadGraphFactory));
+            _isEnabled = apiSettings.IsFeatureEnabled(ApiFeature.AggregateDependencies.GetConfigKeyName());
+            _resourceLoadGraphFactory = resourceLoadGraphFactory;
         }
 
         [HttpGet]
-        public IHttpActionResult Get()
+        public IActionResult Get()
         {
+            if (!_isEnabled)
+            {
+                return NotFound();
+            }
+
             try
             {
-                if (Request.Headers.Accept.Contains(new MediaTypeWithQualityHeaderValue(CustomMediaContentTypes.GraphML)))
-                {
-                    return Ok(CreateGraphML(_resourceLoadGraphFactory.CreateResourceLoadGraph()));
-                }
-
-                return Ok(GetGroupedLoadOrder(_resourceLoadGraphFactory.CreateResourceLoadGraph()));
+                return Request.Headers["Accept"].ToString().EqualsIgnoreCase(CustomMediaContentTypes.GraphML)
+                    ? Ok(CreateGraphML(_resourceLoadGraphFactory.CreateResourceLoadGraph()))
+                    : Ok(GetGroupedLoadOrder(_resourceLoadGraphFactory.CreateResourceLoadGraph()));
             }
             catch (NonAcyclicGraphException e)
             {
@@ -109,3 +118,4 @@ namespace EdFi.Ods.Api.Services.Metadata.Controllers
             => $"/{resource.SchemaUriSegment()}/{resource.PluralName.ToCamelCase()}";
     }
 }
+#endif

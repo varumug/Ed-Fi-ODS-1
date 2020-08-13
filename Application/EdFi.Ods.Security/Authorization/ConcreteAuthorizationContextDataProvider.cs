@@ -4,7 +4,7 @@
 // See the LICENSE and NOTICES files in the project root for more information.
 
 using System;
-using EdFi.Ods.Api.Exceptions;
+using EdFi.Ods.Api.Common.Exceptions;
 using EdFi.Ods.Common.Caching;
 using EdFi.Ods.Security.AuthorizationStrategies.Relationships;
 

@@ -9,7 +9,7 @@ using System.Linq;
 using EdFi.Ods.Common.Models;
 using EdFi.Ods.Common.Models.Domain;
 
-namespace EdFi.Ods.Api.NHibernate.Architecture
+namespace EdFi.Ods.Api.Common.Providers
 {
     public class EdFiDescriptorReflectionProvider : IEdFiDescriptorReflectionProvider
     {

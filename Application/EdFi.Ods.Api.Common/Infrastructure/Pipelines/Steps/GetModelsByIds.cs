@@ -6,14 +6,12 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using EdFi.Ods.Api.Exceptions;
+using EdFi.Ods.Api.Common.Exceptions;
 using EdFi.Ods.Common;
 using EdFi.Ods.Common.Extensions;
 using EdFi.Ods.Common.Repositories;
-using EdFi.Ods.Pipelines;
-using EdFi.Ods.Pipelines.Common;
 
-namespace EdFi.Ods.Api.Pipelines.Steps
+namespace EdFi.Ods.Api.Common.Infrastructure.Pipelines.Steps
 {
     public class GetModelsByIds<TContext, TResult, TResourceModel, TEntityModel> 
         : IStep<TContext, TResult>

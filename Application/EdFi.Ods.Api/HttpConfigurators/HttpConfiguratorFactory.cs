@@ -8,7 +8,7 @@ using System.Web.Http;
 using System.Web.Http.Dependencies;
 using EdFi.Ods.Api.Architecture;
 
-namespace EdFi.Ods.Api.Startup.HttpConfigurators
+namespace EdFi.Ods.Api.HttpConfigurators
 {
     public class HttpConfiguratorFactory : IHttpConfiguratorFactory
     {

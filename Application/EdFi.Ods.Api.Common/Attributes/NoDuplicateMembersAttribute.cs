@@ -7,7 +7,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace EdFi.Ods.Api.Validation
+namespace EdFi.Ods.Api.Common.Attributes
 {
     public sealed class NoDuplicateMembersAttribute : ValidationAttribute
     {

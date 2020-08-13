@@ -6,10 +6,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+#if NETFRAMEWORK
 using System.Web.Http.Dependencies;
 using Castle.Windsor;
 
-namespace EdFi.Ods.Common.Http.InversionOfControl
+namespace EdFi.Ods.Api.InversionOfControl
 {
     public class WindsorDependencyResolver : IDependencyResolver
     {
@@ -47,3 +48,4 @@ namespace EdFi.Ods.Common.Http.InversionOfControl
         public void Dispose() { }
     }
 }
+#endif

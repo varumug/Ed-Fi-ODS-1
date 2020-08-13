@@ -7,7 +7,7 @@ using System;
 using EdFi.Ods.Common.Models;
 using EdFi.Ods.Common.Security.Claims;
 
-namespace EdFi.Ods.Api.Dependencies
+namespace EdFi.Ods.Api.Common.Dependencies
 {
     /// <summary>
     /// Provides static references to the specific services used by the generated artifacts.

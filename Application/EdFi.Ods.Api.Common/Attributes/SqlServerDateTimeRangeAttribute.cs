@@ -7,7 +7,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Data.SqlTypes;
 
-namespace EdFi.Ods.Api.Validation
+namespace EdFi.Ods.Api.Common.Attributes
 {
     /// <summary>
     /// Ensures that the value assigned falls within SQL server's datetime range

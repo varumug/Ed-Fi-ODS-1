@@ -11,7 +11,7 @@ using NHibernate;
 using NHibernate.Criterion;
 using NHibernate.SqlCommand;
 
-namespace EdFi.Ods.Api.NHibernate.Architecture.Criteria
+namespace EdFi.Ods.Api.Common.Providers.Criteria
 {
     /// <summary>
     /// Provides methods for saving and subsequently accessing functions that apply filter criteria to queries using the <see cref="ICriteria"/> API.

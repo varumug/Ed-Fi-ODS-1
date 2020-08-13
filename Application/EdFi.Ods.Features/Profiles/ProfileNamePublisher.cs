@@ -3,10 +3,12 @@
 // The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
 // See the LICENSE and NOTICES files in the project root for more information.
 
+#if NETFRAMEWORK
+using EdFi.Ods.Api.Common.ExternalTasks;
 using EdFi.Ods.Common;
 using EdFi.Ods.Security.Profiles;
 
-namespace EdFi.Ods.Api.Startup.ExternalTasks
+namespace EdFi.Ods.Features.Profiles
 {
     public class ProfileNamePublisher : IExternalTask
     {
@@ -23,3 +25,4 @@ namespace EdFi.Ods.Api.Startup.ExternalTasks
         }
     }
 }
+#endif

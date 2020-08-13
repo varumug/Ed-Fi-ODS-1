@@ -1,4 +1,5 @@
-﻿// SPDX-License-Identifier: Apache-2.0
+﻿#if NETFRAMEWORK
+// SPDX-License-Identifier: Apache-2.0
 // Licensed to the Ed-Fi Alliance under one or more agreements.
 // The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
 // See the LICENSE and NOTICES files in the project root for more information.
@@ -7,15 +8,15 @@ using System.Web.Http;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor;
 using EdFi.Ods.Api.Architecture;
-using EdFi.Ods.Api.ChangeQueries;
-using EdFi.Ods.Api.NHibernate.Architecture;
-using EdFi.Ods.Api.Services.Metadata.Providers;
+using EdFi.Ods.Api.Common.Infrastructure.Configuration;
+using EdFi.Ods.Api.Common.Infrastructure.Pipelines.Steps;
+using EdFi.Ods.Api.Common.Providers;
 using EdFi.Ods.ChangeQueries.NHibernate;
 using EdFi.Ods.ChangeQueries.Providers;
 using EdFi.Ods.Common.InversionOfControl;
 using Component = Castle.MicroKernel.Registration.Component;
 
-namespace EdFi.Ods.ChangeQueries._Installers
+namespace EdFi.Ods.ChangeQueries.Container.Installers
 {
     /// <summary>
     /// Registers components with the Castle Windsor container needed for the Change Queries API feature.
@@ -65,3 +66,4 @@ namespace EdFi.Ods.ChangeQueries._Installers
         }
     }
 }
+#endif

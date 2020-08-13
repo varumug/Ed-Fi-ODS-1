@@ -5,9 +5,10 @@
 
 using System;
 using System.Net;
+using EdFi.Ods.Api.Common.Models;
 using NHibernate;
 
-namespace EdFi.Ods.Api.ExceptionHandling.Translators
+namespace EdFi.Ods.Api.Common.ExceptionHandling.Translators
 {
     public class DuplicateNaturalKeyUpdateExceptionTranslator : IExceptionTranslator
     {

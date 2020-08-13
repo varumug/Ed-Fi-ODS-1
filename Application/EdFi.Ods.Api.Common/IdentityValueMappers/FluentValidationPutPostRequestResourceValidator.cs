@@ -8,11 +8,12 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using EdFi.Ods.Api.Validation;
+using EdFi.Ods.Api.Common.Validation;
+using EdFi.Ods.Common;
 using EdFi.Ods.Common.Extensions;
 using FluentValidation;
 
-namespace EdFi.Ods.Common.Validation
+namespace EdFi.Ods.Api.Common.IdentityValueMappers
 {
     public class FluentValidationPutPostRequestResourceValidator : ObjectValidatorBase, IResourceValidator
     {

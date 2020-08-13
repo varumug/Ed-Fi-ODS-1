@@ -4,10 +4,10 @@
 // See the LICENSE and NOTICES files in the project root for more information.
 
 using System.Collections.Generic;
-using EdFi.Ods.Api.NHibernate.Architecture;
+using EdFi.Ods.Api.Common.Dtos;
 using NHibernate.Cfg.MappingSchema;
 
-namespace EdFi.Ods.Api.Extensibility
+namespace EdFi.Ods.Api.Common.Infrastructure.Extensibility
 {
     public interface IExtensionNHibernateConfigurationProvider
     {

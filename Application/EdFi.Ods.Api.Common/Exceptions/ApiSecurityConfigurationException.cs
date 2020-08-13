@@ -6,7 +6,7 @@
 using System;
 using System.Runtime.Serialization;
 
-namespace EdFi.Ods.Api.Exceptions
+namespace EdFi.Ods.Api.Common.Exceptions
 {
     /// <summary>
     /// Thrown when a problem is detected in the API security configuration that prevents API requests from safely being served. 

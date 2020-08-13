@@ -1,4 +1,5 @@
-﻿// SPDX-License-Identifier: Apache-2.0
+﻿#if NETFRAMEWORK
+// SPDX-License-Identifier: Apache-2.0
 // Licensed to the Ed-Fi Alliance under one or more agreements.
 // The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
 // See the LICENSE and NOTICES files in the project root for more information.
@@ -8,14 +9,13 @@ using System.Linq;
 using System.Reflection;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor;
-using EdFi.Ods.Api.NHibernate.Architecture.Criteria;
-using EdFi.Ods.Api.NHibernate.Filtering;
+using EdFi.Ods.Api.Common.Infrastructure.Filtering;
 using EdFi.Ods.Common.Extensions;
 using EdFi.Ods.Common.InversionOfControl;
 using EdFi.Ods.Common.Security.Authorization;
 using EdFi.Ods.Security.AuthorizationStrategies.Relationships;
 
-namespace EdFi.Ods.Security._Installers
+namespace EdFi.Ods.Security.Container.Installers
 {
     public class AuthorizationStrategiesInstaller<TMarker> : RegistrationMethodsInstallerBase
     {
@@ -70,3 +70,4 @@ namespace EdFi.Ods.Security._Installers
         }
     }
 }
+#endif

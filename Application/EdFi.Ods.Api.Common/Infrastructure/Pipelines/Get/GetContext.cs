@@ -6,7 +6,7 @@
 using System;
 using EdFi.Ods.Common;
 
-namespace EdFi.Ods.Pipelines.Get
+namespace EdFi.Ods.Api.Common.Infrastructure.Pipelines.Get
 {
     public class GetContext<TEntityModel> : IHasPersistentModel<TEntityModel>, IHasETag, IHasIdentifier
         where TEntityModel : class

@@ -5,7 +5,7 @@
 
 using System;
 using System.Linq;
-using EdFi.Ods.Api.NHibernate.Composites;
+using EdFi.Ods.Features.Composites.Infrastructure;
 using NUnit.Framework;
 using Shouldly;
 using Test.Common;

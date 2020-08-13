@@ -3,12 +3,13 @@
 // The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
 // See the LICENSE and NOTICES files in the project root for more information.
 
+using EdFi.Ods.Api.Common.Infrastructure.Repositories;
 using EdFi.Ods.Common;
 using EdFi.Ods.Common.Caching;
 using NHibernate;
 using NHibernate.Criterion;
 
-namespace EdFi.Ods.Api.NHibernate.Architecture.Criteria
+namespace EdFi.Ods.Api.Common.Providers.Criteria
 {
     /// <summary>
     /// Builds a query that retrieves the total count of resource items available to the current caller.

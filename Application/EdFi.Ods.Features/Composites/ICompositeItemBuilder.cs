@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using EdFi.Ods.Common.Models.Domain;
 using EdFi.Ods.Common.Models.Resource;
 
-namespace EdFi.Ods.Common.Composites
+namespace EdFi.Ods.Features.Composites
 {
     public interface ICompositeItemBuilder<TBuilderContext, TBuildResult>
     {
@@ -28,7 +28,7 @@ namespace EdFi.Ods.Common.Composites
             CompositeDefinitionProcessorContext processorContext);
 
         /// <summary>
-        /// Apply the provided property projections onto the build result with the provided builder and composite 
+        /// Apply the provided property projections onto the build result with the provided builder and composite
         /// definition processor contexts.
         /// </summary>
         /// <param name="propertyProjections">A list of property projections to be applied to the build result.</param>
@@ -94,7 +94,7 @@ namespace EdFi.Ods.Common.Composites
         /// </summary>
         /// <seealso cref="CreateParentingContext"/>
         /// <param name="builderContext">The current build context.</param>
-        /// <remarks>Implementations should use this as a means for preserving part of the current 
+        /// <remarks>Implementations should use this as a means for preserving part of the current
         /// context for future use by storing the snapshotted context within the current context.</remarks>
         void SnapshotParentingContext(TBuilderContext builderContext);
 
@@ -127,6 +127,19 @@ namespace EdFi.Ods.Common.Composites
         /// <param name="builderContext">The current builder context.</param>
         /// <returns><b>true</b> if the resource can be processed; otherwise <b>false</b>.</returns>
         bool TryIncludeResource(CompositeDefinitionProcessorContext processorContext, TBuilderContext builderContext);
+
+        /// <summary>
+        /// Applies properties necessary to support self-referencing association behavior.
+        /// </summary>
+        /// <param name="selfReferencingAssociations">The relevant self-referencing associations.</param>
+        /// <param name="builderContext">The current builder context.</param>
+        /// <param name="processorContext">The composite definition processor context.</param>
+        /// <remarks>The associations supplied may not be from the current resource class.  In cases where the self-referencing
+        /// behavior is obtained through a referenced resource, the associations will be from the referenced resource.</remarks>
+        void ApplySelfReferencingProperties(
+            IReadOnlyList<AssociationView> selfReferencingAssociations,
+            TBuilderContext builderContext,
+            CompositeDefinitionProcessorContext processorContext);
     }
 
     public class CompositePropertyProjection

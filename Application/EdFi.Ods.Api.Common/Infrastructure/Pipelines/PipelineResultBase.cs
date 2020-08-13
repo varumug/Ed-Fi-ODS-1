@@ -6,7 +6,7 @@
 using System;
 using EdFi.Ods.Common.Repositories;
 
-namespace EdFi.Ods.Pipelines
+namespace EdFi.Ods.Api.Common.Infrastructure.Pipelines
 {
     public abstract class PipelineResultBase
     {

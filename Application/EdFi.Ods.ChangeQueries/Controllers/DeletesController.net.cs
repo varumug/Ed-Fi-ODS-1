@@ -3,10 +3,11 @@
 // The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
 // See the LICENSE and NOTICES files in the project root for more information.
 
+#if NETFRAMEWORK
 using System.Web.Http;
-using EdFi.Ods.Api.ChangeQueries;
+using EdFi.Ods.Api.Common.Infrastructure.Pipelines.Steps;
+using EdFi.Ods.Api.Common.Models.Queries;
 using EdFi.Ods.Api.Services.Authentication;
-using EdFi.Ods.Api.Services.Queries;
 
 namespace EdFi.Ods.ChangeQueries.Controllers
 {
@@ -31,3 +32,4 @@ namespace EdFi.Ods.ChangeQueries.Controllers
         }
     }
 }
+#endif

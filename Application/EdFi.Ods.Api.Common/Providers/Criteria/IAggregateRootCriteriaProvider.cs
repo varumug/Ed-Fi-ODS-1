@@ -6,7 +6,7 @@
 using EdFi.Ods.Common;
 using NHibernate;
 
-namespace EdFi.Ods.Api.NHibernate.Architecture.Criteria
+namespace EdFi.Ods.Api.Common.Providers.Criteria
 {
     /// <summary>
     /// Provides an abstraction for aggregate queries using the <see cref="ICriteria"/> API in NHibernate, primarily to

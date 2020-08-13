@@ -6,17 +6,18 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using EdFi.Ods.Api.Constants;
-using EdFi.Ods.Api.Services.Metadata;
-using EdFi.Ods.Api.Services.Metadata.Factories;
-using EdFi.Ods.Api.Services.Metadata.Providers;
-using EdFi.Ods.Api.Services.Metadata.Strategies.ResourceStrategies;
+using EdFi.Ods.Api.Common.Constants;
+using EdFi.Ods.Api.Common.Models;
+using EdFi.Ods.Api.Common.Providers;
 using EdFi.Ods.Common;
 using EdFi.Ods.Common.Conventions;
 using EdFi.Ods.Common.Extensions;
 using EdFi.Ods.Common.Models;
+using EdFi.Ods.Features.OpenApiMetadata.Factories;
+using EdFi.Ods.Features.OpenApiMetadata.Models;
+using EdFi.Ods.Features.OpenApiMetadata.Strategies.ResourceStrategies;
 
-namespace EdFi.Ods.Api.Startup.Features
+namespace EdFi.Ods.Features.Extensions
 {
     public class ExtensionsOpenApiContentProvider : IOpenApiContentProvider
     {
@@ -39,8 +40,7 @@ namespace EdFi.Ods.Api.Startup.Features
 
         public IEnumerable<OpenApiContent> GetOpenApiContent()
             => _domainModelProvider.GetDomainModel()
-                .Schemas.Where(x => !x.LogicalName.EqualsIgnoreCase(EdFiConventions.LogicalName))
-                .Select(
+                .Schemas.Where(x => !x.LogicalName.EqualsIgnoreCase(EdFiConventions.LogicalName)).Select(
                     schema => new
                     {
                         UriSegment = _schemaNameMapProvider.GetSchemaMapByLogicalName(schema.LogicalName).UriSegment,
@@ -52,6 +52,6 @@ namespace EdFi.Ods.Api.Startup.Features
                         OpenApiMetadataSections.Extensions,
                         sf.UriSegment,
                         new Lazy<string>(() => sf.Factory.Create(new SdkGenExtensionResourceStrategy())),
-                        RouteConstants.OdsDataBasePath));
+                        RouteConstants.DataManagementRoutePrefix));
     }
 }

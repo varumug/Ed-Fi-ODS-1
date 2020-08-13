@@ -8,12 +8,12 @@ using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
 using EdFi.Ods.Common;
-using EdFi.Ods.Common.Configuration;
-using EdFi.Ods.Common.Database;
 using EdFi.Ods.Common._Installers;
 using EdFi.Ods.Common._Installers.ComponentNaming;
+using EdFi.Ods.Common.Configuration;
+using EdFi.Ods.Common.Database;
 
-namespace EdFi.Ods.Api.Startup.Features.Installers
+namespace EdFi.Ods.Api._Installers
 {
     public class ConnectionStringProvidersInstaller : IWindsorInstaller
     {

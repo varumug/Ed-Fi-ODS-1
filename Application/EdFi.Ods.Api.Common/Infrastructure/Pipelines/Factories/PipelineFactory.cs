@@ -6,17 +6,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using EdFi.Ods.Api.ChangeQueries.Pipelines.GetDeletedResource;
-using EdFi.Ods.Api.Pipelines.Factories;
+using EdFi.Ods.Api.Common.Infrastructure.Pipelines.Delete;
+using EdFi.Ods.Api.Common.Infrastructure.Pipelines.Get;
+using EdFi.Ods.Api.Common.Infrastructure.Pipelines.GetDeletedResource;
+using EdFi.Ods.Api.Common.Infrastructure.Pipelines.GetMany;
+using EdFi.Ods.Api.Common.Infrastructure.Pipelines.Put;
 using EdFi.Ods.Common;
 using EdFi.Ods.Common.InversionOfControl;
-using EdFi.Ods.Pipelines.Common;
-using EdFi.Ods.Pipelines.Delete;
-using EdFi.Ods.Pipelines.Get;
-using EdFi.Ods.Pipelines.GetMany;
-using EdFi.Ods.Pipelines.Put;
 
-namespace EdFi.Ods.Pipelines.Factories
+namespace EdFi.Ods.Api.Common.Infrastructure.Pipelines.Factories
 {
     public class PipelineFactory : IPipelineFactory
     {
@@ -48,7 +46,11 @@ namespace EdFi.Ods.Pipelines.Factories
             where TEntityModel : class
         {
             var stepTypes = getPipelineStepsProvider.GetSteps();
-            var steps = ResolvePipelineSteps<GetContext<TEntityModel>, GetResult<TResourceModel>, TResourceModel, TEntityModel>(stepTypes);
+
+            var steps =
+                ResolvePipelineSteps<GetContext<TEntityModel>, GetResult<TResourceModel>, TResourceModel, TEntityModel>(
+                    stepTypes);
+
             return new GetPipeline<TResourceModel, TEntityModel>(steps);
         }
 
@@ -59,7 +61,8 @@ namespace EdFi.Ods.Pipelines.Factories
             var stepTypes = getBySpecificationPipelineStepsProvider.GetSteps();
 
             var steps =
-                ResolvePipelineSteps<GetManyContext<TResourceModel, TEntityModel>, GetManyResult<TResourceModel>, TResourceModel, TEntityModel>(
+                ResolvePipelineSteps<GetManyContext<TResourceModel, TEntityModel>, GetManyResult<TResourceModel>, TResourceModel,
+                    TEntityModel>(
                     stepTypes);
 
             return new GetManyPipeline<TResourceModel, TEntityModel>(steps);
@@ -69,7 +72,11 @@ namespace EdFi.Ods.Pipelines.Factories
             where TEntityModel : class
         {
             var stepsTypes = getDeletedResourceIdsPipelineStepsProvider.GetSteps();
-            var steps = ResolvePipelineSteps<GetDeletedResourceContext<TEntityModel>, GetDeletedResourceResult, TResourceModel, TEntityModel>(stepsTypes);
+
+            var steps =
+                ResolvePipelineSteps<GetDeletedResourceContext<TEntityModel>, GetDeletedResourceResult, TResourceModel,
+                    TEntityModel>(stepsTypes);
+
             return new GetDeletedResourcePipeline<TEntityModel>(steps);
         }
 
@@ -78,7 +85,11 @@ namespace EdFi.Ods.Pipelines.Factories
             where TResourceModel : IHasETag
         {
             var stepTypes = putPipelineStepsProvider.GetSteps();
-            var steps = ResolvePipelineSteps<PutContext<TResourceModel, TEntityModel>, PutResult, TResourceModel, TEntityModel>(stepTypes);
+
+            var steps =
+                ResolvePipelineSteps<PutContext<TResourceModel, TEntityModel>, PutResult, TResourceModel, TEntityModel>(
+                    stepTypes);
+
             return new PutPipeline<TResourceModel, TEntityModel>(steps);
         }
 
@@ -89,7 +100,8 @@ namespace EdFi.Ods.Pipelines.Factories
             return new DeletePipeline(steps);
         }
 
-        private IStep<TContext, TResult>[] ResolvePipelineSteps<TContext, TResult, TResourceModel, TEntityModel>(IEnumerable<Type> stepTypes)
+        private IStep<TContext, TResult>[] ResolvePipelineSteps<TContext, TResult, TResourceModel, TEntityModel>(
+            IEnumerable<Type> stepTypes)
         {
             var pipelineStepTypes = new List<IStep<TContext, TResult>>();
 
@@ -100,7 +112,7 @@ namespace EdFi.Ods.Pipelines.Factories
                 if (pipelineStepType.IsGenericTypeDefinition)
                 {
                     var typeArgsNames = pipelineStepType.GetGenericArguments()
-                                                        .Select(x => x.Name);
+                        .Select(x => x.Name);
 
                     var typeArgs = GetGenericTypes<TContext, TResult, TResourceModel, TEntityModel>(typeArgsNames);
 
@@ -117,7 +129,8 @@ namespace EdFi.Ods.Pipelines.Factories
             return pipelineStepTypes.ToArray();
         }
 
-        private IEnumerable<Type> GetGenericTypes<TContext, TResult, TResourceModel, TEntityModel>(IEnumerable<string> genericArgNames)
+        private IEnumerable<Type> GetGenericTypes<TContext, TResult, TResourceModel, TEntityModel>(
+            IEnumerable<string> genericArgNames)
         {
             foreach (var genericArgName in genericArgNames)
             {

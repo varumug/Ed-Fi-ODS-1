@@ -8,7 +8,7 @@ using FluentValidation;
 using NHibernate;
 using NHibernate.Context;
 
-namespace EdFi.Ods.Api.NHibernate.Validation
+namespace EdFi.Ods.Api.Common.Infrastructure.Validation
 {
     /// <summary>
     /// Provides a base class for writing FluentValidation validators that need access to the ODS through the NHibernate model.

@@ -5,12 +5,12 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using EdFi.Ods.Api.Services.Metadata.Models;
-using EdFi.Ods.Api.Services.Metadata.Strategies.FactoryStrategies;
 using EdFi.Ods.Common.Extensions;
-using Swashbuckle.Swagger;
+using EdFi.Ods.Features.OpenApiMetadata.Dtos;
+using EdFi.Ods.Features.OpenApiMetadata.Models;
+using EdFi.Ods.Features.OpenApiMetadata.Strategies.FactoryStrategies;
 
-namespace EdFi.Ods.Api.Services.Metadata.Factories
+namespace EdFi.Ods.Features.OpenApiMetadata.Factories
 {
     public class SwaggerTagsFactory
     {

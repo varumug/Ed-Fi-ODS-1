@@ -6,10 +6,11 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using EdFi.Ods.Api.Common.Dtos;
 using NHibernate.Event;
 using NHibernate.Persister.Entity;
 
-namespace EdFi.Ods.Api.NHibernate.Architecture
+namespace EdFi.Ods.Api.Common.Infrastructure.Listeners
 {
     public class EdFiOdsPreInsertListener : IPreInsertEventListener
     {

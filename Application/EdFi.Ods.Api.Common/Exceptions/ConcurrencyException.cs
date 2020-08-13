@@ -5,7 +5,7 @@
 
 using System;
 
-namespace EdFi.Ods.Api.Exceptions
+namespace EdFi.Ods.Api.Common.Exceptions
 {
     public class ConcurrencyException : Exception
     {

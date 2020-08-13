@@ -5,7 +5,7 @@
 
 using NHibernate.Cfg;
 
-namespace EdFi.Ods.Api.NHibernate.Architecture
+namespace EdFi.Ods.Api.Common.Infrastructure.Configuration
 {
     /// <summary>
     /// Defines a method for manipulating the NHibernate <see cref="Configuration"/> object at runtime before NHibernate configuration is finalized.
@@ -16,6 +16,6 @@ namespace EdFi.Ods.Api.NHibernate.Architecture
         /// Executes the configuration activity.
         /// </summary>
         /// <param name="configuration">The NHibernate <see cref="Configuration"/> instance to be manipulated.</param>
-        void Execute(Configuration configuration);
+        void Execute(NHibernate.Cfg.Configuration configuration);
     }
 }

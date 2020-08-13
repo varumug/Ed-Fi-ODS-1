@@ -5,7 +5,7 @@
 
 using EdFi.Ods.Common.Extensibility;
 
-namespace EdFi.Ods.Api.Startup.Features
+namespace EdFi.Ods.Api.Features
 {
     public interface IFeatureProvider
     {

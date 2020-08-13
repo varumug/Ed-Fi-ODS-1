@@ -1,4 +1,5 @@
-﻿// SPDX-License-Identifier: Apache-2.0
+﻿#if NETFRAMEWORK
+// SPDX-License-Identifier: Apache-2.0
 // Licensed to the Ed-Fi Alliance under one or more agreements.
 // The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
 // See the LICENSE and NOTICES files in the project root for more information.
@@ -6,17 +7,18 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using EdFi.Ods.Api.Constants;
+using EdFi.Ods.Api.Common.Constants;
+using EdFi.Ods.Api.Common.Models;
+using EdFi.Ods.Api.Common.Providers;
 using EdFi.Ods.Api.Services.Metadata;
-using EdFi.Ods.Api.Services.Metadata.Factories;
-using EdFi.Ods.Api.Services.Metadata.Models;
-using EdFi.Ods.Api.Services.Metadata.Providers;
-using EdFi.Ods.Api.Services.Metadata.Strategies.ResourceStrategies;
 using EdFi.Ods.Common;
 using EdFi.Ods.Common.Metadata;
 using EdFi.Ods.Common.Models;
+using EdFi.Ods.Features.OpenApiMetadata.Dtos;
+using EdFi.Ods.Features.OpenApiMetadata.Factories;
+using EdFi.Ods.Features.OpenApiMetadata.Strategies.ResourceStrategies;
 
-namespace EdFi.Ods.Api.Startup.Features
+namespace EdFi.Ods.Features.Profiles
 {
     public class ProfilesOpenApiContentProvider : IOpenApiContentProvider
     {
@@ -67,8 +69,9 @@ namespace EdFi.Ods.Api.Startup.Features
                             OpenApiMetadataSections.Profiles,
                             c.ProfileContext.ProfileName,
                             new Lazy<string>(() => new SwaggerDocumentFactory(c).Create(openApiStrategy)),
-                            RouteConstants.OdsDataBasePath,
+                            RouteConstants.DataManagementRoutePrefix,
                             $"{OpenApiMetadataSections.Profiles}/{c.ProfileContext.ProfileName}"));
         }
     }
 }
+#endif

@@ -10,14 +10,13 @@ using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using NHibernate.Engine;
 using NHibernate.SqlTypes;
 using NHibernate.Type;
 
-namespace EdFi.Ods.Api.NHibernate.Architecture
+namespace EdFi.Ods.Api.Common.Infrastructure.Architecture.SqlServer
 {
     /// <summary>
     /// Provides an abstract implementation of a custom NHibernate <see cref="IType"/> that provides 

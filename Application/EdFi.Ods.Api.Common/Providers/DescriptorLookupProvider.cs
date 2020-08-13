@@ -7,13 +7,14 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using EdFi.Ods.Api.Common.Dtos;
 using EdFi.Ods.Common.Specifications;
 using log4net;
 using NHibernate;
 using NHibernate.Criterion;
 using NHibernate.Transform;
 
-namespace EdFi.Ods.Api.NHibernate.Architecture
+namespace EdFi.Ods.Api.Common.Providers
 {
     public class DescriptorLookupProvider : IDescriptorLookupProvider
     {

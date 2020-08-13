@@ -7,11 +7,11 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using EdFi.Ods.Common.Caching;
 
-namespace EdFi.Ods.Api.IdentityValueMappers
+namespace EdFi.Ods.Api.Common.IdentityValueMappers
 {
     /// <summary>
     /// Implements a version of the <see cref="IPersonIdentifiersProvider"/> that effectively disables the 
-    /// cache warming behavior of the <see cref="IPersonUniqueIdToUsiCache"/>.
+    /// cache warming behavior of the <see cref="EdFi.Ods.Common.Caching.IPersonUniqueIdToUsiCache"/>.
     /// </summary>
     public class NullPersonIdentifiersProvider : IPersonIdentifiersProvider
     {

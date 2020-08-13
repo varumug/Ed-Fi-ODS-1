@@ -5,7 +5,7 @@
 
 using System.Runtime.Serialization;
 
-namespace EdFi.Ods.Api.Models
+namespace EdFi.Ods.Api.Common.Models
 {
     /// <summary>
     /// Contains hyperlink details for a related resource.

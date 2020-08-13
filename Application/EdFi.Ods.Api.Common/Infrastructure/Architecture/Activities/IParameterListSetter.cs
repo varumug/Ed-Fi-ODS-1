@@ -6,7 +6,7 @@
 using System.Collections;
 using NHibernate;
 
-namespace EdFi.Ods.Api.NHibernate.Architecture
+namespace EdFi.Ods.Api.Common.Infrastructure.Architecture.Activities
 {
     /// <summary>
     /// Defines a method for setting a list of parameters on an <see cref="IQuery" /> instance.

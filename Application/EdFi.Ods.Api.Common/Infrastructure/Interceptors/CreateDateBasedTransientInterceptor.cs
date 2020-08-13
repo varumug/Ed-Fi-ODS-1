@@ -6,7 +6,7 @@
 using System;
 using NHibernate;
 
-namespace EdFi.Ods.Api.NHibernate.Architecture
+namespace EdFi.Ods.Api.Common.Infrastructure.Interceptors
 {
     public class CreateDateBasedTransientInterceptor : EmptyInterceptor
     {

@@ -15,6 +15,12 @@ namespace EdFi.Admin.DataAccess.Contexts
 {
     public class PostgresUsersContext : UsersContext
     {
+#if NETFRAMEWORK
+        public PostgresUsersContext() { }
+#elif NETSTANDARD
+        public PostgresUsersContext(string connectionString) : base(connectionString) { }
+#endif
+
         protected override void ApplyProviderSpecificMappings(DbModelBuilder modelBuilder)
         {
             // The column name in this linking table had to be shortened for Postgres

@@ -3,12 +3,13 @@
 // The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
 // See the LICENSE and NOTICES files in the project root for more information.
 
+#if NETFRAMEWORK
 using System;
 using System.Collections.Generic;
-using EdFi.Ods.Api.ExceptionHandling;
-using EdFi.Ods.Api.ExceptionHandling.EdFi;
-using EdFi.Ods.Api.ExceptionHandling.Translators;
-using EdFi.Ods.Api.ExceptionHandling.Translators.SqlServer;
+using EdFi.Ods.Api.Common.ExceptionHandling;
+using EdFi.Ods.Api.Common.ExceptionHandling.EdFi;
+using EdFi.Ods.Api.Common.ExceptionHandling.Translators;
+using EdFi.Ods.Api.Common.ExceptionHandling.Translators.SqlServer;
 using EdFi.Ods.Common.Utils;
 using Rhino.Mocks;
 
@@ -42,7 +43,7 @@ namespace Test.Common
                        new EdFiSecurityExceptionTranslator(),
                        new NotFoundExceptionTranslator(),
                        new NotModifiedExceptionTranslator(),
-                       new ConcurencyExceptionTranslator()
+                       new ConcurrencyExceptionTranslator()
                    };
         }
 
@@ -61,3 +62,4 @@ namespace Test.Common
         }
     }
 }
+#endif

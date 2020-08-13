@@ -6,7 +6,7 @@
 using System;
 using EdFi.Ods.Common;
 
-namespace EdFi.Ods.Api.Services.Requests
+namespace EdFi.Ods.Api.Common.Models.Requests
 {
     /// <summary>
     /// Provides and abstract base class for concrete "Null" request objects that are generated for

@@ -7,11 +7,17 @@ using System.Collections.Generic;
 using System.Xml.Linq;
 using Newtonsoft.Json;
 
-namespace EdFi.Ods.Api.NHibernate.Composites
+namespace EdFi.Ods.Features.Composites.Infrastructure
 {
     public interface ICompositeResourceResponseProvider
     {
         string GetJson(
+            XElement compositeDefinition,
+            IDictionary<string, CompositeSpecificationParameter> specParameters,
+            IDictionary<string, object> queryStringParameters,
+            NullValueHandling nullValueHandling = NullValueHandling.Ignore);
+
+        object Get(
             XElement compositeDefinition,
             IDictionary<string, CompositeSpecificationParameter> specParameters,
             IDictionary<string, object> queryStringParameters,

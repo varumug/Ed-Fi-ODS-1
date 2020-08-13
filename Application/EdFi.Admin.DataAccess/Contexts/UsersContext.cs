@@ -18,12 +18,21 @@ namespace EdFi.Admin.DataAccess.Contexts
     {
         public const string ConnectionStringName = "EdFi_Admin";
 
+#if NETFRAMEWORK
         protected UsersContext()
             : base(ConnectionStringName)
         {
             Database.SetInitializer(new ValidateDatabase<UsersContext>());
         }
+#endif
 
+#if NETSTANDARD
+        protected UsersContext(string connectionString)
+            : base(connectionString)
+        {
+            Database.SetInitializer<UsersContext>(null);
+        }
+#endif
         public const string UserTableName = "Users";
 
         public static string UserNameColumn

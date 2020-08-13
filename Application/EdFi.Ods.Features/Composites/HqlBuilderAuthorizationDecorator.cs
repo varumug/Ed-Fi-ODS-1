@@ -9,18 +9,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using EdFi.Ods.Api.NHibernate.Composites;
 using EdFi.Ods.Common;
-using EdFi.Ods.Common.Composites;
 using EdFi.Ods.Common.Constants;
 using EdFi.Ods.Common.Models.Domain;
 using EdFi.Ods.Common.Models.Resource;
 using EdFi.Ods.Common.Security;
 using EdFi.Ods.Common.Security.Authorization;
 using EdFi.Ods.Common.Security.Claims;
+using EdFi.Ods.Common.Utils.Extensions;
+using EdFi.Ods.Features.Composites.Infrastructure;
+using EdFi.Ods.Security.Authorization;
+using EdFi.Ods.Security.Authorization.Repositories;
 using log4net;
 
-namespace EdFi.Ods.Security.Authorization.Repositories
+namespace EdFi.Ods.Features.Composites
 {
     public class HqlBuilderAuthorizationDecorator : ICompositeItemBuilder<HqlBuilderContext, CompositeQuery>
     {
@@ -96,7 +98,7 @@ namespace EdFi.Ods.Security.Authorization.Repositories
                 if (processorContext.IsAbstract())
                 {
                     Logger.Debug($"Resource {processorContext.CurrentResourceClass.Name} has no claim.");
-                    
+
 
                     if (processorContext.ShouldIncludeResourceSubtype())
                     {
@@ -115,6 +117,22 @@ namespace EdFi.Ods.Security.Authorization.Repositories
             builderContext.CurrentQueryFilterByName = authorizationFilters.ToDictionary(x => x.FilterName, x => x);
 
             return true;
+        }
+
+        /// <summary>
+        /// Applies properties necessary to support self-referencing association behavior.
+        /// </summary>
+        /// <param name="selfReferencingAssociations">The relevant self-referencing associations.</param>
+        /// <param name="builderContext">The current builder context.</param>
+        /// <param name="processorContext">The composite definition processor context.</param>
+        /// <remarks>The associations supplied may not be from the current resource class.  In cases where the self-referencing
+        /// behavior is obtained through a referenced resource, the associations will be from the referenced resource.</remarks>
+        public void ApplySelfReferencingProperties(
+            IReadOnlyList<AssociationView> selfReferencingAssociations,
+            HqlBuilderContext builderContext,
+            CompositeDefinitionProcessorContext processorContext)
+        {
+            _next.ApplySelfReferencingProperties(selfReferencingAssociations, builderContext, processorContext);
         }
 
         /// <summary>
@@ -174,7 +192,7 @@ namespace EdFi.Ods.Security.Authorization.Repositories
         }
 
         /// <summary>
-        /// Apply the provided property projections onto the build result with the provided builder and composite 
+        /// Apply the provided property projections onto the build result with the provided builder and composite
         /// definition processor contexts.
         /// </summary>
         /// <param name="propertyProjections">A list of property projections to be applied to the build result.</param>
@@ -228,7 +246,7 @@ namespace EdFi.Ods.Security.Authorization.Repositories
         /// </summary>
         /// <seealso cref="ICompositeItemBuilder{TBuilderContext,TBuildResult}.CreateParentingContext"/>
         /// <param name="builderContext">The current build context.</param>
-        /// <remarks>Implementations should use this as a means for preserving part of the current 
+        /// <remarks>Implementations should use this as a means for preserving part of the current
         /// context for future use by storing the snapshotted context within the current context.</remarks>
         public void SnapshotParentingContext(HqlBuilderContext builderContext)
         {

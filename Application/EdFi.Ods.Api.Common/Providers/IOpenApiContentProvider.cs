@@ -4,8 +4,9 @@
 // See the LICENSE and NOTICES files in the project root for more information.
 
 using System.Collections.Generic;
+using EdFi.Ods.Api.Common.Models;
 
-namespace EdFi.Ods.Api.Services.Metadata.Providers
+namespace EdFi.Ods.Api.Common.Providers
 {
     public interface IOpenApiContentProvider
     {

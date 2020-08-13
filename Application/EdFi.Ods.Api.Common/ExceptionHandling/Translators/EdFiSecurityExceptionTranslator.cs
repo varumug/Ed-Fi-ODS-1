@@ -5,10 +5,11 @@
 
 using System;
 using System.Net;
+using EdFi.Ods.Api.Common.Models;
 using EdFi.Ods.Common.Extensions;
 using EdFi.Ods.Common.Security;
 
-namespace EdFi.Ods.Api.ExceptionHandling.Translators
+namespace EdFi.Ods.Api.Common.ExceptionHandling.Translators
 {
     public class EdFiSecurityExceptionTranslator : IExceptionTranslator
     {

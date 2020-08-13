@@ -14,7 +14,7 @@ using NHibernate;
 using NHibernate.Criterion;
 using NHibernate.Transform;
 
-namespace EdFi.Ods.Api.IdentityValueMappers
+namespace EdFi.Ods.Api.Common.IdentityValueMappers
 {
     /// <summary>
     /// Provides an implementation of the person identifier value mappers that treats all incoming

@@ -8,6 +8,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using EdFi.Ods.Api.Common.Dtos;
+using EdFi.Ods.Api.Common.Infrastructure.Architecture;
+using EdFi.Ods.Api.Common.Infrastructure.Architecture.Activities;
 using EdFi.Ods.Common;
 using EdFi.Ods.Common.Extensions;
 using EdFi.Ods.Common.Models;
@@ -15,7 +18,7 @@ using EdFi.Ods.Common.Repositories;
 using NHibernate;
 using NHibernate.Context;
 
-namespace EdFi.Ods.Api.NHibernate.Architecture
+namespace EdFi.Ods.Api.Common.Infrastructure.Repositories
 {
     public class GetEntitiesByIds<TEntity> : GetEntitiesBase<TEntity>, IGetEntitiesByIds<TEntity>
         where TEntity : DomainObjectBase, IHasIdentifier, IDateVersionedEntity

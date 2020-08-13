@@ -5,10 +5,11 @@
 
 using System;
 using System.Net;
-using EdFi.Ods.Api.Exceptions;
+using EdFi.Ods.Api.Common.Exceptions;
+using EdFi.Ods.Api.Common.Models;
 using EdFi.Ods.Common.Extensions;
 
-namespace EdFi.Ods.Api.ExceptionHandling.Translators
+namespace EdFi.Ods.Api.Common.ExceptionHandling.Translators
 {
     public class NotFoundExceptionTranslator : IExceptionTranslator
     {

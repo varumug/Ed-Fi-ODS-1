@@ -13,7 +13,7 @@ using NHibernate;
 using NHibernate.Event;
 using NHibernate.Persister.Entity;
 
-namespace EdFi.Ods.Api.NHibernate.Architecture
+namespace EdFi.Ods.Api.Common.Infrastructure.Listeners
 {
     public class EdFiOdsPostUpdateEventListener : IPostUpdateEventListener
     {

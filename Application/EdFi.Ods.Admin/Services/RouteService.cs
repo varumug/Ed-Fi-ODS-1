@@ -5,7 +5,7 @@
 
 using System.Web;
 using System.Web.Mvc;
-using EdFi.Ods.Common.Http.Extensions;
+using EdFi.Ods.Admin.Extensions;
 
 namespace EdFi.Ods.Admin.Services
 {

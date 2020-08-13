@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using EdFi.Ods.Common.Database;
 using NHibernate.Connection;
 
-namespace EdFi.Ods.Api.NHibernate.Architecture
+namespace EdFi.Ods.Api.Common.Infrastructure.ConnectionProviders
 {
     /// <summary>
     /// An NHibernate <see cref="ConnectionProvider"/> implementation that uses the registered ODS 

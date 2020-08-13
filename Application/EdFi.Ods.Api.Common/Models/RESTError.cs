@@ -6,7 +6,7 @@
 using System;
 using System.Runtime.Serialization;
 
-namespace EdFi.Ods.Api.ExceptionHandling
+namespace EdFi.Ods.Api.Common.Models
 {
     [Serializable]
     [DataContract]

@@ -1,4 +1,5 @@
-﻿// SPDX-License-Identifier: Apache-2.0
+﻿#if NETFRAMEWORK
+// SPDX-License-Identifier: Apache-2.0
 // Licensed to the Ed-Fi Alliance under one or more agreements.
 // The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
 // See the LICENSE and NOTICES files in the project root for more information.
@@ -10,8 +11,8 @@ using System.Linq;
 using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
-using EdFi.Ods.Api.NHibernate.Architecture.Criteria;
-using EdFi.Ods.Api.Pipelines.Factories;
+using EdFi.Ods.Api.Common.Infrastructure.Pipelines.Factories;
+using EdFi.Ods.Api.Common.Providers.Criteria;
 using EdFi.Ods.Common;
 using EdFi.Ods.Common.Caching;
 using EdFi.Ods.Common.Conventions;
@@ -19,31 +20,28 @@ using EdFi.Ods.Common.Extensions;
 using EdFi.Ods.Common.Repositories;
 using EdFi.Ods.Common.Security.Authorization;
 using EdFi.Ods.Common.Security.Claims;
-using EdFi.Ods.Security;
+using EdFi.Security.DataAccess.Contexts;
+using EdFi.Security.DataAccess.Repositories;
+using EdFi.Admin.DataAccess.Contexts;
+using EdFi.Ods.Common.Configuration;
+using EdFi.Ods.Sandbox.Repositories;
 using EdFi.Ods.Security.Authorization;
 using EdFi.Ods.Security.Authorization.Filtering;
 using EdFi.Ods.Security.Authorization.Pipeline;
 using EdFi.Ods.Security.Authorization.Repositories;
 using EdFi.Ods.Security.AuthorizationStrategies;
 using EdFi.Ods.Security.AuthorizationStrategies.Relationships;
-using EdFi.Security.DataAccess.Contexts;
-using EdFi.Security.DataAccess.Repositories;
-using EdFi.Ods.Security._Installers;
-using EdFi.Ods.Standard;
-using EdFi.Admin.DataAccess.Contexts;
-using EdFi.Ods.Common.Configuration;
-using EdFi.Ods.Sandbox.Repositories;
+using EdFi.Ods.Security.Claims;
 using EdFi.Ods.Security.Utilities;
 using log4net;
 
-namespace EdFi.Ods.Api.Startup.Features.Installers
+namespace EdFi.Ods.Security.Container.Installers
 {
     public class SecurityInstaller : IWindsorInstaller
     {
         public const string CacheTimeoutKey = "SecurityMetadataCacheTimeoutMinutes";
 
         private readonly IConfigValueProvider _configValueProvider;
-        private readonly IAssembliesProvider _assembliesProvider;
         private readonly IDictionary<Type, Type> _decoratorRegistrations = new Dictionary<Type, Type>
         {
             // NHibernate authorization decorators
@@ -69,18 +67,16 @@ namespace EdFi.Ods.Api.Startup.Features.Installers
         };
 
         private readonly ILog _logger = LogManager.GetLogger(typeof(SecurityInstaller));
-        
-        public SecurityInstaller(IAssembliesProvider assembliesProvider, IConfigValueProvider configValueProvider)
-        {
-            _assembliesProvider = Preconditions.ThrowIfNull(assembliesProvider, nameof(assembliesProvider));
-            _configValueProvider = Preconditions.ThrowIfNull(configValueProvider, nameof(configValueProvider));
 
-            // force security to be loaded
-            AssemblyLoader.EnsureLoaded<Marker_EdFi_Ods_Standard>();
+        public SecurityInstaller(IConfigValueProvider configValueProvider)
+        {
+            _configValueProvider = Preconditions.ThrowIfNull(configValueProvider, nameof(configValueProvider));
         }
 
         public void Install(IWindsorContainer container, IConfigurationStore store)
         {
+            RegisterClaims(container);
+
             RegisterAuthorizationDecorators(container);
 
             RegisterIAuthorizationSegmentsToFiltersConverter(container);
@@ -98,6 +94,11 @@ namespace EdFi.Ods.Api.Startup.Features.Installers
             RegisterAuthorizationViewsProvider(container);
 
             container.Install(new AuthorizationStrategiesInstaller<Marker_EdFi_Ods_Security>());
+        }
+
+        private void RegisterClaims(IWindsorContainer container)
+        {
+            container.Register(Component.For<IClaimsIdentityProvider>().ImplementedBy<ClaimsIdentityProvider>());
         }
 
         private void RegisterAuthorizationSegmentsVerifier(IWindsorContainer container)
@@ -270,7 +271,7 @@ namespace EdFi.Ods.Api.Startup.Features.Installers
         private void RegisterIRelationshipsAuthorizationContextDataProviders(IWindsorContainer container)
         {
             // Register all context data providers
-            var relationshipContextDataProviderTypes = _assembliesProvider.GetAssemblies()
+            var relationshipContextDataProviderTypes = container.Resolve<IAssembliesProvider>().GetAssemblies()
                 .Where(a => a.IsExtensionAssembly() || a.IsStandardAssembly())
                 .SelectMany(a =>
                 {
@@ -333,3 +334,4 @@ namespace EdFi.Ods.Api.Startup.Features.Installers
         }
     }
 }
+#endif

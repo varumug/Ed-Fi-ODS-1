@@ -4,9 +4,10 @@
 // See the LICENSE and NOTICES files in the project root for more information.
 
 using System.Collections.Generic;
+using EdFi.Ods.Api.Common.Models;
 using EdFi.Ods.Common;
 
-namespace EdFi.Ods.Api.ChangeQueries
+namespace EdFi.Ods.Api.Common.Infrastructure.Pipelines.Steps
 {
     public interface IGetDeletedResourceIds
     {

@@ -1,4 +1,5 @@
-﻿// SPDX-License-Identifier: Apache-2.0
+﻿#if NETFRAMEWORK
+// SPDX-License-Identifier: Apache-2.0
 // Licensed to the Ed-Fi Alliance under one or more agreements.
 // The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
 // See the LICENSE and NOTICES files in the project root for more information.
@@ -9,7 +10,7 @@ using System.Configuration;
 namespace EdFi.Ods.Common.Database
 {
     /// <summary>
-    /// Provides a connection string that is identified as a named connection string from 
+    /// Provides a connection string that is identified as a named connection string from
     /// the application configuration file's 'connectionStrings' section.
     /// </summary>
     public class NamedDatabaseConnectionStringProvider : IDatabaseConnectionStringProvider
@@ -17,7 +18,7 @@ namespace EdFi.Ods.Common.Database
         private readonly string connectionStringName;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="NamedDatabaseConnectionStringProvider"/> 
+        /// Initializes a new instance of the <see cref="NamedDatabaseConnectionStringProvider"/>
         /// class using the specified connection string name (matching a connection string defined
         /// in the application's configuration file's 'connectionStrings' section
         /// </summary>
@@ -54,3 +55,4 @@ namespace EdFi.Ods.Common.Database
         }
     }
 }
+#endif

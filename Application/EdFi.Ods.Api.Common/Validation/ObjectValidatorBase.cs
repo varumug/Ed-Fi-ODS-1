@@ -5,7 +5,7 @@
 
 using EdFi.Ods.Common;
 
-namespace EdFi.Ods.Api.Validation
+namespace EdFi.Ods.Api.Common.Validation
 {
     public abstract class ObjectValidatorBase
     {

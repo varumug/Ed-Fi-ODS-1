@@ -9,13 +9,13 @@ using System.Data;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
-using EdFi.Ods.Api.Services.Metadata.Models;
 using EdFi.Ods.Common.Conventions;
 using EdFi.Ods.Common.Extensions;
 using EdFi.Ods.Common.Models.Domain;
 using EdFi.Ods.Common.Models.Resource;
+using EdFi.Ods.Features.OpenApiMetadata.Dtos;
 
-namespace EdFi.Ods.Api.Services.Metadata.Strategies.FactoryStrategies
+namespace EdFi.Ods.Features.OpenApiMetadata.Strategies.FactoryStrategies
 {
     public class SwaggerCompositePathsFactoryStrategy : ISwaggerPathsFactorySelectorStrategy
     {

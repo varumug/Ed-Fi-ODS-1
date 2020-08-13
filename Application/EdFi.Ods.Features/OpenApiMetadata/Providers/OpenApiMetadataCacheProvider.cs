@@ -3,23 +3,25 @@
 // The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
 // See the LICENSE and NOTICES files in the project root for more information.
 
+#if NETCOREAPP
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using EdFi.Ods.Api.Constants;
-using EdFi.Ods.Api.Extensions;
-using EdFi.Ods.Api.Services.Metadata.Factories;
-using EdFi.Ods.Api.Services.Metadata.Models;
-using EdFi.Ods.Api.Services.Metadata.Strategies.ResourceStrategies;
-using EdFi.Ods.Common;
+using EdFi.Ods.Api.Common.Constants;
+using EdFi.Ods.Api.Common.Models;
+using EdFi.Ods.Api.Common.Providers;
+using EdFi.Ods.Api.NetCore.Routing;
 using EdFi.Ods.Common.Extensions;
 using EdFi.Ods.Common.Models;
-using EdFi.Ods.Common.Utils.Extensions;
+using EdFi.Ods.Features.OpenApiMetadata.Dtos;
+using EdFi.Ods.Features.OpenApiMetadata.Factories;
+using EdFi.Ods.Features.OpenApiMetadata.Models;
+using EdFi.Ods.Features.OpenApiMetadata.Strategies.ResourceStrategies;
 using log4net;
 
-namespace EdFi.Ods.Api.Services.Metadata.Providers
+namespace EdFi.Ods.Features.OpenApiMetadata.Providers
 {
     public class OpenApiMetadataCacheProvider : IOpenApiMetadataCacheProvider
     {
@@ -30,9 +32,11 @@ namespace EdFi.Ods.Api.Services.Metadata.Providers
         private static readonly string _odsDataBasePath = $"data/v{ApiVersionConstants.Ods}";
 
         private readonly ILog _logger = LogManager.GetLogger(typeof(OpenApiMetadataCacheProvider));
+        private readonly IList<IOpenApiContentProvider> _openApiContentProviders;
         private readonly IDictionary<string, IOpenApiMetadataResourceStrategy> _openApiMetadataResourceFilters;
-        private readonly IOpenApiMetadataRouteProvider _openApiMetadataRouteProvider;
-        private readonly IOpenApiContentProvider[] _openApiContentProviders;
+        private readonly IList<IOpenApiMetadataRouteInformation> _openApiMetadataRouteInformations;
+
+        // private readonly IOpenApiMetadataRouteProvider _openApiMetadataRouteProvider;
         private readonly IResourceModelProvider _resourceModelProvider;
 
         private readonly IEnumerable<string> _sdkGenSections = new[]
@@ -45,14 +49,14 @@ namespace EdFi.Ods.Api.Services.Metadata.Providers
         };
         private readonly ConcurrentDictionary<string, OpenApiContent> _swaggerMetadataCache;
 
-        public OpenApiMetadataCacheProvider(IResourceModelProvider resourceModelProvider,
-            IOpenApiMetadataRouteProvider openApiMetadataRouteProvider, IOpenApiContentProvider[] openApiContentProviders)
+        public OpenApiMetadataCacheProvider(
+            IResourceModelProvider resourceModelProvider,
+            IList<IOpenApiMetadataRouteInformation> openApiMetadataRouteInformations,
+            IList<IOpenApiContentProvider> openApiContentProviders)
         {
-            _openApiContentProviders = Preconditions.ThrowIfNull(openApiContentProviders, nameof(openApiContentProviders));
-            _resourceModelProvider = Preconditions.ThrowIfNull(resourceModelProvider, nameof(resourceModelProvider));
-
-            _openApiMetadataRouteProvider = Preconditions.ThrowIfNull(
-                openApiMetadataRouteProvider, nameof(openApiMetadataRouteProvider));
+            _openApiMetadataRouteInformations = openApiMetadataRouteInformations;
+            _openApiContentProviders = openApiContentProviders;
+            _resourceModelProvider = resourceModelProvider;
 
             _openApiMetadataResourceFilters =
                 new Dictionary<string, IOpenApiMetadataResourceStrategy>(StringComparer.InvariantCultureIgnoreCase)
@@ -99,34 +103,32 @@ namespace EdFi.Ods.Api.Services.Metadata.Providers
             var sw = new Stopwatch();
             sw.Start();
 
-            _openApiMetadataRouteProvider.GetAllRoutes()
-                .ForEach(
-                    r =>
+            foreach (IOpenApiMetadataRouteInformation openApiMetadataRouteInformation in _openApiMetadataRouteInformations)
+            {
+                var routeInformation = openApiMetadataRouteInformation.GetRouteInformation();
+
+                if (routeInformation.Name.EqualsIgnoreCase(MetadataRouteConstants.All))
+                {
+                    AddToCache(CreateSdkGenAllSection());
+                }
+                else if (routeInformation.Name.EqualsIgnoreCase(MetadataRouteConstants.ResourceTypes))
+                {
+                    AddToCache(CreateSwaggerUiSection());
+                }
+                else
+                {
+                    foreach (IGrouping<string, IOpenApiContentProvider> apiContentProvidersByRouteName in
+                        _openApiContentProviders.GroupBy(g => g.RouteName.ToLowerInvariant()))
                     {
-                        string routeName = r.GetDataTokenRouteName();
+                        foreach (IOpenApiContentProvider openApiContentProvider in apiContentProvidersByRouteName)
+                        {
+                            AddToCache(openApiContentProvider.GetOpenApiContent());
+                        }
+                    }
+                }
 
-                        if (routeName.EqualsIgnoreCase(MetadataRouteConstants.All))
-                        {
-                            AddToCache(CreateSdkGenAllSection());
-                        }
-                        else if (routeName.EqualsIgnoreCase(MetadataRouteConstants.ResourceTypes))
-                        {
-                            AddToCache(CreateSwaggerUiSection());
-                        }
-                        else
-                        {
-                            foreach (IGrouping<string, IOpenApiContentProvider> apiContentProvidersByRouteName in
-                                _openApiContentProviders.GroupBy(g => g.RouteName.ToLowerInvariant()))
-                            {
-                                foreach (IOpenApiContentProvider openApiContentProvider in apiContentProvidersByRouteName)
-                                {
-                                    AddToCache(openApiContentProvider.GetOpenApiContent());
-                                }
-                            }
-                        }
-
-                        _logger.Debug($"Populated the {routeName} sections at {sw.Elapsed:c}");
-                    });
+                _logger.Debug($"Populated the {routeInformation.Name} sections at {sw.Elapsed:c}");
+            }
 
             sw.Stop();
 
@@ -146,10 +148,12 @@ namespace EdFi.Ods.Api.Services.Metadata.Providers
                     .Select(
                         x => new OpenApiContent(
                             OpenApiMetadataSections.SwaggerUi,
-                            x.Key, new Lazy<string>(
+                            x.Key,
+                            new Lazy<string>(
                                 () =>
                                     new SwaggerDocumentFactory(
-                                        new SwaggerDocumentContext(_resourceModelProvider.GetResourceModel())).Create(x.Value)),
+                                            new SwaggerDocumentContext(_resourceModelProvider.GetResourceModel()))
+                                        .Create(x.Value)),
                             _odsDataBasePath));
             }
 
@@ -158,9 +162,12 @@ namespace EdFi.Ods.Api.Services.Metadata.Providers
                 {
                     new OpenApiContent(
                         OpenApiMetadataSections.SdkGen,
-                        All, new Lazy<string>( () => 
-                        new SwaggerDocumentFactory(new SwaggerDocumentContext(_resourceModelProvider.GetResourceModel()))
-                            .Create(_openApiMetadataResourceFilters[All])),
+                        All,
+                        new Lazy<string>(
+                            () =>
+                                new SwaggerDocumentFactory(
+                                        new SwaggerDocumentContext(_resourceModelProvider.GetResourceModel()))
+                                    .Create(_openApiMetadataResourceFilters[All])),
                         _odsDataBasePath,
                         string.Empty)
                 };
@@ -182,3 +189,4 @@ namespace EdFi.Ods.Api.Services.Metadata.Providers
         }
     }
 }
+#endif

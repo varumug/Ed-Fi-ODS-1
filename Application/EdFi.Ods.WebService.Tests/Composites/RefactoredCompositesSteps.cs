@@ -282,11 +282,18 @@ namespace EdFi.Ods.WebService.Tests.Composites
 
             var uri = OwinUriHelper.BuildCompositeUri(requestUrl);
 
-            var getResponseMessage = httpClient.GetAsync(uri)
-                                               .Sync();
-
-            // Save the response, and the resource collection name for the scenario
-            ScenarioContext.Current.Set(getResponseMessage);
+            try
+            {
+                var getResponseMessage = httpClient.GetAsync(uri)
+                    .Sync();
+                // Save the response, and the resource collection name for the scenario
+                ScenarioContext.Current.Set(getResponseMessage);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
 
             string json = GetContentFromResponse();
             var logger = LogManager.GetLogger(GetType());

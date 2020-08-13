@@ -4,8 +4,14 @@
 // See the LICENSE and NOTICES files in the project root for more information.
 
 using System.Collections.Generic;
+using System.Linq;
+using EdFi.Ods.Common.Extensions;
+using EdFi.Ods.Common.Models.Domain;
+using EdFi.Ods.Common.Models.Graphs;
+using QuickGraph;
+using EntitySpecification = EdFi.Ods.Common.Specifications.EntitySpecification;
 
-namespace EdFi.Ods.Api.Services.Metadata.Controllers
+namespace EdFi.Ods.Api.Common.Models.GraphML
 {
     // ReSharper disable once InconsistentNaming
     public class GraphML

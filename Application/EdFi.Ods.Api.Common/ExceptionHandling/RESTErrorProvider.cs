@@ -6,8 +6,9 @@
 using System;
 using System.Collections.Generic;
 using System.Net;
+using EdFi.Ods.Api.Common.Models;
 
-namespace EdFi.Ods.Api.ExceptionHandling
+namespace EdFi.Ods.Api.Common.ExceptionHandling
 {
     public interface IRESTErrorProvider
     {

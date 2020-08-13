@@ -6,7 +6,8 @@
 using System;
 using System.ComponentModel;
 using System.Linq;
-using EdFi.Ods.Api.Services.Queries;
+using EdFi.Ods.Api.Common.Infrastructure.Repositories;
+using EdFi.Ods.Api.Common.Models.Queries;
 using EdFi.Ods.Common;
 using EdFi.Ods.Common.Caching;
 using EdFi.Ods.Common.Extensions;
@@ -14,11 +15,11 @@ using EdFi.Ods.Common.Specifications;
 using NHibernate;
 using NHibernate.Criterion;
 
-namespace EdFi.Ods.Api.NHibernate.Architecture.Criteria
+namespace EdFi.Ods.Api.Common.Providers.Criteria
 {
     /// <summary>
     /// Contains common functionality for incorporating entity specifications and query parameters supplied by the API client
-    /// into the <see cref="ICriteria" /> for servicing the request.  
+    /// into the <see cref="ICriteria" /> for servicing the request.
     /// </summary>
     /// <typeparam name="TEntity">The <see cref="Type" /> of the entity being queried.</typeparam>
     public abstract class AggregateRootCriteriaProviderBase<TEntity> : NHibernateRepositoryOperationBase

@@ -3,10 +3,11 @@
 // The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
 // See the LICENSE and NOTICES files in the project root for more information.
 
-using EdFi.Ods.Api.Services.Metadata.Providers;
+using EdFi.Ods.Api.Common.ExternalTasks;
+using EdFi.Ods.Api.Common.Providers;
 using EdFi.Ods.Common;
 
-namespace EdFi.Ods.Api.Startup.ExternalTasks
+namespace EdFi.Ods.Features.OpenApiMetadata
 {
     public class InitializeOpenApiMetadataCache : IExternalTask
     {

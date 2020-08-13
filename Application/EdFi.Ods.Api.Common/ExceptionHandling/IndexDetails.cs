@@ -5,7 +5,7 @@
 
 using System.Collections.Generic;
 
-namespace EdFi.Ods.Api.ExceptionHandling
+namespace EdFi.Ods.Api.Common.ExceptionHandling
 {
     public class IndexDetails
     {

@@ -3,11 +3,11 @@
 // The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
 // See the LICENSE and NOTICES files in the project root for more information.
 
-using EdFi.Ods.Api.Services.Metadata.Models;
 using EdFi.Ods.Common.Extensions;
 using EdFi.Ods.Common.Utils.Profiles;
+using EdFi.Ods.Features.OpenApiMetadata.Dtos;
 
-namespace EdFi.Ods.Api.Services.Metadata.Strategies.FactoryStrategies
+namespace EdFi.Ods.Features.OpenApiMetadata.Strategies.FactoryStrategies
 {
     public class SwaggerPathsFactoryCompositeStrategy : ISwaggerPathsFactoryNamingStrategy
     {

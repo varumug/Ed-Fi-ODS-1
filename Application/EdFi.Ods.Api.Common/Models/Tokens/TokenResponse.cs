@@ -3,10 +3,9 @@
 // The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
 // See the LICENSE and NOTICES files in the project root for more information.
 
-using Castle.MicroKernel.Lifestyle.Scoped;
-using EdFi.Admin.DataAccess.Models;
+using System;
 
-namespace EdFi.Ods.Api.Services.Authentication.ClientCredentials
+namespace EdFi.Ods.Api.Common.Models.Tokens
 {
     public class TokenResponse
     {
@@ -14,15 +13,18 @@ namespace EdFi.Ods.Api.Services.Authentication.ClientCredentials
 
         public int? Expires_in { get; private set; }
 
-        public string Token_type => "bearer";
+        public string Token_type
+        {
+            get => "bearer";
+        }
 
         public string Scope { get; private set; }
 
-        public void SetToken(ClientAccessToken token)
+        public void SetToken(Guid tokenId, int expiresIn, string scope)
         {
-            Access_token = token.Id.ToString("N");
-            Expires_in = (int) token.Duration.TotalSeconds;
-            Scope = token.Scope;
+            Access_token = tokenId.ToString("N");
+            Expires_in = expiresIn;
+            Scope = scope;
         }
     }
 }

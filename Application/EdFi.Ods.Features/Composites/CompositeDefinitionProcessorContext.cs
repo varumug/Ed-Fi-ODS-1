@@ -10,7 +10,7 @@ using EdFi.Ods.Common.Extensions;
 using EdFi.Ods.Common.Models.Domain;
 using EdFi.Ods.Common.Models.Resource;
 
-namespace EdFi.Ods.Common.Composites
+namespace EdFi.Ods.Features.Composites
 {
     public class CompositeDefinitionProcessorContext
     {
@@ -65,6 +65,10 @@ namespace EdFi.Ods.Common.Composites
         public bool ShouldFlatten() => AttributeValueAsBool(CompositeDefinitionHelper.Flatten);
 
         public bool ShouldIncludeResourceSubtype() => AttributeValueAsBool(CompositeDefinitionHelper.IncludeResourceSubtype);
+
+        public bool ShouldUseHierarchy() => AttributeValueAsBool(CompositeDefinitionHelper.UseHierarchy);
+
+        public bool ShouldUseReferenceHierarchy() => AttributeValueAsBool(CompositeDefinitionHelper.UseReferencedHierarchy);
 
         public string AttributeValue(string attributeName) => CurrentElement.AttributeValue(attributeName);
 

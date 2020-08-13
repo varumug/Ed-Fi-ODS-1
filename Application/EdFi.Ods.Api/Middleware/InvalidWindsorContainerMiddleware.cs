@@ -7,10 +7,11 @@ using System.IO;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+#if NETFRAMEWORK
 using log4net;
 using Microsoft.Owin;
 
-namespace EdFi.Ods.Api.Startup.Middleware {
+namespace EdFi.Ods.Api.Middleware {
     public class InvalidWindsorContainerMiddleware : OwinMiddleware
     {
         private readonly ILog _logger = LogManager.GetLogger(typeof(InvalidWindsorContainerMiddleware));
@@ -28,3 +29,4 @@ namespace EdFi.Ods.Api.Startup.Middleware {
         }
     }
 }
+#endif

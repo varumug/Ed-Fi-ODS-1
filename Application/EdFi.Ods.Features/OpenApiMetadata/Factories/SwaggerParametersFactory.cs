@@ -5,9 +5,9 @@
 
 using System.Collections.Generic;
 using EdFi.Ods.Common.Configuration;
-using Swashbuckle.Swagger;
+using EdFi.Ods.Features.OpenApiMetadata.Models;
 
-namespace EdFi.Ods.Api.Services.Metadata.Factories
+namespace EdFi.Ods.Features.OpenApiMetadata.Factories
 {
     public class SwaggerParametersFactory
     {
@@ -37,7 +37,9 @@ namespace EdFi.Ods.Api.Services.Metadata.Factories
                         type = "integer",
                         format = "int32",
                         minimum = 1,
+#if NETFRAMEWORK
                         maximum  = new DefaultPageSizeLimitProvider().GetDefaultPageSizeLimit(),
+#endif
                         required = false,
                         @default = 25
                     }

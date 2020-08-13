@@ -3,8 +3,6 @@
 // The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
 // See the LICENSE and NOTICES files in the project root for more information.
 
-using System.Collections;
-using System.Collections.Generic;
 using NHibernate.Cache;
 using NHibernate.Engine;
 using NHibernate.Mapping;
@@ -12,7 +10,7 @@ using NHibernate.Persister.Entity;
 using NHibernate.Type;
 using NHibernate.Util;
 
-namespace EdFi.Ods.Api.NHibernate.Architecture
+namespace EdFi.Ods.Api.Common.Infrastructure.Architecture.Persisters
 {
     // Addresses ODS-2964 - https://tracker.ed-fi.org/browse/ODS-2964
     //

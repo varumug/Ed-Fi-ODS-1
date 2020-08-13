@@ -5,11 +5,15 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using EdFi.Ods.Api.Extensibility;
-using EdFi.Ods.Api.NHibernate.Architecture.Criteria;
-using EdFi.Ods.Api.NHibernate.Filtering;
+using System.Reflection;
+using EdFi.Ods.Api.Common.Infrastructure.Extensibility;
+using EdFi.Ods.Api.Common.Infrastructure.Filtering;
+using EdFi.Ods.Api.Common.Providers;
+using EdFi.Ods.Api.Common.Providers.Criteria;
 using EdFi.Ods.Common;
+using EdFi.Ods.Common.Database;
 using EdFi.Ods.Common.Extensions;
 using EdFi.Ods.Common.Utils.Extensions;
 using NHibernate;
@@ -17,7 +21,7 @@ using NHibernate.Cfg;
 using NHibernate.Cfg.MappingSchema;
 using NHibernate.Mapping;
 
-namespace EdFi.Ods.Api.NHibernate.Architecture
+namespace EdFi.Ods.Api.Common.Infrastructure.Configuration
 {
     public class NHibernateConfigurator : INHibernateConfigurator
     {
@@ -35,29 +39,44 @@ namespace EdFi.Ods.Api.NHibernate.Architecture
         private readonly IFilterCriteriaApplicatorProvider _filterCriteriaApplicatorProvider;
         private readonly IOrmMappingFileDataProvider _ormMappingFileDataProvider;
 
+#if NETFRAMEWORK
         public NHibernateConfigurator(IExtensionNHibernateConfigurationProvider[] extensionConfigurationProviders,
             INHibernateBeforeBindMappingActivity[] beforeBindMappingActivities,
             INHibernateFilterConfigurator[] authorizationStrategyConfigurators,
             IFilterCriteriaApplicatorProvider filterCriteriaApplicatorProvider,
             INHibernateConfigurationActivity[] configurationActivities,
             IOrmMappingFileDataProvider ormMappingFileDataProvider)
+#elif NETSTANDARD
+        private IOdsDatabaseConnectionStringProvider _connectionStringProvider;
+        public NHibernateConfigurator(IEnumerable<IExtensionNHibernateConfigurationProvider> extensionConfigurationProviders,
+            IEnumerable<INHibernateBeforeBindMappingActivity> beforeBindMappingActivities,
+            IEnumerable<INHibernateFilterConfigurator> authorizationStrategyConfigurators,
+            IFilterCriteriaApplicatorProvider filterCriteriaApplicatorProvider,
+            IEnumerable<INHibernateConfigurationActivity> configurationActivities,
+            IOrmMappingFileDataProvider ormMappingFileDataProvider,
+            IOdsDatabaseConnectionStringProvider connectionStringProvider)
+#endif
         {
+#if NETSTANDARD
+            _connectionStringProvider = connectionStringProvider;
+#endif
             _ormMappingFileDataProvider = Preconditions.ThrowIfNull(
                 ormMappingFileDataProvider, nameof(ormMappingFileDataProvider));
 
             _extensionConfigurationProviders = Preconditions.ThrowIfNull(
-                extensionConfigurationProviders, nameof(extensionConfigurationProviders));
+                extensionConfigurationProviders.ToArray(), nameof(extensionConfigurationProviders));
 
             _beforeBindMappingActivities = Preconditions.ThrowIfNull(
-                beforeBindMappingActivities, nameof(beforeBindMappingActivities));
+                beforeBindMappingActivities.ToArray(), nameof(beforeBindMappingActivities));
 
             _authorizationStrategyConfigurators = Preconditions.ThrowIfNull(
-                authorizationStrategyConfigurators, nameof(authorizationStrategyConfigurators));
+                authorizationStrategyConfigurators.ToArray(), nameof(authorizationStrategyConfigurators));
+
+            _configurationActivities = Preconditions.ThrowIfNull(
+                configurationActivities.ToArray(), nameof(configurationActivities));
 
             _filterCriteriaApplicatorProvider = Preconditions.ThrowIfNull(
                 filterCriteriaApplicatorProvider, nameof(filterCriteriaApplicatorProvider));
-
-            _configurationActivities = Preconditions.ThrowIfNull(configurationActivities, nameof(configurationActivities));
 
             //Resolve all extensions to include in core mapping
             _entityExtensionHbmBagsByEntityName = _extensionConfigurationProviders
@@ -90,9 +109,17 @@ namespace EdFi.Ods.Api.NHibernate.Architecture
                 .ToDictionary(k => k.Key, v => v.SelectMany(y => y.Value).ToArray());
         }
 
-        public Configuration Configure()
+        public NHibernate.Cfg.Configuration Configure()
         {
-            var configuration = new Configuration();
+            var configuration = new NHibernate.Cfg.Configuration();
+#if NETSTANDARD
+            // NOTE: the NHibernate documentation states that this file would be automatically loaded, however in testings this was not the case.
+            // The expectation is that this file will be in the binaries location.
+            configuration.Configure(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "hibernate.cfg.xml"));
+
+            // NOTE: since we are using the connection string provider instead we just need to configure the connection string.
+            configuration.DataBaseIntegration(c => c.ConnectionString = _connectionStringProvider.GetConnectionString());
+#endif
 
             // Add the configuration to the container
             configuration.BeforeBindMapping += Configuration_BeforeBindMapping;
@@ -103,7 +130,7 @@ namespace EdFi.Ods.Api.NHibernate.Architecture
                 .Distinct()
                 .ToList();
 
-            // Group the filters by name first (there can only be 1 "default" filter, but flexibility 
+            // Group the filters by name first (there can only be 1 "default" filter, but flexibility
             // to apply same filter name with same parameters to different entities should be supported
             // (and is in fact supported below when filters are applied to individual entity mappings)
             var allFilterDetailsGroupedByName = allFilterDetails

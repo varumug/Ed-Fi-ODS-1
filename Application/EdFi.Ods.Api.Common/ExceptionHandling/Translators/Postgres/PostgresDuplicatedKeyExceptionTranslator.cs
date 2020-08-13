@@ -6,10 +6,11 @@
 using System;
 using System.Net;
 using System.Text.RegularExpressions;
+using EdFi.Ods.Api.Common.Models;
 using NHibernate.Exceptions;
 using Npgsql;
 
-namespace EdFi.Ods.Api.ExceptionHandling.Translators.Postgres
+namespace EdFi.Ods.Api.Common.ExceptionHandling.Translators.Postgres
 {
     public class PostgresDuplicatedKeyExceptionTranslator : IExceptionTranslator
     {

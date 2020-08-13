@@ -4,15 +4,10 @@
 // See the LICENSE and NOTICES files in the project root for more information.
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using EdFi.Ods.Common.Conventions;
-using NHibernate;
 using NHibernate.Properties;
 
-namespace EdFi.Ods.Api.NHibernate.Architecture
+namespace EdFi.Ods.Api.Common.Infrastructure.Architecture.Accessors
 {
     public class EmbeddedObjectPropertyAccessor : IPropertyAccessor
     {

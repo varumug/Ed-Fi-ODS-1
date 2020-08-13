@@ -5,9 +5,8 @@
 
 using System;
 using EdFi.Ods.Common;
-using EdFi.Ods.Pipelines;
 
-namespace EdFi.Ods.Api.ChangeQueries.Pipelines.GetDeletedResource
+namespace EdFi.Ods.Api.Common.Infrastructure.Pipelines.GetDeletedResource
 {
     public class GetDeletedResourceContext<TEntityModel> : IHasIdentifier, IHasPersistentModel<TEntityModel>
         where TEntityModel : class

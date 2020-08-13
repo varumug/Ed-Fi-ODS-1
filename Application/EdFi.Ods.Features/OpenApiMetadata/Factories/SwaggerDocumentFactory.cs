@@ -6,14 +6,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using EdFi.Ods.Api.Constants;
-using EdFi.Ods.Api.Services.Metadata.Models;
-using EdFi.Ods.Api.Services.Metadata.Strategies.ResourceStrategies;
+using EdFi.Ods.Api.Common.Constants;
+using EdFi.Ods.Features.OpenApiMetadata.Dtos;
+using EdFi.Ods.Features.OpenApiMetadata.Models;
+using EdFi.Ods.Features.OpenApiMetadata.Strategies.ResourceStrategies;
 using log4net;
 using Newtonsoft.Json;
-using Swashbuckle.Swagger;
 
-namespace EdFi.Ods.Api.Services.Metadata.Factories
+namespace EdFi.Ods.Features.OpenApiMetadata.Factories
 {
     public class SwaggerDocumentFactory
     {
@@ -58,7 +58,7 @@ namespace EdFi.Ods.Api.Services.Metadata.Factories
                 var resources = resourceStrategy.GetFilteredResources(_documentContext)
                                                 .ToList();
 
-                var swaggerDocument = new SwaggerDocument
+                var swaggerDocument = new OpenApiMetadataDocument
                                       {
                                           info = new Info
                                                  {

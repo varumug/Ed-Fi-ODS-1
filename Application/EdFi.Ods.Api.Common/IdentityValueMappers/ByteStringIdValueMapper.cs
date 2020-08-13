@@ -6,7 +6,7 @@
 using System;
 using System.Text;
 
-namespace EdFi.Ods.Api.IdentityValueMappers
+namespace EdFi.Ods.Api.Common.IdentityValueMappers
 {
     public class ByteStringIdValueMapper : IUniqueIdToIdValueMapper
     {
@@ -25,8 +25,7 @@ namespace EdFi.Ods.Api.IdentityValueMappers
         {
             return new PersonIdentifiersValueMap
                    {
-                       Id = id, UniqueId = Encoding.ASCII.GetString(id.ToByteArray())
-                                                   .TrimEnd('\0')
+                       Id = id, UniqueId = Encoding.ASCII.GetString(id.ToByteArray()).TrimEnd(new[] {'\0'})
                    };
         }
     }

@@ -5,15 +5,15 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using EdFi.Ods.Api.Services.Metadata.Models;
-using EdFi.Ods.Api.Services.Metadata.Strategies.FactoryStrategies;
 using EdFi.Ods.Common.Extensions;
 using EdFi.Ods.Common.Models.Resource;
 using EdFi.Ods.Common.Specifications;
 using EdFi.Ods.Common.Utils.Extensions;
-using Swashbuckle.Swagger;
+using EdFi.Ods.Features.OpenApiMetadata.Dtos;
+using EdFi.Ods.Features.OpenApiMetadata.Models;
+using EdFi.Ods.Features.OpenApiMetadata.Strategies.FactoryStrategies;
 
-namespace EdFi.Ods.Api.Services.Metadata.Factories
+namespace EdFi.Ods.Features.OpenApiMetadata.Factories
 {
     public class SwaggerDefinitionsFactory
     {

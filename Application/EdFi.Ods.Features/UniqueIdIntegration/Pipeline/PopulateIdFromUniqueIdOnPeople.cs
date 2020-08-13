@@ -6,11 +6,10 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using EdFi.Ods.Api.Common.Infrastructure.Pipelines;
 using EdFi.Ods.Common;
 using EdFi.Ods.Common.Caching;
 using EdFi.Ods.Common.Specifications;
-using EdFi.Ods.Pipelines;
-using EdFi.Ods.Pipelines.Common;
 
 namespace EdFi.Ods.Features.UniqueIdIntegration.Pipeline
 {

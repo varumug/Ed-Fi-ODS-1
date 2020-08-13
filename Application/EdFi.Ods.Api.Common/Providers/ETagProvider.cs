@@ -8,7 +8,7 @@ using System.Globalization;
 using EdFi.Ods.Common;
 using EdFi.Ods.Common.Exceptions;
 
-namespace EdFi.Ods.Api.ETag
+namespace EdFi.Ods.Api.Common.Providers
 {
     // TODO: Revisit
     public class ETagProvider : IETagProvider

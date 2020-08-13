@@ -8,11 +8,12 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using EdFi.Ods.Api.Common.Infrastructure.Architecture.Activities;
 using EdFi.Ods.Common;
 using NHibernate;
 using NHibernate.Type;
 
-namespace EdFi.Ods.Api.NHibernate.Architecture
+namespace EdFi.Ods.Api.Common.Infrastructure.Architecture.SqlServer
 {
     /// <summary>
     /// Implements an <see cref="IParameterListSetter" /> that is optimized for SQL Server by making

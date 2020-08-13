@@ -8,9 +8,11 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
+using EdFi.Ods.Api.Common.Models;
+using EdFi.Ods.Api.Common.Providers;
 using NHibernate.Exceptions;
 
-namespace EdFi.Ods.Api.ExceptionHandling.Translators.SqlServer
+namespace EdFi.Ods.Api.Common.ExceptionHandling.Translators.SqlServer
 {
     public class DuplicateNaturalKeyCreateExceptionTranslator : IExceptionTranslator
     {

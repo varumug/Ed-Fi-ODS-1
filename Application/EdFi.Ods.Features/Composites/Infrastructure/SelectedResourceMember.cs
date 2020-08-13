@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace EdFi.Ods.Api.NHibernate.Composites
+namespace EdFi.Ods.Features.Composites.Infrastructure
 {
     /// <summary>
     /// Represents a resource member selected via a 'fields' query string parameter.

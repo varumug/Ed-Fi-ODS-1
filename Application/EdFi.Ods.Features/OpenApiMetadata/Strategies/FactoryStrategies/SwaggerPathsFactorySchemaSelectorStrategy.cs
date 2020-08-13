@@ -5,9 +5,9 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using EdFi.Ods.Api.Services.Metadata.Models;
+using EdFi.Ods.Features.OpenApiMetadata.Dtos;
 
-namespace EdFi.Ods.Api.Services.Metadata.Strategies.FactoryStrategies
+namespace EdFi.Ods.Features.OpenApiMetadata.Strategies.FactoryStrategies
 {
     public class SwaggerPathsFactorySchemaSelectorStrategy : ISwaggerPathsFactorySelectorStrategy
     {

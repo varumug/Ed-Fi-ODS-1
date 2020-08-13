@@ -7,22 +7,20 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using EdFi.Ods.Api.Extensions;
+using EdFi.Ods.Api.Common.Extensions;
 using EdFi.Ods.Common;
-using EdFi.Ods.Pipelines;
-using EdFi.Ods.Pipelines.Common;
 
-namespace EdFi.Ods.Api.Pipelines.Steps
+namespace EdFi.Ods.Api.Common.Infrastructure.Pipelines.Steps
 {
-    public class MapEntityModelsToResourceModels<TContext, TResult, TResourceModel, TEntityModel> 
-        : IStep<TContext, TResult>
+    public class MapEntityModelsToResourceModels<TContext, TResult, TResourceModel, TEntityModel> : IStep<TContext, TResult>
         where TContext : IHasPersistentModels<TEntityModel>
         where TResult : PipelineResultBase, IHasResources<TResourceModel>
         where TResourceModel : IHasETag //, new()
         where TEntityModel : class, IMappable
     {
-        public Task ExecuteAsync(TContext context, TResult result, CancellationToken cancellationToken)
-        { 
+        public void Execute(TContext context, TResult result)
+        {
+            // NOTE this step will always run synchronously so we are not moving the logic to the async method.
             try
             {
                 // Map the persistent models to resources
@@ -35,7 +33,11 @@ namespace EdFi.Ods.Api.Pipelines.Steps
             {
                 result.Exception = ex;
             }
+        }
 
+        public Task ExecuteAsync(TContext context, TResult result, CancellationToken cancellationToken)
+        { 
+            Execute(context, result);
             return Task.CompletedTask;
         }
     }

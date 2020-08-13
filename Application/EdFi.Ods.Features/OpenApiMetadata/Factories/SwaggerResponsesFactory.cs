@@ -4,9 +4,9 @@
 // See the LICENSE and NOTICES files in the project root for more information.
 
 using System.Collections.Generic;
-using Swashbuckle.Swagger;
+using EdFi.Ods.Features.OpenApiMetadata.Models;
 
-namespace EdFi.Ods.Api.Services.Metadata.Factories
+namespace EdFi.Ods.Features.OpenApiMetadata.Factories
 {
     public class SwaggerResponsesFactory
     {

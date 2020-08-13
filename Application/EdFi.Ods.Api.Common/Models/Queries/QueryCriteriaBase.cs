@@ -5,7 +5,7 @@
 
 using EdFi.Ods.Common;
 
-namespace EdFi.Ods.Api.Services.Queries
+namespace EdFi.Ods.Api.Common.Models.Queries
 {
     public abstract class QueryCriteriaBase : IQueryCriteriaBase
     {

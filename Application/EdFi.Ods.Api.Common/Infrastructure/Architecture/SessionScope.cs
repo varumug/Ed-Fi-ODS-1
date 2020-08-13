@@ -7,7 +7,7 @@ using System;
 using NHibernate;
 using NHibernate.Context;
 
-namespace EdFi.Ods.Api.NHibernate.Architecture
+namespace EdFi.Ods.Api.Common.Infrastructure.Architecture
 {
     /// <summary>
     /// Implements a localized disposable scope for use of the "current" NHibernate session, abstracting any contextually 

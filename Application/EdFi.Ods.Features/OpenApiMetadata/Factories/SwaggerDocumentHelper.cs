@@ -6,15 +6,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
-using EdFi.Ods.Api.Services.Metadata.Models;
 using EdFi.Ods.Common.Extensions;
 using EdFi.Ods.Common.Models.Domain;
 using EdFi.Ods.Common.Models.Resource;
 using EdFi.Ods.Common.Specifications;
-using Swashbuckle.Swagger;
-using Schema = Swashbuckle.Swagger.Schema;
+using EdFi.Ods.Features.OpenApiMetadata.Dtos;
+using EdFi.Ods.Features.OpenApiMetadata.Models;
+using Schema = EdFi.Ods.Features.OpenApiMetadata.Models.Schema;
 
-namespace EdFi.Ods.Api.Services.Metadata.Factories
+namespace EdFi.Ods.Features.OpenApiMetadata.Factories
 {
     public static class SwaggerDocumentHelper
     {

@@ -5,7 +5,7 @@
 
 using System;
 
-namespace EdFi.Ods.Api.Services.Metadata
+namespace EdFi.Ods.Api.Common.Models
 {
     public class OpenApiContent
     {

@@ -6,7 +6,7 @@
 using System.Text.RegularExpressions;
 using Npgsql;
 
-namespace EdFi.Ods.Api.ExceptionHandling.Translators.Postgres
+namespace EdFi.Ods.Api.Common.ExceptionHandling.Translators.Postgres
 {
     public enum PostgresExceptionConstraintType
     {

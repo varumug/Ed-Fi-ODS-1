@@ -5,7 +5,7 @@
 
 using EdFi.Ods.Common.Conventions;
 
-namespace EdFi.Ods.Api.Services.Metadata.Controllers
+namespace EdFi.Ods.Features.OpenApiMetadata.Models
 {
     public class OpenApiMetadataRequest
     {

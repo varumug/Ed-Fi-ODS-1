@@ -6,7 +6,7 @@
 using System;
 using System.Runtime.Serialization;
 
-namespace EdFi.Ods.Api.ChangeQueries
+namespace EdFi.Ods.Api.Common.Models
 {
     public class DeletedResource
     {

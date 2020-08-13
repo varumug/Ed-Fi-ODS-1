@@ -5,7 +5,7 @@
 
 using System.ComponentModel.DataAnnotations;
 
-namespace EdFi.Ods.Api.Validation
+namespace EdFi.Ods.Api.Common.Attributes
 {
     public class NoWhitespaceAttribute : ValidationAttribute
     {

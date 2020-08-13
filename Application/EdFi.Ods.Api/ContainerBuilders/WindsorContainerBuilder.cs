@@ -1,4 +1,5 @@
-﻿// SPDX-License-Identifier: Apache-2.0
+﻿#if NETFRAMEWORK
+// SPDX-License-Identifier: Apache-2.0
 // Licensed to the Ed-Fi Alliance under one or more agreements.
 // The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
 // See the LICENSE and NOTICES files in the project root for more information.
@@ -11,11 +12,11 @@ using Castle.Facilities.TypedFactory;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor;
 using EdFi.Ods.Api._Installers;
-using EdFi.Ods.Api.Caching;
-using EdFi.Ods.Api.Dependencies;
-using EdFi.Ods.Api.Startup.Features;
-using EdFi.Ods.Api.Startup.Features.Installers;
-using EdFi.Ods.Api.Startup.HttpConfigurators;
+using EdFi.Ods.Api.Common.Caching;
+using EdFi.Ods.Api.Common.Dependencies;
+using EdFi.Ods.Api.Common.Infrastructure.Extensibility;
+using EdFi.Ods.Api.Features;
+using EdFi.Ods.Api.HttpConfigurators;
 using EdFi.Ods.Common;
 using EdFi.Ods.Common.Caching;
 using EdFi.Ods.Common.ChainOfResponsibility;
@@ -27,10 +28,11 @@ using EdFi.Ods.Common._Installers;
 using EdFi.Ods.Common.Configuration;
 using EdFi.Ods.Common.Extensibility;
 using EdFi.Ods.Common.Security;
+using EdFi.Ods.Security.Container.Installers;
 using log4net;
 using EdFi.Ods.Security.Authorization;
 
-namespace EdFi.Ods.Api.Startup.ContainerBuilders
+namespace EdFi.Ods.Api.ContainerBuilders
 {
     public class WindsorContainerBuilder : IWindsorContainerBuilder
     {
@@ -45,12 +47,12 @@ namespace EdFi.Ods.Api.Startup.ContainerBuilders
             InstallFacilities(container);
 
             InstallFeaturePrerequisites(container);
-            
+
             var assembliesProvider = container.Resolve<IAssembliesProvider>();
             var configValueProvider = container.Resolve<IConfigValueProvider>();
-            
+
             InstallPlugins();
-            
+
             InstallCoreFeatures(container);
 
             InstallFeatures(container);
@@ -82,7 +84,7 @@ namespace EdFi.Ods.Api.Startup.ContainerBuilders
             container.Install(
                 new ConnectionStringProvidersInstaller(apiConfigurationProvider),
                 new HttpConfigurationInstaller(apiConfigurationProvider),
-                new SecurityInstaller(assembliesProvider, configValueProvider),
+                new SecurityInstaller(configValueProvider),
                 new NHibernateInstaller(),
                 new CoreApiInstaller(assembliesProvider, apiConfigurationProvider, configValueProvider),
                 new NHibernateConfiguratorInstaller(apiConfigurationProvider)
@@ -105,6 +107,7 @@ namespace EdFi.Ods.Api.Startup.ContainerBuilders
             foreach (var assembly in assembliesProvider.GetAssembliesContaining<IFeature>())
             {
                 _logger.Debug($"Registering features from assembly {assembly.FullName}.");
+
                 container.Register(
                     Classes.FromAssembly(assembly)
                         .BasedOn<IFeature>()
@@ -121,8 +124,8 @@ namespace EdFi.Ods.Api.Startup.ContainerBuilders
             // apply the features that are enabled.
             var enabledFeatures = container.Resolve<IFeatureProvider>().EnabledFeatures();
 
-            var featureNames = string.Join(", ", enabledFeatures.Select(f => f.FeatureName)); 
-            
+            var featureNames = string.Join(", ", enabledFeatures.Select(f => f.FeatureName));
+
             _logger.Debug($"The following features are being installed: {featureNames}");
 
             container.Install(enabledFeatures.Select(f => f.Installer).ToArray());
@@ -161,7 +164,9 @@ namespace EdFi.Ods.Api.Startup.ContainerBuilders
 
             // Provide cache using a closure rather than repeated invocations to the container
             IPersonUniqueIdToUsiCache personUniqueIdToUsiCache = null;
-            PersonUniqueIdToUsiCache.GetCache = () => personUniqueIdToUsiCache ?? (personUniqueIdToUsiCache = container.Resolve<IPersonUniqueIdToUsiCache>());
+
+            PersonUniqueIdToUsiCache.GetCache = ()
+                => personUniqueIdToUsiCache ?? (personUniqueIdToUsiCache = container.Resolve<IPersonUniqueIdToUsiCache>());
 
             // Provide cache using a closure rather than repeated invocations to the container
             IDescriptorsCache cache = null;
@@ -169,6 +174,10 @@ namespace EdFi.Ods.Api.Startup.ContainerBuilders
 
             ResourceModelHelper.ResourceModel =
                 new Lazy<ResourceModel>(() => container.Resolve<IResourceModelProvider>().GetResourceModel());
+
+            EntityExtensionsFactory.Instance = container.Kernel.HasComponent(typeof(IEntityExtensionsFactory))
+                ? container.Resolve<IEntityExtensionsFactory>()
+                : new NoEntityExtensionsFactory();
         }
 
         private void InstallFacilities(IWindsorContainer container)
@@ -180,3 +189,4 @@ namespace EdFi.Ods.Api.Startup.ContainerBuilders
         }
     }
 }
+#endif

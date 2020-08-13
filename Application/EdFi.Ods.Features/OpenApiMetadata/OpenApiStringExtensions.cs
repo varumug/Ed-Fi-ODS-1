@@ -5,7 +5,7 @@
 
 using System.Text.RegularExpressions;
 
-namespace EdFi.Ods.Api.Services.Metadata
+namespace EdFi.Ods.Features.OpenApiMetadata
 {
     public static class OpenApiStringExtensions
     {

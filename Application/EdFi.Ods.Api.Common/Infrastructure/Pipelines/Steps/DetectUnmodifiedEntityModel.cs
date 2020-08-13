@@ -6,15 +6,12 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using EdFi.Ods.Api.Exceptions;
+using EdFi.Ods.Api.Common.Exceptions;
 using EdFi.Ods.Common;
-using EdFi.Ods.Pipelines;
-using EdFi.Ods.Pipelines.Common;
 
-namespace EdFi.Ods.Api.Pipelines.Steps
+namespace EdFi.Ods.Api.Common.Infrastructure.Pipelines.Steps
 {
-    public class DetectUnmodifiedEntityModel<TContext, TResult, TResourceModel, TEntityModel> 
-        : IStep<TContext, TResult>
+    public class DetectUnmodifiedEntityModel<TContext, TResult, TResourceModel, TEntityModel> : IStep<TContext, TResult>
         where TContext : IHasPersistentModel<TEntityModel>, IHasETag
         where TResult : PipelineResultBase
         where TEntityModel : class
@@ -26,7 +23,7 @@ namespace EdFi.Ods.Api.Pipelines.Steps
             this.etagProvider = etagProvider;
         }
 
-        public Task ExecuteAsync(TContext context, TResult result, CancellationToken cancellationToken)
+        public void Execute(TContext context, TResult result)
         {
             // NOTE: the etag provide is always synchronous so it makes no sense to move this code into the async method.
             try
@@ -34,22 +31,23 @@ namespace EdFi.Ods.Api.Pipelines.Steps
                 // Don't process model if ETag isn't present
                 if (context.ETag == null)
                 {
-                    return Task.CompletedTask;
+                    return;
                 }
 
                 // Check the ETag for no modifications
                 if (context.ETag == etagProvider.GetETag(context.PersistentModel))
                 {
                     // TODO: Consider using System.Net.HttpResult for these results instead of exceptions
-                    result.Exception = new NotModifiedException();
+                    throw new NotModifiedException();
                 }
             }
             catch (Exception ex)
             {
                 result.Exception = ex;
             }
-
-            return Task.CompletedTask;
         }
+
+        public async Task ExecuteAsync(TContext context, TResult result, CancellationToken cancellationToken)
+            => await Task.Run(() => Execute(context, result), cancellationToken).ConfigureAwait(false);
     }
 }

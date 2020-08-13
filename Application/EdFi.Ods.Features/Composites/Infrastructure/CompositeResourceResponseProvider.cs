@@ -11,12 +11,11 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Xml.Linq;
-using EdFi.Ods.Api.Exceptions;
-using EdFi.Ods.Api.NHibernate.Extensions;
+using EdFi.Ods.Api.Common.Exceptions;
+using EdFi.Ods.Api.Common.Extensions;
+using EdFi.Ods.Api.Common.Infrastructure.Filtering;
 using EdFi.Ods.Common;
 using EdFi.Ods.Common.Caching;
-using EdFi.Ods.Common.Composites;
-using EdFi.Ods.Common.Configuration;
 using EdFi.Ods.Common.Conventions;
 using EdFi.Ods.Common.Extensions;
 using EdFi.Ods.Common.Models;
@@ -30,7 +29,7 @@ using Newtonsoft.Json;
 using NHibernate;
 using NHibernate.Context;
 
-namespace EdFi.Ods.Api.NHibernate.Composites
+namespace EdFi.Ods.Features.Composites.Infrastructure
 {
     public class CompositeResourceResponseProvider : ICompositeResourceResponseProvider
     {
@@ -76,7 +75,18 @@ namespace EdFi.Ods.Api.NHibernate.Composites
         {
             Preconditions.ThrowIfNull(parameters, nameof(parameters));
             Preconditions.ThrowIfNull(queryStringParameters, nameof(queryStringParameters));
-            
+
+            var result = Get(compositeDefinition, parameters, queryStringParameters, nullValueHandling);
+
+            return JsonConvert.SerializeObject(result, Formatting.Indented, _jsonSerializerSettings);
+        }
+
+        public object Get(
+            XElement compositeDefinition,
+            IDictionary<string, CompositeSpecificationParameter> parameters,
+            IDictionary<string, object> queryStringParameters,
+            NullValueHandling nullValueHandling = NullValueHandling.Ignore)
+        {
             var resourceModel = GetResourceModel();
 
             bool closeSession = false;
@@ -131,11 +141,11 @@ namespace EdFi.Ods.Api.NHibernate.Composites
                 if (closeSession)
                 {
                     _sessionFactory.GetCurrentSession()
-                                   .Close();
+                        .Close();
                 }
             }
 
-            return JsonConvert.SerializeObject(result, Formatting.Indented, _jsonSerializerSettings);
+            return result;
         }
 
         private bool IsSingleItemRequest(
@@ -151,7 +161,7 @@ namespace EdFi.Ods.Api.NHibernate.Composites
             }
 
             string logicalSchema = currentElt.Attributes()
-                                             .SingleOrDefault(x => x.Name.ToString().EqualsIgnoreCase(CompositeDefinitionHelper.LogicalSchema))
+                                             .SingleOrDefault(x => StringExtensions.EqualsIgnoreCase(x.Name.ToString(), CompositeDefinitionHelper.LogicalSchema))
                                             ?.Value ?? EdFiConventions.LogicalName;
 
             var physicalName = resourceModel.GetPhysicalNameForLogicalName(logicalSchema);
@@ -239,11 +249,12 @@ namespace EdFi.Ods.Api.NHibernate.Composites
             Hashtable parentRow,
             string[] parentKeys,
             IReadOnlyList<SelectedResourceMember> fieldSelections,
-            NullValueHandling nullValueHandling)
+            NullValueHandling nullValueHandling,
+            IDictionary<string, string> recursiveChildKeyMap = null)
         {
             var results = new List<IDictionary>();
 
-            var currentEnumerator = query.GetEnumerator(parentRow);
+            var currentEnumerator = query.GetEnumerator(parentRow, parentKeys, recursiveChildKeyMap);
 
             do
             {
@@ -262,7 +273,7 @@ namespace EdFi.Ods.Api.NHibernate.Composites
                 }
 
                 // If the child is outside the context of the parent, quit processing
-                if (parentRow != null && !IsChildRow(parentKeys, parentRow, currentRow))
+                if (parentRow != null && !IsChildRow(parentKeys, parentRow, recursiveChildKeyMap, currentRow))
                 {
                     break;
                 }
@@ -300,7 +311,32 @@ namespace EdFi.Ods.Api.NHibernate.Composites
                            .ApplyCardinality(childQuery.IsSingleItemResult);
                 }
 
-                results.Add(resultItem);
+                // Is the current query recursive?
+                if (query.IsRecursive)
+                {
+                    // Need to add a child "self" collection with recursion
+                    resultItem[query.DisplayName] = ProcessResults(
+                        query,
+                        currentRow,
+                        query.KeyFields,
+                        fieldSelections,
+                        nullValueHandling,
+                        query.RecursiveChildKeyMap);
+
+                    // Strip out hierarchical support fields from the response
+                    resultItem.Keys.OfType<string>()
+                              .Where(k => k.StartsWith(CompositeDefinitionHelper.HierarchyMarker))
+                              .ToList()
+                              .ForEach(k => resultItem.Remove(k));
+
+                    // Add the row - we're done.
+                    results.Add(resultItem);
+                }
+                else
+                {
+                    // Just add the row - we're done.
+                    results.Add(resultItem);
+                }
             }
             while (currentEnumerator.MoveNext());
 
@@ -326,7 +362,7 @@ namespace EdFi.Ods.Api.NHibernate.Composites
                                           .ToDictionary(
                                                x => x.Substring(0, x.IndexOf(CompositeDefinitionHelper.Marker)),
                                                x => sourceRow[x]);
-            
+
             HashSet<string> selectedKeys = null;
 
             if (fieldSelections != null && fieldSelections.Count > 0)
@@ -340,7 +376,8 @@ namespace EdFi.Ods.Api.NHibernate.Composites
             }
 
             var keysToProcess = keys.Where(x => !x.StartsWith(CompositeDefinitionHelper.Marker)
-                                                && !x.EndsWith(CompositeDefinitionHelper.NamespaceMarker));
+                                                && !x.EndsWith(CompositeDefinitionHelper.NamespaceMarker)
+                                                && !x.StartsWith(CompositeDefinitionHelper.HierarchyMarker));
 
             // Retain order of properties
             // since pass through items are not in the resource and/or domain model, we need to add them as part of the return fields.
@@ -436,10 +473,23 @@ namespace EdFi.Ods.Api.NHibernate.Composites
             }
         }
 
-        private bool IsChildRow(string[] parentKeys, Hashtable parentRow, Hashtable currentRow)
+        private bool IsChildRow(string[] parentKeys, Hashtable parentRow, IDictionary<string, string> recursiveChildKeyMap, Hashtable currentRow)
         {
-            // Match values based on name.
-            return parentKeys.All(k => Equals(parentRow[k], currentRow[k]));
+            // If no explicit key fields for the children are provided, match values based on name.
+            if (recursiveChildKeyMap == null)
+            {
+                return parentKeys.All(k => Equals(parentRow[k], currentRow[k]));
+            }
+
+            // Explicit child keys have been provided, so match based on values retrieved by name, but positionally for the child
+            return recursiveChildKeyMap
+                  .Select(
+                       kvp =>
+                           new
+                           {
+                               ParentKeyValue = parentRow[kvp.Key], ChildKeyValue = currentRow[kvp.Value]
+                           })
+                  .All(x => Equals(x.ParentKeyValue, x.ChildKeyValue));
         }
     }
 }

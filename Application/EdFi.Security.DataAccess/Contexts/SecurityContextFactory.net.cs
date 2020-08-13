@@ -3,6 +3,7 @@
 // The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
 // See the LICENSE and NOTICES files in the project root for more information.
 
+#if NETFRAMEWORK
 using System;
 using System.Collections.Generic;
 using EdFi.Ods.Common;
@@ -13,17 +14,16 @@ namespace EdFi.Security.DataAccess.Contexts
     public class SecurityContextFactory : ISecurityContextFactory
     {
         private readonly IApiConfigurationProvider _configurationProvider;
-        private readonly IDictionary<DatabaseEngine, Type> _securityContextTypeByDatabaseEngine;
-
-        public SecurityContextFactory(IApiConfigurationProvider configurationProvider)
-        {
-            _configurationProvider = Preconditions.ThrowIfNull(configurationProvider, nameof(configurationProvider));
-
-            _securityContextTypeByDatabaseEngine = new Dictionary<DatabaseEngine, Type>
+        private readonly IDictionary<DatabaseEngine, Type> _securityContextTypeByDatabaseEngine =
+            new Dictionary<DatabaseEngine, Type>
             {
                 {DatabaseEngine.SqlServer, typeof(SqlServerSecurityContext)},
                 {DatabaseEngine.Postgres, typeof(PostgresSecurityContext)}
             };
+
+        public SecurityContextFactory(IApiConfigurationProvider configurationProvider)
+        {
+            _configurationProvider = Preconditions.ThrowIfNull(configurationProvider, nameof(configurationProvider));
         }
 
         public ISecurityContext CreateContext()
@@ -38,3 +38,4 @@ namespace EdFi.Security.DataAccess.Contexts
         }
     }
 }
+#endif

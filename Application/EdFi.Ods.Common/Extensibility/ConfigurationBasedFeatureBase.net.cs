@@ -1,3 +1,4 @@
+#if NETFRAMEWORK
 // SPDX-License-Identifier: Apache-2.0
 // Licensed to the Ed-Fi Alliance under one or more agreements.
 // The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
@@ -14,7 +15,7 @@ namespace EdFi.Ods.Common.Extensibility
     /// </summary>
     public abstract class ConfigurationBasedFeatureBase : ConditionalFeatureBase
     {
-        private readonly IConfigValueProvider _configValueProvider;
+        protected readonly IConfigValueProvider ConfigValueProvider;
 
         /// <summary>
         /// Initializes a new instance of <see cref="ConfigurationBasedFeatureBase"/>
@@ -28,7 +29,7 @@ namespace EdFi.Ods.Common.Extensibility
             IApiConfigurationProvider apiConfigurationProvider)
             : base(configValueProvider, apiConfigurationProvider)
         {
-            _configValueProvider = Preconditions.ThrowIfNull(configValueProvider, nameof(configValueProvider));
+            ConfigValueProvider = Preconditions.ThrowIfNull(configValueProvider, nameof(configValueProvider));
 
             Preconditions.ThrowIfNull(apiConfigurationProvider, nameof(apiConfigurationProvider));
         }
@@ -36,6 +37,7 @@ namespace EdFi.Ods.Common.Extensibility
         public string ConfigKey => $"{FeatureName.ToCamelCase()}:featureIsEnabled";
 
         protected override Func<IApiConfigurationProvider, IConfigValueProvider, bool> ActivationPredicate
-            => (apiConfig, config) => _configValueProvider.GetValue(ConfigKey).ToBoolean();
+            => (apiConfig, config) => ConfigValueProvider.GetValue(ConfigKey).ToBoolean();
     }
 }
+#endif

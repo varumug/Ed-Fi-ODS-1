@@ -4,9 +4,8 @@
 // See the LICENSE and NOTICES files in the project root for more information.
 
 using System;
-using EdFi.Ods.Api.Pipelines;
 
-namespace EdFi.Ods.Pipelines.Put
+namespace EdFi.Ods.Api.Common.Infrastructure.Pipelines.Put
 {
     public class PutResult : PipelineResultBase, IHasResourceChangeDetails
     {

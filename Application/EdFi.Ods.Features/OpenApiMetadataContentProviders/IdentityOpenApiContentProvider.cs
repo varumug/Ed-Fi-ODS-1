@@ -6,10 +6,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using EdFi.Ods.Api.Constants;
+using EdFi.Ods.Api.Common.Constants;
+using EdFi.Ods.Api.Common.Models;
+using EdFi.Ods.Api.Common.Providers;
 using EdFi.Ods.Common.Utils.Extensions;
+using EdFi.Ods.Features.OpenApiMetadata.Models;
 
-namespace EdFi.Ods.Api.Services.Metadata.Providers
+namespace EdFi.Ods.Features.IdentityManagement
 {
     public class IdentityOpenApiContentProvider : IOpenApiContentProvider
     {

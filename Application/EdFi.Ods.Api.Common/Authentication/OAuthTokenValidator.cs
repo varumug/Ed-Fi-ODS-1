@@ -4,12 +4,11 @@
 // See the LICENSE and NOTICES files in the project root for more information.
 
 using System;
-using System.Data.SqlClient;
 using System.Threading.Tasks;
 using EdFi.Ods.Sandbox.Repositories;
 using EdFi.Ods.Common;
 
-namespace EdFi.Ods.Api.Services.Authorization
+namespace EdFi.Ods.Api.Common.Authentication
 {
     /// <summary>
     /// Implements a token validator that retrieves the API client's details from the Admin database.

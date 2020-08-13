@@ -6,7 +6,7 @@
 using System.ComponentModel.DataAnnotations;
 using EdFi.Ods.Common.Extensions;
 
-namespace EdFi.Ods.Api.Validation
+namespace EdFi.Ods.Api.Common.Attributes
 {
     /// <summary>
     /// Ensures that the value assigned is not the Type's default value (e.g. "null" for reference types, 0's for numbers, etc.).

@@ -17,7 +17,8 @@ namespace EdFi.BulkLoadClient.Console.Application
         public CommandLineParser()
         {
             Setup(arg => arg.ApiUrl).As('a', "apiurl")
-                .WithDescription("The web API url (i.e. http://server/)");
+                .WithDescription("The web API url (i.e. http://server/)")
+                .SetDefault(new Uri(new Uri(Settings.Default.BaseUrl), "/data/v3/").ToString());
 
             Setup(arg => arg.SchoolYear).As('y', "year")
                 .WithDescription("The target school year for the web API (i.e. 2016)")
@@ -40,10 +41,12 @@ namespace EdFi.BulkLoadClient.Console.Application
                 .SetDefault(false);
 
             Setup(arg => arg.MetadataUrl).As('m', "metadataurl")
-                .WithDescription("The metadata url (i.e. http://server/metadata)");
+                .WithDescription("The metadata url (i.e. http://server/metadata)")
+                .SetDefault(new Uri(new Uri(Settings.Default.BaseUrl), "/metadata").ToString());
 
             Setup(arg => arg.OauthUrl).As('o', "oauthurl")
-                .WithDescription("The OAuth url (i.e. http://server/oauth)");
+                .WithDescription("The OAuth url (i.e. http://server/oauth)")
+                .SetDefault(new Uri(new Uri(Settings.Default.BaseUrl), "/oauth").ToString());
 
             Setup(arg => arg.Profile).As('p', "profile")
                 .WithDescription("The name of an API profile to use (optional)");
@@ -84,13 +87,11 @@ namespace EdFi.BulkLoadClient.Console.Application
                 .SetDefault(GetFirstValue(Settings.Default.MaxSimultaneousApiRequests, 1));
 
             Setup(arg => arg.DependenciesUrl).As('g', "dependenciesUrl")
-                .WithDescription("The Dependencies endpoint url");
+                .WithDescription("The Dependencies endpoint url")
+                .SetDefault(new Uri(new Uri(Settings.Default.BaseUrl), "/metadata/data/v3/dependencies").ToString());
 
             Setup(arg => arg.IncludeStats).As("include-stats")
                 .WithDescription("Include timing stats");
-
-            Setup(arg => arg.BaseUrl).As('b', "baseUrl")
-                .WithDescription("The base url");
         }
 
         private static string GetFirstValue(params string[] defaults)

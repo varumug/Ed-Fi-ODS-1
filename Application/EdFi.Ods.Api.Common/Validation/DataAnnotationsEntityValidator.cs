@@ -8,7 +8,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using EdFi.Ods.Common;
 
-namespace EdFi.Ods.Api.Validation
+namespace EdFi.Ods.Api.Common.Validation
 {
     public class DataAnnotationsEntityValidator : ObjectValidatorBase, IEntityValidator
     {

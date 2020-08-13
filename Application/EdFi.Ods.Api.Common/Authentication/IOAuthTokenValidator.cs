@@ -5,7 +5,7 @@
 
 using System.Threading.Tasks;
 
-namespace EdFi.Ods.Api.Services.Authorization
+namespace EdFi.Ods.Api.Common.Authentication
 {
     /// <summary>
     /// Defines a method for obtaining the API client's details from their OAuth security token.
@@ -16,7 +16,7 @@ namespace EdFi.Ods.Api.Services.Authorization
         /// Gets the API client details for the supplied OAuth security token.
         /// </summary>
         /// <param name="token">The OAuth security token.</param>
-        /// <returns>The <see cref="ApiClientDetails"/> associatd with the token.</returns>
+        /// <returns>The <see cref="ApiClientDetails"/> associated with the token.</returns>
         Task<ApiClientDetails> GetClientDetailsForTokenAsync(string token);
     }
 }

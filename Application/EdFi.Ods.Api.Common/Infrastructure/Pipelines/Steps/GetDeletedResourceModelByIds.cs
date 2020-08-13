@@ -5,12 +5,10 @@
 
 using System.Threading;
 using System.Threading.Tasks;
-using EdFi.Ods.Api.ChangeQueries.Pipelines.GetDeletedResource;
+using EdFi.Ods.Api.Common.Infrastructure.Pipelines.GetDeletedResource;
 using EdFi.Ods.Common;
-using EdFi.Ods.Pipelines;
-using EdFi.Ods.Pipelines.Common;
 
-namespace EdFi.Ods.Api.ChangeQueries.Pipelines.Steps
+namespace EdFi.Ods.Api.Common.Infrastructure.Pipelines.Steps
 {
     public class GetDeletedResourceModelByIds<TContext, TResult, TEntityModel> 
         : IStep<TContext, TResult>

@@ -6,13 +6,12 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using EdFi.Ods.Api.Common.Infrastructure.Pipelines.Put;
 using EdFi.Ods.Common;
 using EdFi.Ods.Common.Extensions;
 using EdFi.Ods.Common.Repositories;
-using EdFi.Ods.Pipelines.Common;
-using EdFi.Ods.Pipelines.Put;
 
-namespace EdFi.Ods.Api.Pipelines.Steps
+namespace EdFi.Ods.Api.Common.Infrastructure.Pipelines.Steps
 {
     public class PersistEntityModel<TContext, TResult, TResourceModel, TEntityModel> 
         : IStep<TContext, TResult>

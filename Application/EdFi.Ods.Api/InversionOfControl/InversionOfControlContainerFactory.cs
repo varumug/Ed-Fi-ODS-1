@@ -11,11 +11,12 @@ using System.Reflection;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor;
 using Castle.Windsor.Configuration.Interpreters;
+using EdFi.Ods.Common.InversionOfControl;
+#if NETFRAMEWORK
 using Castle.Windsor.Installer;
 using EdFi.Ods.Common.Configuration;
-using EdFi.Ods.Common.InversionOfControl;
 
-namespace EdFi.Ods.Common.Http.InversionOfControl
+namespace EdFi.Ods.Api.InversionOfControl
 {
     /// <summary>
     /// Creates and initializes a Castle Windsor container using the installers configured for the application.
@@ -228,3 +229,4 @@ namespace EdFi.Ods.Common.Http.InversionOfControl
         }
     }
 }
+#endif

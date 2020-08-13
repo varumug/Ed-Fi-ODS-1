@@ -7,20 +7,18 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using EdFi.Ods.Common;
-using EdFi.Ods.Pipelines;
-using EdFi.Ods.Pipelines.Common;
 
-namespace EdFi.Ods.Api.Pipelines.Steps
+namespace EdFi.Ods.Api.Common.Infrastructure.Pipelines.Steps
 {
-    public class MapEntityModelToResourceModel<TContext, TResult, TResourceModel, TEntityModel> 
-        : IStep<TContext, TResult>
+    public class MapEntityModelToResourceModel<TContext, TResult, TResourceModel, TEntityModel> : IStep<TContext, TResult>
         where TContext : IHasPersistentModel<TEntityModel>
         where TResult : PipelineResultBase, IHasResource<TResourceModel>
         where TResourceModel : IHasETag, new()
         where TEntityModel : class, IMappable
     {
-        public Task ExecuteAsync(TContext context, TResult result, CancellationToken cancellationToken)
+        public void Execute(TContext context, TResult result)
         {
+            // NOTE this step will always run synchronously so we are not moving the logic to the async method.
             try
             {
                 var resource = new TResourceModel();
@@ -33,7 +31,11 @@ namespace EdFi.Ods.Api.Pipelines.Steps
             {
                 result.Exception = ex;
             }
+        }
 
+        public Task ExecuteAsync(TContext context, TResult result, CancellationToken cancellationToken)
+        {
+            Execute(context, result);
             return Task.CompletedTask;
         }
     }

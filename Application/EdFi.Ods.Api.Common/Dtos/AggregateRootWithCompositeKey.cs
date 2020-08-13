@@ -7,7 +7,7 @@ using System;
 using System.Runtime.Serialization;
 using EdFi.Ods.Common;
 
-namespace EdFi.Ods.Api.NHibernate.Architecture
+namespace EdFi.Ods.Api.Common.Dtos
 {
     public abstract class AggregateRootWithCompositeKey
         : EntityWithCompositeKey,

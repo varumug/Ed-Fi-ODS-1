@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using EdFi.Ods.Common;
 
-namespace EdFi.Ods.Api.Services.Queries
+namespace EdFi.Ods.Api.Common.Models.Queries
 {
     public class QueryParameters : IQueryParameters
     {
@@ -69,14 +69,14 @@ namespace EdFi.Ods.Api.Services.Queries
                 foreach (Match match in matches)
                 {
                     string propertyName = match.Groups["PropertyName"]
-                                               .Value;
+                        .Value;
 
                     // Supporting only non-quoted text searches for now
                     if (match.Groups["Text"]
-                             .Success)
+                        .Success)
                     {
                         string text = match.Groups["Text"]
-                                           .Value;
+                            .Value;
 
                         bool leadingAsterisk = text[0] == '*';
                         bool trailingAsterisk = text[text.Length - 1] == '*';
@@ -84,9 +84,10 @@ namespace EdFi.Ods.Api.Services.Queries
                         string rawText = text.Trim('*');
 
                         var textCriteria = new TextCriteria
-                                           {
-                                               PropertyName = propertyName, Value = rawText
-                                           };
+                        {
+                            PropertyName = propertyName,
+                            Value = rawText
+                        };
 
                         if (leadingAsterisk && trailingAsterisk)
                         {

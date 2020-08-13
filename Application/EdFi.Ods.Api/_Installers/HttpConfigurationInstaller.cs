@@ -8,14 +8,14 @@ using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
 using EdFi.Ods.Api.Architecture;
+using EdFi.Ods.Api.HttpConfigurators;
+using EdFi.Ods.Api.HttpRouteConfigurations;
+using EdFi.Ods.Api.InversionOfControl;
 using EdFi.Ods.Api.Services.Metadata;
-using EdFi.Ods.Api.Startup.HttpConfigurators;
-using EdFi.Ods.Api.Startup.HttpRouteConfigurations;
 using EdFi.Ods.Common;
 using EdFi.Ods.Common.Configuration;
-using EdFi.Ods.Common.Http.InversionOfControl;
 
-namespace EdFi.Ods.Api.Startup.Features.Installers
+namespace EdFi.Ods.Api._Installers
 {
     public class HttpConfigurationInstaller : IWindsorInstaller
     {

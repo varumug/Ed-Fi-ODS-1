@@ -8,7 +8,7 @@ using EdFi.Ods.Api.Architecture;
 using EdFi.Ods.Api.Services.Metadata;
 using EdFi.Ods.Common;
 
-namespace EdFi.Ods.Api.Startup.HttpConfigurators
+namespace EdFi.Ods.Api.HttpRouteConfigurations
 {
     public class HttpOAuthRouteConfiguration : IRouteConfiguration, IOpenApiMetadataRouteConfiguration
     {

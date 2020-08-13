@@ -3,13 +3,13 @@
 // The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
 // See the LICENSE and NOTICES files in the project root for more information.
 
+using System.Web.Http;
+using System.Web.Http.Dispatcher;
 using EdFi.Ods.Api.Architecture;
 using EdFi.Ods.Common;
 using EdFi.Ods.Common.Metadata;
-using System.Web.Http;
-using System.Web.Http.Dispatcher;
 
-namespace EdFi.Ods.Api.Startup.HttpConfigurators
+namespace EdFi.Ods.Api.HttpConfigurators
 {
     public class HttpRouteConfigurator : IHttpConfigurator
     {

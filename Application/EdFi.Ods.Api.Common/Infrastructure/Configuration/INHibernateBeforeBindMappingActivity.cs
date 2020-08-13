@@ -5,7 +5,7 @@
 
 using NHibernate.Cfg;
 
-namespace EdFi.Ods.Api.NHibernate.Architecture
+namespace EdFi.Ods.Api.Common.Infrastructure.Configuration
 {
     /// <summary>
     /// Defines a method for manipulating the NHibernate mappings before bind

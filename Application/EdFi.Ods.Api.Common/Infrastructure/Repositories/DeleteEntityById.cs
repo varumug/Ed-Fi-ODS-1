@@ -6,13 +6,15 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using EdFi.Ods.Api.Common.Dtos;
+using EdFi.Ods.Api.Common.Infrastructure.Architecture;
 using EdFi.Ods.Common;
 using EdFi.Ods.Common.Extensions;
 using EdFi.Ods.Common.Repositories;
 using NHibernate;
 using NHibernate.Context;
 
-namespace EdFi.Ods.Api.NHibernate.Architecture
+namespace EdFi.Ods.Api.Common.Infrastructure.Repositories
 {
     public class DeleteEntityById<TEntity>
         : NHibernateRepositoryDeleteOperationBase<TEntity>, IDeleteEntityById<TEntity>

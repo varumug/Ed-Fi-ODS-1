@@ -6,13 +6,12 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using EdFi.Ods.Api.Models;
 using EdFi.Ods.Common.Caching;
 using EdFi.Ods.Common.Security;
 using NHibernate;
 using NHibernate.Transform;
 
-namespace EdFi.Ods.Api.Services.Providers
+namespace EdFi.Ods.Features.TokenInfo
 {
     public class TokenInfoProvider : ITokenInfoProvider
     {

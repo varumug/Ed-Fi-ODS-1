@@ -4,9 +4,8 @@
 // See the LICENSE and NOTICES files in the project root for more information.
 
 using System;
-using System.Web.Caching;
 
-namespace EdFi.Ods.Api.Caching
+namespace EdFi.Ods.Api.Common.Caching
 {
     public interface ICacheProvider
     {

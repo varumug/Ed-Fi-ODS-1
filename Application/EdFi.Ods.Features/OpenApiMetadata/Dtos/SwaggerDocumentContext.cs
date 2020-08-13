@@ -6,7 +6,7 @@
 using System;
 using EdFi.Ods.Common.Models.Resource;
 
-namespace EdFi.Ods.Api.Services.Metadata.Models
+namespace EdFi.Ods.Features.OpenApiMetadata.Dtos
 {
     public class SwaggerDocumentContext
     {

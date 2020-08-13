@@ -2,17 +2,15 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Runtime.Serialization;
-using EdFi.Ods.Api;
-using EdFi.Ods.Api.Caching;
-using EdFi.Ods.Api.Extensibility;
-using EdFi.Ods.Api.NHibernate;
-using EdFi.Ods.Api.NHibernate.Architecture;
-using EdFi.Ods.Api.Validation;
+using EdFi.Ods.Api.Common.Adapters;
+using EdFi.Ods.Api.Common.Attributes;
+using EdFi.Ods.Api.Common.Caching;
+using EdFi.Ods.Api.Common.Dtos;
+using EdFi.Ods.Api.Common.Infrastructure.Extensibility;
 using EdFi.Ods.Common;
 using EdFi.Ods.Common.Extensions;
 using EdFi.Ods.Entities.Common.EdFi;
@@ -87,7 +85,7 @@ namespace EdFi.Ods.Entities.NHibernate.ArtMediumDescriptorAggregate.Sample
             set { ShortDescription = value; }
         }
         // -------------------------------------------------------------
-        
+
         // =============================================================
         //                          Properties
         // -------------------------------------------------------------
@@ -385,7 +383,7 @@ namespace EdFi.Ods.Entities.NHibernate.BusAggregate.Sample
         //                      Inherited Properties
         // -------------------------------------------------------------
         // -------------------------------------------------------------
-        
+
         // =============================================================
         //                          Properties
         // -------------------------------------------------------------
@@ -643,7 +641,7 @@ namespace EdFi.Ods.Entities.NHibernate.BusRouteAggregate.Sample
         //                      Inherited Properties
         // -------------------------------------------------------------
         // -------------------------------------------------------------
-        
+
         // =============================================================
         //                          Properties
         // -------------------------------------------------------------
@@ -1417,7 +1415,7 @@ namespace EdFi.Ods.Entities.NHibernate.BusRouteAggregate.Sample
         //                      Inherited Properties
         // -------------------------------------------------------------
         // -------------------------------------------------------------
-        
+
         // =============================================================
         //                          Properties
         // -------------------------------------------------------------
@@ -1639,7 +1637,7 @@ namespace EdFi.Ods.Entities.NHibernate.BusRouteAggregate.Sample
         //                      Inherited Properties
         // -------------------------------------------------------------
         // -------------------------------------------------------------
-        
+
         // =============================================================
         //                          Properties
         // -------------------------------------------------------------
@@ -1847,7 +1845,7 @@ namespace EdFi.Ods.Entities.NHibernate.BusRouteAggregate.Sample
         //                      Inherited Properties
         // -------------------------------------------------------------
         // -------------------------------------------------------------
-        
+
         // =============================================================
         //                          Properties
         // -------------------------------------------------------------
@@ -2032,7 +2030,7 @@ namespace EdFi.Ods.Entities.NHibernate.BusRouteAggregate.Sample
         //                      Inherited Properties
         // -------------------------------------------------------------
         // -------------------------------------------------------------
-        
+
         // =============================================================
         //                          Properties
         // -------------------------------------------------------------
@@ -2252,7 +2250,7 @@ namespace EdFi.Ods.Entities.NHibernate.BusRouteAggregate.Sample
         //                      Inherited Properties
         // -------------------------------------------------------------
         // -------------------------------------------------------------
-        
+
         // =============================================================
         //                          Properties
         // -------------------------------------------------------------
@@ -2480,7 +2478,7 @@ namespace EdFi.Ods.Entities.NHibernate.FavoriteBookCategoryDescriptorAggregate.S
             set { ShortDescription = value; }
         }
         // -------------------------------------------------------------
-        
+
         // =============================================================
         //                          Properties
         // -------------------------------------------------------------
@@ -2727,7 +2725,7 @@ namespace EdFi.Ods.Entities.NHibernate.MembershipTypeDescriptorAggregate.Sample
             set { ShortDescription = value; }
         }
         // -------------------------------------------------------------
-        
+
         // =============================================================
         //                          Properties
         // -------------------------------------------------------------
@@ -2986,7 +2984,7 @@ namespace EdFi.Ods.Entities.NHibernate.ParentAggregate.Sample
         //                      Inherited Properties
         // -------------------------------------------------------------
         // -------------------------------------------------------------
-        
+
         // =============================================================
         //                          Properties
         // -------------------------------------------------------------
@@ -3230,7 +3228,7 @@ namespace EdFi.Ods.Entities.NHibernate.ParentAggregate.Sample
         //                      Inherited Properties
         // -------------------------------------------------------------
         // -------------------------------------------------------------
-        
+
         // =============================================================
         //                          Properties
         // -------------------------------------------------------------
@@ -3412,7 +3410,7 @@ namespace EdFi.Ods.Entities.NHibernate.ParentAggregate.Sample
         //                      Inherited Properties
         // -------------------------------------------------------------
         // -------------------------------------------------------------
-        
+
         // =============================================================
         //                          Properties
         // -------------------------------------------------------------
@@ -3591,7 +3589,7 @@ namespace EdFi.Ods.Entities.NHibernate.ParentAggregate.Sample
         //                      Inherited Properties
         // -------------------------------------------------------------
         // -------------------------------------------------------------
-        
+
         // =============================================================
         //                          Properties
         // -------------------------------------------------------------
@@ -3768,7 +3766,7 @@ namespace EdFi.Ods.Entities.NHibernate.ParentAggregate.Sample
         //                      Inherited Properties
         // -------------------------------------------------------------
         // -------------------------------------------------------------
-        
+
         // =============================================================
         //                          Properties
         // -------------------------------------------------------------
@@ -4014,7 +4012,7 @@ namespace EdFi.Ods.Entities.NHibernate.ParentAggregate.Sample
         //                      Inherited Properties
         // -------------------------------------------------------------
         // -------------------------------------------------------------
-        
+
         // =============================================================
         //                          Properties
         // -------------------------------------------------------------
@@ -4213,7 +4211,7 @@ namespace EdFi.Ods.Entities.NHibernate.ParentAggregate.Sample
         //                      Inherited Properties
         // -------------------------------------------------------------
         // -------------------------------------------------------------
-        
+
         // =============================================================
         //                          Properties
         // -------------------------------------------------------------
@@ -4479,7 +4477,7 @@ namespace EdFi.Ods.Entities.NHibernate.ParentAggregate.Sample
         //                      Inherited Properties
         // -------------------------------------------------------------
         // -------------------------------------------------------------
-        
+
         // =============================================================
         //                          Properties
         // -------------------------------------------------------------
@@ -4673,7 +4671,7 @@ namespace EdFi.Ods.Entities.NHibernate.ParentAggregate.Sample
         //                      Inherited Properties
         // -------------------------------------------------------------
         // -------------------------------------------------------------
-        
+
         // =============================================================
         //                          Properties
         // -------------------------------------------------------------
@@ -4876,7 +4874,7 @@ namespace EdFi.Ods.Entities.NHibernate.ParentAggregate.Sample
         //                      Inherited Properties
         // -------------------------------------------------------------
         // -------------------------------------------------------------
-        
+
         // =============================================================
         //                          Properties
         // -------------------------------------------------------------
@@ -5055,7 +5053,7 @@ namespace EdFi.Ods.Entities.NHibernate.ParentAggregate.Sample
 
                 if (_parentAuthors == null)
                     _parentAuthors = new CovariantCollectionAdapter<Entities.Common.Sample.IParentAuthor, ParentAuthor>(sourceList);
-                
+
                 return _parentAuthors;
             }
             set
@@ -5081,7 +5079,7 @@ namespace EdFi.Ods.Entities.NHibernate.ParentAggregate.Sample
 
                 if (_parentCeilingHeights == null)
                     _parentCeilingHeights = new CovariantCollectionAdapter<Entities.Common.Sample.IParentCeilingHeight, ParentCeilingHeight>(sourceList);
-                
+
                 return _parentCeilingHeights;
             }
             set
@@ -5107,7 +5105,7 @@ namespace EdFi.Ods.Entities.NHibernate.ParentAggregate.Sample
 
                 if (_parentEducationContents == null)
                     _parentEducationContents = new CovariantCollectionAdapter<Entities.Common.Sample.IParentEducationContent, ParentEducationContent>(sourceList);
-                
+
                 return _parentEducationContents;
             }
             set
@@ -5134,7 +5132,7 @@ namespace EdFi.Ods.Entities.NHibernate.ParentAggregate.Sample
 
                 if (_parentFavoriteBookTitles == null)
                     _parentFavoriteBookTitles = new CovariantCollectionAdapter<Entities.Common.Sample.IParentFavoriteBookTitle, ParentFavoriteBookTitle>(sourceList);
-                
+
                 return _parentFavoriteBookTitles;
             }
             set
@@ -5160,7 +5158,7 @@ namespace EdFi.Ods.Entities.NHibernate.ParentAggregate.Sample
 
                 if (_parentStudentProgramAssociations == null)
                     _parentStudentProgramAssociations = new CovariantCollectionAdapter<Entities.Common.Sample.IParentStudentProgramAssociation, ParentStudentProgramAssociation>(sourceList);
-                
+
                 return _parentStudentProgramAssociations;
             }
             set
@@ -5512,7 +5510,7 @@ namespace EdFi.Ods.Entities.NHibernate.ParentAggregate.Sample
         //                      Inherited Properties
         // -------------------------------------------------------------
         // -------------------------------------------------------------
-        
+
         // =============================================================
         //                          Properties
         // -------------------------------------------------------------
@@ -5557,7 +5555,7 @@ namespace EdFi.Ods.Entities.NHibernate.ParentAggregate.Sample
 
                 if (_parentAddressSchoolDistricts == null)
                     _parentAddressSchoolDistricts = new CovariantCollectionAdapter<Entities.Common.Sample.IParentAddressSchoolDistrict, ParentAddressSchoolDistrict>(sourceList);
-                
+
                 return _parentAddressSchoolDistricts;
             }
             set
@@ -5583,7 +5581,7 @@ namespace EdFi.Ods.Entities.NHibernate.ParentAggregate.Sample
 
                 if (_parentAddressTerms == null)
                     _parentAddressTerms = new CovariantCollectionAdapter<Entities.Common.Sample.IParentAddressTerm, ParentAddressTerm>(sourceList);
-                
+
                 return _parentAddressTerms;
             }
             set
@@ -5790,7 +5788,7 @@ namespace EdFi.Ods.Entities.NHibernate.SchoolAggregate.Sample
         //                      Inherited Properties
         // -------------------------------------------------------------
         // -------------------------------------------------------------
-        
+
         // =============================================================
         //                          Properties
         // -------------------------------------------------------------
@@ -6036,7 +6034,7 @@ namespace EdFi.Ods.Entities.NHibernate.SchoolAggregate.Sample
         //                      Inherited Properties
         // -------------------------------------------------------------
         // -------------------------------------------------------------
-        
+
         // =============================================================
         //                          Properties
         // -------------------------------------------------------------
@@ -6233,7 +6231,7 @@ namespace EdFi.Ods.Entities.NHibernate.SchoolAggregate.Sample
         //                      Inherited Properties
         // -------------------------------------------------------------
         // -------------------------------------------------------------
-        
+
         // =============================================================
         //                          Properties
         // -------------------------------------------------------------
@@ -6311,7 +6309,7 @@ namespace EdFi.Ods.Entities.NHibernate.SchoolAggregate.Sample
 
                 if (_schoolDirectlyOwnedBuses == null)
                     _schoolDirectlyOwnedBuses = new CovariantCollectionAdapter<Entities.Common.Sample.ISchoolDirectlyOwnedBus, SchoolDirectlyOwnedBus>(sourceList);
-                
+
                 return _schoolDirectlyOwnedBuses;
             }
             set
@@ -6506,7 +6504,7 @@ namespace EdFi.Ods.Entities.NHibernate.StaffAggregate.Sample
         //                      Inherited Properties
         // -------------------------------------------------------------
         // -------------------------------------------------------------
-        
+
         // =============================================================
         //                          Properties
         // -------------------------------------------------------------
@@ -6691,7 +6689,7 @@ namespace EdFi.Ods.Entities.NHibernate.StaffAggregate.Sample
         //                      Inherited Properties
         // -------------------------------------------------------------
         // -------------------------------------------------------------
-        
+
         // =============================================================
         //                          Properties
         // -------------------------------------------------------------
@@ -6883,7 +6881,7 @@ namespace EdFi.Ods.Entities.NHibernate.StaffAggregate.Sample
         //                      Inherited Properties
         // -------------------------------------------------------------
         // -------------------------------------------------------------
-        
+
         // =============================================================
         //                          Properties
         // -------------------------------------------------------------
@@ -6980,7 +6978,7 @@ namespace EdFi.Ods.Entities.NHibernate.StaffAggregate.Sample
 
                 if (_staffPets == null)
                     _staffPets = new CovariantCollectionAdapter<Entities.Common.Sample.IStaffPet, StaffPet>(sourceList);
-                
+
                 return _staffPets;
             }
             set
@@ -7177,7 +7175,7 @@ namespace EdFi.Ods.Entities.NHibernate.StudentAggregate.Sample
         //                      Inherited Properties
         // -------------------------------------------------------------
         // -------------------------------------------------------------
-        
+
         // =============================================================
         //                          Properties
         // -------------------------------------------------------------
@@ -7399,7 +7397,7 @@ namespace EdFi.Ods.Entities.NHibernate.StudentAggregate.Sample
         //                      Inherited Properties
         // -------------------------------------------------------------
         // -------------------------------------------------------------
-        
+
         // =============================================================
         //                          Properties
         // -------------------------------------------------------------
@@ -7689,7 +7687,7 @@ namespace EdFi.Ods.Entities.NHibernate.StudentAggregate.Sample
         //                      Inherited Properties
         // -------------------------------------------------------------
         // -------------------------------------------------------------
-        
+
         // =============================================================
         //                          Properties
         // -------------------------------------------------------------
@@ -7878,7 +7876,7 @@ namespace EdFi.Ods.Entities.NHibernate.StudentAggregate.Sample
         //                      Inherited Properties
         // -------------------------------------------------------------
         // -------------------------------------------------------------
-        
+
         // =============================================================
         //                          Properties
         // -------------------------------------------------------------
@@ -8063,7 +8061,7 @@ namespace EdFi.Ods.Entities.NHibernate.StudentAggregate.Sample
         //                      Inherited Properties
         // -------------------------------------------------------------
         // -------------------------------------------------------------
-        
+
         // =============================================================
         //                          Properties
         // -------------------------------------------------------------
@@ -8522,7 +8520,7 @@ namespace EdFi.Ods.Entities.NHibernate.StudentArtProgramAssociationAggregate.Sam
             set { ServedOutsideOfRegularSession = value; }
         }
         // -------------------------------------------------------------
-        
+
         // =============================================================
         //                          Properties
         // -------------------------------------------------------------
@@ -9156,7 +9154,7 @@ namespace EdFi.Ods.Entities.NHibernate.StudentArtProgramAssociationAggregate.Sam
         //                      Inherited Properties
         // -------------------------------------------------------------
         // -------------------------------------------------------------
-        
+
         // =============================================================
         //                          Properties
         // -------------------------------------------------------------
@@ -9367,7 +9365,7 @@ namespace EdFi.Ods.Entities.NHibernate.StudentArtProgramAssociationAggregate.Sam
         //                      Inherited Properties
         // -------------------------------------------------------------
         // -------------------------------------------------------------
-        
+
         // =============================================================
         //                          Properties
         // -------------------------------------------------------------
@@ -9610,7 +9608,7 @@ namespace EdFi.Ods.Entities.NHibernate.StudentArtProgramAssociationAggregate.Sam
         //                      Inherited Properties
         // -------------------------------------------------------------
         // -------------------------------------------------------------
-        
+
         // =============================================================
         //                          Properties
         // -------------------------------------------------------------
@@ -9883,7 +9881,7 @@ namespace EdFi.Ods.Entities.NHibernate.StudentArtProgramAssociationAggregate.Sam
         //                      Inherited Properties
         // -------------------------------------------------------------
         // -------------------------------------------------------------
-        
+
         // =============================================================
         //                          Properties
         // -------------------------------------------------------------
@@ -10096,7 +10094,7 @@ namespace EdFi.Ods.Entities.NHibernate.StudentCTEProgramAssociationAggregate.Sam
         //                      Inherited Properties
         // -------------------------------------------------------------
         // -------------------------------------------------------------
-        
+
         // =============================================================
         //                          Properties
         // -------------------------------------------------------------
@@ -10349,7 +10347,7 @@ namespace EdFi.Ods.Entities.NHibernate.StudentEducationOrganizationAssociationAg
         //                      Inherited Properties
         // -------------------------------------------------------------
         // -------------------------------------------------------------
-        
+
         // =============================================================
         //                          Properties
         // -------------------------------------------------------------
@@ -10599,7 +10597,7 @@ namespace EdFi.Ods.Entities.NHibernate.StudentEducationOrganizationAssociationAg
         //                      Inherited Properties
         // -------------------------------------------------------------
         // -------------------------------------------------------------
-        
+
         // =============================================================
         //                          Properties
         // -------------------------------------------------------------
@@ -10801,7 +10799,7 @@ namespace EdFi.Ods.Entities.NHibernate.StudentEducationOrganizationAssociationAg
         //                      Inherited Properties
         // -------------------------------------------------------------
         // -------------------------------------------------------------
-        
+
         // =============================================================
         //                          Properties
         // -------------------------------------------------------------
@@ -11050,7 +11048,7 @@ namespace EdFi.Ods.Entities.NHibernate.StudentEducationOrganizationAssociationAg
         //                      Inherited Properties
         // -------------------------------------------------------------
         // -------------------------------------------------------------
-        
+
         // =============================================================
         //                          Properties
         // -------------------------------------------------------------
@@ -11095,7 +11093,7 @@ namespace EdFi.Ods.Entities.NHibernate.StudentEducationOrganizationAssociationAg
 
                 if (_studentEducationOrganizationAssociationAddressSchoolDistricts == null)
                     _studentEducationOrganizationAssociationAddressSchoolDistricts = new CovariantCollectionAdapter<Entities.Common.Sample.IStudentEducationOrganizationAssociationAddressSchoolDistrict, StudentEducationOrganizationAssociationAddressSchoolDistrict>(sourceList);
-                
+
                 return _studentEducationOrganizationAssociationAddressSchoolDistricts;
             }
             set
@@ -11121,7 +11119,7 @@ namespace EdFi.Ods.Entities.NHibernate.StudentEducationOrganizationAssociationAg
 
                 if (_studentEducationOrganizationAssociationAddressTerms == null)
                     _studentEducationOrganizationAssociationAddressTerms = new CovariantCollectionAdapter<Entities.Common.Sample.IStudentEducationOrganizationAssociationAddressTerm, StudentEducationOrganizationAssociationAddressTerm>(sourceList);
-                
+
                 return _studentEducationOrganizationAssociationAddressTerms;
             }
             set
@@ -11579,7 +11577,7 @@ namespace EdFi.Ods.Entities.NHibernate.StudentGraduationPlanAssociationAggregate
         //                      Inherited Properties
         // -------------------------------------------------------------
         // -------------------------------------------------------------
-        
+
         // =============================================================
         //                          Properties
         // -------------------------------------------------------------
@@ -12493,7 +12491,7 @@ namespace EdFi.Ods.Entities.NHibernate.StudentGraduationPlanAssociationAggregate
         //                      Inherited Properties
         // -------------------------------------------------------------
         // -------------------------------------------------------------
-        
+
         // =============================================================
         //                          Properties
         // -------------------------------------------------------------
@@ -12692,7 +12690,7 @@ namespace EdFi.Ods.Entities.NHibernate.StudentGraduationPlanAssociationAggregate
         //                      Inherited Properties
         // -------------------------------------------------------------
         // -------------------------------------------------------------
-        
+
         // =============================================================
         //                          Properties
         // -------------------------------------------------------------
@@ -12888,7 +12886,7 @@ namespace EdFi.Ods.Entities.NHibernate.StudentGraduationPlanAssociationAggregate
         //                      Inherited Properties
         // -------------------------------------------------------------
         // -------------------------------------------------------------
-        
+
         // =============================================================
         //                          Properties
         // -------------------------------------------------------------
@@ -13153,7 +13151,7 @@ namespace EdFi.Ods.Entities.NHibernate.StudentGraduationPlanAssociationAggregate
         //                      Inherited Properties
         // -------------------------------------------------------------
         // -------------------------------------------------------------
-        
+
         // =============================================================
         //                          Properties
         // -------------------------------------------------------------
@@ -13351,7 +13349,7 @@ namespace EdFi.Ods.Entities.NHibernate.StudentGraduationPlanAssociationAggregate
         //                      Inherited Properties
         // -------------------------------------------------------------
         // -------------------------------------------------------------
-        
+
         // =============================================================
         //                          Properties
         // -------------------------------------------------------------
@@ -13549,7 +13547,7 @@ namespace EdFi.Ods.Entities.NHibernate.StudentGraduationPlanAssociationAggregate
         //                      Inherited Properties
         // -------------------------------------------------------------
         // -------------------------------------------------------------
-        
+
         // =============================================================
         //                          Properties
         // -------------------------------------------------------------
@@ -13783,7 +13781,7 @@ namespace EdFi.Ods.Entities.NHibernate.StudentGraduationPlanAssociationAggregate
         //                      Inherited Properties
         // -------------------------------------------------------------
         // -------------------------------------------------------------
-        
+
         // =============================================================
         //                          Properties
         // -------------------------------------------------------------
@@ -14001,7 +13999,7 @@ namespace EdFi.Ods.Entities.NHibernate.StudentGraduationPlanAssociationAggregate
         //                      Inherited Properties
         // -------------------------------------------------------------
         // -------------------------------------------------------------
-        
+
         // =============================================================
         //                          Properties
         // -------------------------------------------------------------
@@ -14225,7 +14223,7 @@ namespace EdFi.Ods.Entities.NHibernate.StudentParentAssociationAggregate.Sample
         //                      Inherited Properties
         // -------------------------------------------------------------
         // -------------------------------------------------------------
-        
+
         // =============================================================
         //                          Properties
         // -------------------------------------------------------------
@@ -14411,7 +14409,7 @@ namespace EdFi.Ods.Entities.NHibernate.StudentParentAssociationAggregate.Sample
         //                      Inherited Properties
         // -------------------------------------------------------------
         // -------------------------------------------------------------
-        
+
         // =============================================================
         //                          Properties
         // -------------------------------------------------------------
@@ -14596,7 +14594,7 @@ namespace EdFi.Ods.Entities.NHibernate.StudentParentAssociationAggregate.Sample
         //                      Inherited Properties
         // -------------------------------------------------------------
         // -------------------------------------------------------------
-        
+
         // =============================================================
         //                          Properties
         // -------------------------------------------------------------
@@ -14781,7 +14779,7 @@ namespace EdFi.Ods.Entities.NHibernate.StudentParentAssociationAggregate.Sample
         //                      Inherited Properties
         // -------------------------------------------------------------
         // -------------------------------------------------------------
-        
+
         // =============================================================
         //                          Properties
         // -------------------------------------------------------------
@@ -15049,7 +15047,7 @@ namespace EdFi.Ods.Entities.NHibernate.StudentParentAssociationAggregate.Sample
         //                      Inherited Properties
         // -------------------------------------------------------------
         // -------------------------------------------------------------
-        
+
         // =============================================================
         //                          Properties
         // -------------------------------------------------------------
@@ -15256,7 +15254,7 @@ namespace EdFi.Ods.Entities.NHibernate.StudentParentAssociationAggregate.Sample
         //                      Inherited Properties
         // -------------------------------------------------------------
         // -------------------------------------------------------------
-        
+
         // =============================================================
         //                          Properties
         // -------------------------------------------------------------
@@ -15514,7 +15512,7 @@ namespace EdFi.Ods.Entities.NHibernate.StudentParentAssociationAggregate.Sample
         //                      Inherited Properties
         // -------------------------------------------------------------
         // -------------------------------------------------------------
-        
+
         // =============================================================
         //                          Properties
         // -------------------------------------------------------------
@@ -15648,7 +15646,7 @@ namespace EdFi.Ods.Entities.NHibernate.StudentParentAssociationAggregate.Sample
 
                 if (_studentParentAssociationDisciplines == null)
                     _studentParentAssociationDisciplines = new CovariantCollectionAdapter<Entities.Common.Sample.IStudentParentAssociationDiscipline, StudentParentAssociationDiscipline>(sourceList);
-                
+
                 return _studentParentAssociationDisciplines;
             }
             set
@@ -15675,7 +15673,7 @@ namespace EdFi.Ods.Entities.NHibernate.StudentParentAssociationAggregate.Sample
 
                 if (_studentParentAssociationFavoriteBookTitles == null)
                     _studentParentAssociationFavoriteBookTitles = new CovariantCollectionAdapter<Entities.Common.Sample.IStudentParentAssociationFavoriteBookTitle, StudentParentAssociationFavoriteBookTitle>(sourceList);
-                
+
                 return _studentParentAssociationFavoriteBookTitles;
             }
             set
@@ -15701,7 +15699,7 @@ namespace EdFi.Ods.Entities.NHibernate.StudentParentAssociationAggregate.Sample
 
                 if (_studentParentAssociationHoursPerWeeks == null)
                     _studentParentAssociationHoursPerWeeks = new CovariantCollectionAdapter<Entities.Common.Sample.IStudentParentAssociationHoursPerWeek, StudentParentAssociationHoursPerWeek>(sourceList);
-                
+
                 return _studentParentAssociationHoursPerWeeks;
             }
             set
@@ -15727,7 +15725,7 @@ namespace EdFi.Ods.Entities.NHibernate.StudentParentAssociationAggregate.Sample
 
                 if (_studentParentAssociationPagesReads == null)
                     _studentParentAssociationPagesReads = new CovariantCollectionAdapter<Entities.Common.Sample.IStudentParentAssociationPagesRead, StudentParentAssociationPagesRead>(sourceList);
-                
+
                 return _studentParentAssociationPagesReads;
             }
             set
@@ -15753,7 +15751,7 @@ namespace EdFi.Ods.Entities.NHibernate.StudentParentAssociationAggregate.Sample
 
                 if (_studentParentAssociationStaffEducationOrganizationEmploymentAssociations == null)
                     _studentParentAssociationStaffEducationOrganizationEmploymentAssociations = new CovariantCollectionAdapter<Entities.Common.Sample.IStudentParentAssociationStaffEducationOrganizationEmploymentAssociation, StudentParentAssociationStaffEducationOrganizationEmploymentAssociation>(sourceList);
-                
+
                 return _studentParentAssociationStaffEducationOrganizationEmploymentAssociations;
             }
             set
@@ -16098,7 +16096,7 @@ namespace EdFi.Ods.Entities.NHibernate.StudentSchoolAssociationAggregate.Sample
         //                      Inherited Properties
         // -------------------------------------------------------------
         // -------------------------------------------------------------
-        
+
         // =============================================================
         //                          Properties
         // -------------------------------------------------------------
@@ -16274,5 +16272,3 @@ namespace EdFi.Ods.Entities.NHibernate.StudentSchoolAssociationAggregate.Sample
         // -----------------------------------------
     }
 }
-
-

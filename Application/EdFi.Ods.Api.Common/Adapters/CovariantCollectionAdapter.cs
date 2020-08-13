@@ -7,7 +7,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace EdFi.Ods.Api
+namespace EdFi.Ods.Api.Common.Adapters
 {
     public class ItemAddedEventArgs
     {

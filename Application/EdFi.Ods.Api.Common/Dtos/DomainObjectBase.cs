@@ -10,7 +10,7 @@ using System.Reflection;
 using System.Runtime.Serialization;
 using Newtonsoft.Json.Linq;
 
-namespace EdFi.Ods.Api.NHibernate.Architecture
+namespace EdFi.Ods.Api.Common.Dtos
 {
     /// <summary>
     ///     Provides a standard base class for facilitating comparison of objects.

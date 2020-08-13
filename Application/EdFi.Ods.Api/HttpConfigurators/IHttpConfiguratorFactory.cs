@@ -5,7 +5,7 @@
 
 using System.Web.Http;
 
-namespace EdFi.Ods.Api.Startup.HttpConfigurators {
+namespace EdFi.Ods.Api.HttpConfigurators {
     public interface IHttpConfiguratorFactory {
         HttpConfiguration Configure();
     }

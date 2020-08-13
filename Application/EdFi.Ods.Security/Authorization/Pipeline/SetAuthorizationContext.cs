@@ -5,10 +5,10 @@
 
 using System.Threading;
 using System.Threading.Tasks;
+using EdFi.Ods.Api.Common.Infrastructure.Pipelines;
 using EdFi.Ods.Common;
 using EdFi.Ods.Common.Extensions;
 using EdFi.Ods.Common.Security.Claims;
-using EdFi.Ods.Pipelines.Common;
 using EdFi.Security.DataAccess.Models;
 using EdFi.Security.DataAccess.Repositories;
 

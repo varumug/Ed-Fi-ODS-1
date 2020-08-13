@@ -5,7 +5,7 @@
 
 using System;
 
-namespace EdFi.Ods.Api.Identity
+namespace EdFi.Ods.Api.Common.Models.Identity
 {
     public class Identity : IIdentity
     {

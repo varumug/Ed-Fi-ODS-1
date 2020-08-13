@@ -7,7 +7,7 @@ using System.Web.Http;
 using EdFi.Ods.Api.Architecture;
 using EdFi.Ods.Common;
 
-namespace EdFi.Ods.Api.Startup.HttpConfigurators
+namespace EdFi.Ods.Api.HttpConfigurators
 {
     public class HttpFormatterConfigurator : IHttpConfigurator
     {

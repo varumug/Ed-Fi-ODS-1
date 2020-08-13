@@ -5,7 +5,7 @@
 
 using System;
 
-namespace EdFi.Ods.Api.Pipelines.Factories
+namespace EdFi.Ods.Api.Common.Infrastructure.Pipelines.Factories
 {
     public interface IPipelineStepsProvider
     {

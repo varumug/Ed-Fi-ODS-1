@@ -12,7 +12,7 @@ using EdFi.Ods.Common.Extensions;
 using EdFi.Ods.Common.Repositories;
 using NHibernate;
 
-namespace EdFi.Ods.Api.NHibernate.Architecture
+namespace EdFi.Ods.Api.Common.Infrastructure.Repositories
 {
     public class NHibernateRepository<TEntity>
         : IRepository<TEntity>,

@@ -6,17 +6,14 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using EdFi.Ods.Api.Exceptions;
+using EdFi.Ods.Api.Common.Exceptions;
 using EdFi.Ods.Common;
 using EdFi.Ods.Common.Extensions;
 using EdFi.Ods.Common.Repositories;
-using EdFi.Ods.Pipelines;
-using EdFi.Ods.Pipelines.Common;
 
-namespace EdFi.Ods.Api.Pipelines.Steps
+namespace EdFi.Ods.Api.Common.Infrastructure.Pipelines.Steps
 {
-    public class GetEntityModelById<TContext, TResult, TResourceModel, TEntityModel> 
-        : IStep<TContext, TResult>
+    public class GetEntityModelById<TContext, TResult, TResourceModel, TEntityModel> : IStep<TContext, TResult>
         where TContext : IHasIdentifier, IHasPersistentModel<TEntityModel>
         where TResult : PipelineResultBase
         where TResourceModel : IHasETag
@@ -28,6 +25,9 @@ namespace EdFi.Ods.Api.Pipelines.Steps
         {
             _repository = repository;
         }
+
+        public void Execute(TContext context, TResult result)
+            => ExecuteAsync(context, result, CancellationToken.None).WaitSafely();
 
         public async Task ExecuteAsync(TContext context, TResult result, CancellationToken cancellationToken)
         {

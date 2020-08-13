@@ -6,7 +6,7 @@
 using System;
 using System.Runtime.Serialization;
 
-namespace EdFi.Ods.Api.Exceptions
+namespace EdFi.Ods.Api.Common.Exceptions
 {
     /// <summary>
     ///     Indicates that a resource or persistent model identified for an operation was not found.

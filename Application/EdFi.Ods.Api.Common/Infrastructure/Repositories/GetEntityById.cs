@@ -7,12 +7,13 @@ using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using EdFi.Ods.Api.Common.Dtos;
 using EdFi.Ods.Common;
 using EdFi.Ods.Common.Extensions;
 using EdFi.Ods.Common.Repositories;
 using NHibernate;
 
-namespace EdFi.Ods.Api.NHibernate.Architecture
+namespace EdFi.Ods.Api.Common.Infrastructure.Repositories
 {
     /// <summary>
     /// Provides an implementation of the GetById method that works with NHibernate.

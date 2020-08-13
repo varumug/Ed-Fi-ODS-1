@@ -1,3 +1,4 @@
+#if NETFRAMEWORK
 // SPDX-License-Identifier: Apache-2.0
 // Licensed to the Ed-Fi Alliance under one or more agreements.
 // The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
@@ -15,7 +16,7 @@ namespace EdFi.Ods.Common.Configuration
         private readonly ExternalConfigFileSectionProvider _configFileSectionProvider;
 
         /// <summary>
-        /// Creates and initializes an instance of the <see cref="ExternalConfigFileConfigValueProvider"/> using 
+        /// Creates and initializes an instance of the <see cref="ExternalConfigFileConfigValueProvider"/> using
         /// the supplied <see cref="ExternalConfigFileSectionProvider"/> instance.
         /// </summary>
         /// <param name="configFileSectionProvider">The previously initialized config section provider that provides
@@ -33,7 +34,7 @@ namespace EdFi.Ods.Common.Configuration
         public string GetValue(string name)
         {
             var appSettingsSection = _configFileSectionProvider.GetSection("appSettings") as AppSettingsSection;
-            
+
             // ReSharper disable once PossibleNullReferenceException - in reality it does not return null.
             // Thus no way to unit test (right now) if a null check were added.
             return appSettingsSection.Settings[name]
@@ -41,3 +42,4 @@ namespace EdFi.Ods.Common.Configuration
         }
     }
 }
+#endif

@@ -6,7 +6,7 @@
 using System.Collections.Generic;
 using EdFi.Ods.Common;
 
-namespace EdFi.Ods.Pipelines.GetMany
+namespace EdFi.Ods.Api.Common.Infrastructure.Pipelines.GetMany
 {
     public class GetManyContext<TResourceModel, TEntityModel>
         : IHasPersistentModel<TEntityModel>, IHasPersistentModels<TEntityModel>, IHasResource<TResourceModel> // IHasETag, IHasIdentifier 

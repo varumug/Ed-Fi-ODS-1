@@ -7,7 +7,7 @@ using System;
 using System.Threading.Tasks;
 using EdFi.Ods.Common.Expando;
 
-namespace EdFi.Ods.Api.Identity
+namespace EdFi.Ods.Api.Common.Models.Identity
 {
     [Flags]
     public enum IdentityServiceCapabilities

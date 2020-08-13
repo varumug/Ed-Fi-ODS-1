@@ -5,7 +5,7 @@
 
 using System;
 
-namespace EdFi.Ods.Api.Models
+namespace EdFi.Ods.Api.Common.Attributes
 {
     [AttributeUsage(AttributeTargets.Property)]
     public sealed class UniqueIdAttribute : Attribute { }

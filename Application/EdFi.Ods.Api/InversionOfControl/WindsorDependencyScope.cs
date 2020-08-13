@@ -6,11 +6,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web.Http.Dependencies;
 using Castle.MicroKernel.Lifestyle;
+#if NETFRAMEWORK
+using System.Web.Http.Dependencies;
 using Castle.Windsor;
 
-namespace EdFi.Ods.Common.Http.InversionOfControl
+namespace EdFi.Ods.Api.InversionOfControl
 {
     internal class WindsorDependencyScope : IDependencyScope
     {
@@ -48,3 +49,4 @@ namespace EdFi.Ods.Common.Http.InversionOfControl
         }
     }
 }
+#endif

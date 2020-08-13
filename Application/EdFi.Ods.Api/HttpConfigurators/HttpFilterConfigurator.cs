@@ -5,7 +5,7 @@
 
 using System.Web.Http;
 using EdFi.Ods.Api.Architecture;
-using EdFi.Ods.Api.ExceptionHandling;
+using EdFi.Ods.Api.Common.ExceptionHandling;
 using EdFi.Ods.Api.Services.ActionFilters;
 using EdFi.Ods.Api.Services.Filters;
 using EdFi.Ods.Common;
@@ -13,7 +13,7 @@ using EdFi.Ods.Common.Context;
 using EdFi.Ods.Common.Security.Claims;
 using EdFi.Security.DataAccess.Repositories;
 
-namespace EdFi.Ods.Api.Startup.HttpConfigurators
+namespace EdFi.Ods.Api.HttpConfigurators
 {
     public class HttpFilterConfigurator : IHttpConfigurator
     {

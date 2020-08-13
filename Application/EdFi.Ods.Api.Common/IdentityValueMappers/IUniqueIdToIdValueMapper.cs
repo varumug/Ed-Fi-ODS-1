@@ -6,7 +6,7 @@
 using System;
 using EdFi.Ods.Common.Caching;
 
-namespace EdFi.Ods.Api.IdentityValueMappers
+namespace EdFi.Ods.Api.Common.IdentityValueMappers
 {
     /// <summary>
     /// Provides interfaces for mapping between a UniqueId and the Id (i.e. the API resource "id").
@@ -14,7 +14,7 @@ namespace EdFi.Ods.Api.IdentityValueMappers
     /// <remarks>
     /// Implementors of this interface should return <see cref="PersonIdentifiersValueMap"/> instances containing at least the
     /// value being requested on each method.  For optimization purposes, they may also return the tertiary identification
-    /// value which will then be opportunistically cached by the <see cref="IPersonUniqueIdToIdCache"/> component (and in an
+    /// value which will then be opportunistically cached by the <see cref="EdFi.Ods.Common.Caching.IPersonUniqueIdToIdCache"/> component (and in an
     /// ODS-specific manner for USI values).
     /// 
     /// If the requested value cannot be found, then a default instance of the <see cref="PersonIdentifiersValueMap"/> should be returned.

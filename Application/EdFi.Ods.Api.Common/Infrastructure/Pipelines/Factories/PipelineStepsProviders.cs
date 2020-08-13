@@ -4,10 +4,9 @@
 // See the LICENSE and NOTICES files in the project root for more information.
 
 using System;
-using EdFi.Ods.Api.ChangeQueries.Pipelines.Steps;
-using EdFi.Ods.Api.Pipelines.Steps;
+using EdFi.Ods.Api.Common.Infrastructure.Pipelines.Steps;
 
-namespace EdFi.Ods.Api.Pipelines.Factories
+namespace EdFi.Ods.Api.Common.Infrastructure.Pipelines.Factories
 {
     /// <summary>
     /// Provides the core Ed-Fi ODS API steps for "GetById" access.

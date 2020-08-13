@@ -6,11 +6,12 @@
 using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
-using EdFi.Ods.Api.NHibernate.Architecture;
-using EdFi.Ods.Api.NHibernate.Architecture.Criteria;
+using EdFi.Ods.Api.Common.Infrastructure.Repositories;
+using EdFi.Ods.Api.Common.Providers;
+using EdFi.Ods.Api.Common.Providers.Criteria;
 using EdFi.Ods.Common.Repositories;
 
-namespace EdFi.Ods.Api.Startup.Features.Installers
+namespace EdFi.Ods.Api._Installers
 {
     public class NHibernateInstaller : IWindsorInstaller
     {

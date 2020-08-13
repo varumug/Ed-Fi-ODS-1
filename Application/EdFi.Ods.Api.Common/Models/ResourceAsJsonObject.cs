@@ -6,7 +6,7 @@
 using System;
 using Newtonsoft.Json.Linq;
 
-namespace EdFi.Ods.Api
+namespace EdFi.Ods.Api.Common.Models
 {
     public abstract class ResourceAsJsonObject<TId>
     {

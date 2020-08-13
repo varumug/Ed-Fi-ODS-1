@@ -9,6 +9,9 @@ using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using EdFi.Ods.Api.Common.Attributes;
+using EdFi.Ods.Api.Common.Dtos;
+using EdFi.Ods.Api.Common.Infrastructure.Architecture;
 using EdFi.Ods.Common;
 using EdFi.Ods.Common.Constants;
 using EdFi.Ods.Common.Conventions;
@@ -18,7 +21,7 @@ using EdFi.Ods.Common.Security.Claims;
 using NHibernate;
 using NHibernate.Context;
 
-namespace EdFi.Ods.Api.NHibernate.Architecture
+namespace EdFi.Ods.Api.Common.Infrastructure.Repositories
 {
     /// <summary>
     /// Provides a base class for implementing <see cref="NHibernateRepositoryOperationBase"/>-derived classes

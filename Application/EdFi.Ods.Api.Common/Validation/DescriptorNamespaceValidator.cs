@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 using EdFi.Ods.Common;
 using FluentValidation;
 
-namespace EdFi.Ods.Api.Validation
+namespace EdFi.Ods.Api.Common.Validation
 {
     public class DescriptorNamespaceValidator : AbstractValidator<IEdFiDescriptor>
     {

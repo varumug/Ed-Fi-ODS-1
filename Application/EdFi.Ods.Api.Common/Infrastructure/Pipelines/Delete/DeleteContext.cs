@@ -6,7 +6,7 @@
 using System;
 using EdFi.Ods.Common;
 
-namespace EdFi.Ods.Pipelines.Delete
+namespace EdFi.Ods.Api.Common.Infrastructure.Pipelines.Delete
 {
     public class DeleteContext : IHasIdentifier
     {

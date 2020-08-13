@@ -6,7 +6,7 @@
 using System;
 using EdFi.Ods.Common;
 
-namespace EdFi.Ods.Pipelines.Put
+namespace EdFi.Ods.Api.Common.Infrastructure.Pipelines.Put
 {
     public class PutContext<TResourceModel, TEntityModel> : IHasPersistentModel<TEntityModel>, IHasResource<TResourceModel>, IHasIdentifier
         where TResourceModel : IHasETag

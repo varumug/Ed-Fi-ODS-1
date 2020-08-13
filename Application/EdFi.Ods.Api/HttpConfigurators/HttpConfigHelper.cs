@@ -9,7 +9,7 @@ using EdFi.Ods.Api.Services;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
-namespace EdFi.Ods.Api.Startup.HttpConfigurators
+namespace EdFi.Ods.Api.HttpConfigurators
 {
     public static class HttpConfigHelper
     {

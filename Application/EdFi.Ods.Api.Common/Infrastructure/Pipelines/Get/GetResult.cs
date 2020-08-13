@@ -5,7 +5,7 @@
 
 using EdFi.Ods.Common;
 
-namespace EdFi.Ods.Pipelines.Get
+namespace EdFi.Ods.Api.Common.Infrastructure.Pipelines.Get
 {
     public class GetResult<TResourceModel> : PipelineResultBase, IHasResource<TResourceModel>
         where TResourceModel : IHasETag

@@ -4,9 +4,8 @@
 // See the LICENSE and NOTICES files in the project root for more information.
 
 using EdFi.Ods.Common;
-using EdFi.Ods.Pipelines.Common;
 
-namespace EdFi.Ods.Pipelines.GetMany
+namespace EdFi.Ods.Api.Common.Infrastructure.Pipelines.GetMany
 {
     public class GetManyPipeline<TResourceModel, TEntityModel>
         : PipelineBase<GetManyContext<TResourceModel, TEntityModel>, GetManyResult<TResourceModel>>

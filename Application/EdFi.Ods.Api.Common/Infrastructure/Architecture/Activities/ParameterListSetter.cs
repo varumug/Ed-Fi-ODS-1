@@ -6,7 +6,7 @@
 using System.Collections;
 using NHibernate;
 
-namespace EdFi.Ods.Api.NHibernate.Architecture
+namespace EdFi.Ods.Api.Common.Infrastructure.Architecture.Activities
 {
     /// <summary>
     /// Implements a default <see cref="IParameterListSetter" /> as a straight pass-through to NHibernate.

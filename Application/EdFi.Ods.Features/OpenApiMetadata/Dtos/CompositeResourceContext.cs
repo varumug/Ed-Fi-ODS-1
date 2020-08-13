@@ -5,7 +5,7 @@
 
 using System.Xml.Linq;
 
-namespace EdFi.Ods.Api.Services.Metadata.Models
+namespace EdFi.Ods.Features.OpenApiMetadata.Dtos
 {
     public class CompositeResourceContext
     {

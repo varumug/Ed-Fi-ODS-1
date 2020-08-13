@@ -6,13 +6,12 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using EdFi.Ods.Api.Common.Infrastructure.Pipelines.Delete;
 using EdFi.Ods.Common;
 using EdFi.Ods.Common.Extensions;
 using EdFi.Ods.Common.Repositories;
-using EdFi.Ods.Pipelines.Common;
-using EdFi.Ods.Pipelines.Delete;
 
-namespace EdFi.Ods.Api.Pipelines.Steps
+namespace EdFi.Ods.Api.Common.Infrastructure.Pipelines.Steps
 {
     public class DeleteEntityModel<TContext, TResult, TResourceModel, TEntityModel> : IStep<DeleteContext, DeleteResult>
         where TEntityModel : IHasIdentifier

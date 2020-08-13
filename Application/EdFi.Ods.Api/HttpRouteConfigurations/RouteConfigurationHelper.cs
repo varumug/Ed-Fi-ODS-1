@@ -3,9 +3,9 @@
 // The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
 // See the LICENSE and NOTICES files in the project root for more information.
 
-using EdFi.Ods.Api.Constants;
+using EdFi.Ods.Api.Common.Constants;
 
-namespace EdFi.Ods.Api.Startup.HttpRouteConfigurations
+namespace EdFi.Ods.Api.HttpRouteConfigurations
 {
     public static class RouteConfigurationHelper
     {

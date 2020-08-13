@@ -3,7 +3,7 @@
 // The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
 // See the LICENSE and NOTICES files in the project root for more information.
 
-namespace EdFi.Ods.Api.NHibernate.Architecture.Criteria
+namespace EdFi.Ods.Api.Common.Providers.Criteria
 {
     /// <summary>
     /// Defines a method for building a query that retrieves the Ids for the next page of data.

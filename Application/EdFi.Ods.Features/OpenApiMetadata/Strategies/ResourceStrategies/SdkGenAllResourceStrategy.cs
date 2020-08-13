@@ -5,9 +5,9 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using EdFi.Ods.Api.Services.Metadata.Models;
+using EdFi.Ods.Features.OpenApiMetadata.Dtos;
 
-namespace EdFi.Ods.Api.Services.Metadata.Strategies.ResourceStrategies
+namespace EdFi.Ods.Features.OpenApiMetadata.Strategies.ResourceStrategies
 {
     public class SdkGenAllResourceStrategy : IOpenApiMetadataResourceStrategy
     {

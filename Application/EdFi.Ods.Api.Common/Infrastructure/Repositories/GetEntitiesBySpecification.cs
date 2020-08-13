@@ -8,7 +8,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using EdFi.Ods.Api.NHibernate.Architecture.Criteria;
+using EdFi.Ods.Api.Common.Dtos;
+using EdFi.Ods.Api.Common.Infrastructure.Architecture;
+using EdFi.Ods.Api.Common.Providers.Criteria;
 using EdFi.Ods.Common;
 using EdFi.Ods.Common.Extensions;
 using EdFi.Ods.Common.Repositories;
@@ -17,7 +19,7 @@ using NHibernate.Context;
 using NHibernate.Criterion;
 using NHibernate.Multi;
 
-namespace EdFi.Ods.Api.NHibernate.Architecture
+namespace EdFi.Ods.Api.Common.Infrastructure.Repositories
 {
     public class GetEntitiesBySpecification<TEntity>
         : NHibernateRepositoryOperationBase, IGetEntitiesBySpecification<TEntity>

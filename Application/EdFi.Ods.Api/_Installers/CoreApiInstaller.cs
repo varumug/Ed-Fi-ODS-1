@@ -12,39 +12,39 @@ using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
 using EdFi.Ods.Sandbox.Security;
 using EdFi.Ods.Api.Caching;
+using EdFi.Ods.Api.Common;
+using EdFi.Ods.Api.Common.Authentication;
+using EdFi.Ods.Api.Common.Caching;
+using EdFi.Ods.Api.Common.ExceptionHandling;
+using EdFi.Ods.Api.Common.IdentityValueMappers;
+using EdFi.Ods.Api.Common.Infrastructure.Pipelines;
+using EdFi.Ods.Api.Common.Infrastructure.Pipelines.CreateOrUpdate;
+using EdFi.Ods.Api.Common.Infrastructure.Pipelines.Factories;
+using EdFi.Ods.Api.Common.Providers;
+using EdFi.Ods.Api.Common.Validation;
+using EdFi.Ods.Api.Context;
 using EdFi.Ods.Api.ETag;
-using EdFi.Ods.Api.ExceptionHandling;
-using EdFi.Ods.Api.IdentityValueMappers;
-using EdFi.Ods.Api.NHibernate.Architecture;
-using EdFi.Ods.Api.Pipelines.Factories;
 using EdFi.Ods.Api.Services.Authentication;
 using EdFi.Ods.Api.Services.Authentication.ClientCredentials;
 using EdFi.Ods.Api.Services.Authorization;
 using EdFi.Ods.Api.Services.Providers;
-using EdFi.Ods.Api.Validation;
 using EdFi.Ods.Common;
 using EdFi.Ods.Common.Caching;
 using EdFi.Ods.Common.Configuration;
 using EdFi.Ods.Common.Context;
 using EdFi.Ods.Common.Conventions;
 using EdFi.Ods.Common.Extensions;
-using EdFi.Ods.Common.Http.Context;
 using EdFi.Ods.Common.Metadata;
 using EdFi.Ods.Common.Models;
 using EdFi.Ods.Common.Models.Domain;
 using EdFi.Ods.Common.Models.Graphs;
 using EdFi.Ods.Common.Models.Resource;
 using EdFi.Ods.Common.Security;
-using EdFi.Ods.Common.Security.Claims;
 using EdFi.Ods.Common.Validation;
-using EdFi.Ods.Pipelines;
-using EdFi.Ods.Pipelines.Common;
-using EdFi.Ods.Pipelines.Factories;
 using EdFi.Ods.Sandbox.Provisioners;
-using EdFi.Ods.Security.Claims;
 using FluentValidation;
 
-namespace EdFi.Ods.Api.Startup.Features.Installers
+namespace EdFi.Ods.Api._Installers
 {
     public class CoreApiInstaller : IWindsorInstaller
     {
@@ -56,6 +56,7 @@ namespace EdFi.Ods.Api.Startup.Features.Installers
         private readonly Assembly _apiAssembly;
         private readonly IApiConfigurationProvider _apiConfigurationProvider;
         private readonly Assembly _standardAssembly;
+        private Assembly _apiCommonAssembly;
 
         public CoreApiInstaller(IAssembliesProvider assembliesProvider, IApiConfigurationProvider apiConfigurationProvider, IConfigValueProvider configValueProvider)
         {
@@ -69,6 +70,7 @@ namespace EdFi.Ods.Api.Startup.Features.Installers
 
             // TODO JSM - remove the calls using this once we move to the api assembly in ODS-2152. This makes it easy to find the specific locations in the file for now
             _apiAssembly = installedAssemblies.SingleOrDefault(x => x.GetName().Name.Equals("EdFi.Ods.Api"));
+            _apiCommonAssembly = installedAssemblies.SingleOrDefault(x => x.GetName().Name.Equals("EdFi.Ods.Api.Common"));
         }
 
         public void Install(IWindsorContainer container, IConfigurationStore store)
@@ -82,7 +84,6 @@ namespace EdFi.Ods.Api.Startup.Features.Installers
             RegisterDatabaseMetadataProvider(container);
             RegisterEdFiDescriptorReflectionProvider(container);
             RegisterOAuthTokenValidator(container);
-            RegisterClaims(container);
             RegisterEdFiOdsInstanceIdentificationProvider(container);
             RegisterETagProvider(container);
             RegisterUniqueIdToUsiValueMapper(container);
@@ -219,11 +220,6 @@ namespace EdFi.Ods.Api.Startup.Features.Installers
                 Classes.FromAssembly(_apiAssembly).BasedOn<ApiController>().LifestyleScoped());
         }
 
-        private void RegisterClaims(IWindsorContainer container)
-        {
-            container.Register(Component.For<IClaimsIdentityProvider>().ImplementedBy<ClaimsIdentityProvider>());
-        }
-
         private void RegisterEdFiOdsInstanceIdentificationProvider(IWindsorContainer container)
         {
             container.Register(
@@ -260,7 +256,7 @@ namespace EdFi.Ods.Api.Startup.Features.Installers
 
             container.Register(
                 Component.For<IDescriptorsCache>()
-                .ImplementedBy<DescriptorsCache>()
+                    .ImplementedBy<DescriptorsCache>()
                 .DependsOn(Dependency.OnValue<ICacheProvider>(cacheProvider)));
         }
 
@@ -295,7 +291,7 @@ namespace EdFi.Ods.Api.Startup.Features.Installers
         {
             container.Register(
                 Component.For<IRESTErrorProvider>().ImplementedBy<RESTErrorProvider>(),
-                Classes.FromAssemblyContaining<Marker_EdFi_Ods_Api>().BasedOn<IExceptionTranslator>()
+                Classes.FromAssemblyContaining<Marker_EdFi_Ods_Api_Common>().BasedOn<IExceptionTranslator>()
                     .WithService.Base());
         }
 
@@ -336,14 +332,14 @@ namespace EdFi.Ods.Api.Startup.Features.Installers
                     .BasedOn(typeof(ICreateOrUpdatePipeline<,>))
                     .WithService.AllInterfaces(),
                 Classes
-                    .FromAssembly(_apiAssembly)
+                    .FromAssembly(_apiCommonAssembly)
                     .BasedOn(typeof(IStep<,>))
                     .WithService
                     .Self(),
 
                 // Register the providers of the core pipeline steps
                 Classes
-                    .FromAssembly(_apiAssembly)
+                    .FromAssembly(_apiCommonAssembly)
                     .BasedOn<IPipelineStepsProvider>()
                     .WithServiceFirstInterface());
         }

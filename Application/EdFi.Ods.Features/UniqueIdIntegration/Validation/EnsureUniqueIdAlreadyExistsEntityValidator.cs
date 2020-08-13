@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using EdFi.Ods.Api.Validation;
+using EdFi.Ods.Api.Common.Validation;
 using EdFi.Ods.Common;
 using EdFi.Ods.Common.Specifications;
 
@@ -46,12 +46,12 @@ namespace EdFi.Ods.Features.UniqueIdIntegration.Validation
                         typeof(IHasIdentifier).Name));
             }
 
-            // Used in conjunction with the PopulateIdFromUniqueIdOnPeople pipeline step, the Id 
-            // property should have already been populated if the UniqueId provided on the request 
+            // Used in conjunction with the PopulateIdFromUniqueIdOnPeople pipeline step, the Id
+            // property should have already been populated if the UniqueId provided on the request
             // existed previously.
-            // 
-            // For implementations with an integrated UniqueId system, it is an invalid request  
-            // if we are unable to resolve the UniqueId to a GUID-based Id by this point in the 
+            //
+            // For implementations with an integrated UniqueId system, it is an invalid request
+            // if we are unable to resolve the UniqueId to a GUID-based Id by this point in the
             // processing of the request.
             if (entityWithIdentifier.Id == default(Guid))
             {

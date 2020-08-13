@@ -10,18 +10,18 @@ using System.Web.Http;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor;
 using EdFi.Ods.Api.Caching;
-using EdFi.Ods.Api.Services.Authorization;
-using EdFi.Ods.Api.Startup;
+using EdFi.Ods.Api.Common.Authentication;
+using EdFi.Ods.Api.Common.Caching;
 using EdFi.Ods.Common.Configuration;
 using EdFi.Ods.Common.Context;
 using EdFi.Ods.Common.Database;
 using EdFi.Ods.Common.Extensions;
 using EdFi.Ods.Common.Security;
-using EdFi.Ods.Common._Installers.ComponentNaming;
 using EdFi.Ods.Composites.Enrollment;
 using EdFi.Ods.Composites.Test;
+using EdFi.Ods.Features;
+using EdFi.Ods.Standard.Container.Installers;
 using EdFi.Security.DataAccess.Repositories;
-using EdFi.Ods.Standard._Installers;
 using EdFi.Ods.WebService.Tests.Owin;
 using EdFi.Ods.WebService.Tests.Profiles;
 using EdFi.TestObjects;
@@ -40,6 +40,7 @@ namespace EdFi.Ods.WebService.Tests.Composites
             // Ensure assembly containing Composites specification is loaded
             AssemblyLoader.EnsureLoaded<
                 Marker_EdFi_Ods_Composites_Test,
+                Marker_EdFi_Ods_Features,
                 Marker_EdFi_Ods_Composites_Enrollment>();
         }
 

@@ -6,13 +6,13 @@
 using System;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor;
-using EdFi.Ods.Common.Composites;
 using EdFi.Ods.Common.Context;
 using EdFi.Ods.Common.InversionOfControl;
 using EdFi.Ods.Common.IO;
 using EdFi.Ods.Common.Models.Graphs;
 using EdFi.Ods.Common.Models.Resource;
 using EdFi.Ods.Common.Security;
+using EdFi.Ods.Features.Composites;
 
 namespace EdFi.Ods.Repositories.NHibernate.Tests
 {

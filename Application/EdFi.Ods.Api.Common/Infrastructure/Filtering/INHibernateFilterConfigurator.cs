@@ -5,7 +5,7 @@
 
 using System.Collections.Generic;
 
-namespace EdFi.Ods.Api.NHibernate.Filtering
+namespace EdFi.Ods.Api.Common.Infrastructure.Filtering
 {
     /// <summary>
     /// Provides methods for defining and applying NHibernate parameterized filters to entity mappings.

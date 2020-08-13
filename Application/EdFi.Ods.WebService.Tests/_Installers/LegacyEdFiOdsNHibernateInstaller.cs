@@ -6,12 +6,13 @@
 using System;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor;
-using EdFi.Ods.Api.NHibernate.Architecture;
-using EdFi.Ods.Api.NHibernate.Architecture.Criteria;
-using EdFi.Ods.Api.NHibernate.Composites;
-using EdFi.Ods.Common.Composites;
+using EdFi.Ods.Api.Common.Infrastructure.Repositories;
+using EdFi.Ods.Api.Common.Providers;
+using EdFi.Ods.Api.Common.Providers.Criteria;
 using EdFi.Ods.Common.InversionOfControl;
 using EdFi.Ods.Common.Repositories;
+using EdFi.Ods.Features.Composites;
+using EdFi.Ods.Features.Composites.Infrastructure;
 
 namespace EdFi.Ods.WebService.Tests._Installers
 {
@@ -75,27 +76,6 @@ namespace EdFi.Ods.WebService.Tests._Installers
                    .For<IDescriptorLookupProvider>()
                    .ImplementedBy<DescriptorLookupProvider>()
                    .LifestyleSingleton());
-
-            // TODO: Remove with ODS-2973, deprecated by CompositesFeatureInstaller
-            container.Register(
-                Component
-                   .For<ICompositeResourceResponseProvider>()
-                   .ImplementedBy<CompositeResourceResponseProvider>());
-
-            // TODO: Remove with ODS-2973, deprecated by CompositesFeatureInstaller
-            container.Register(
-                Component
-                   .For<ICompositeItemBuilder<HqlBuilderContext, CompositeQuery>>()
-                   .ImplementedBy<HqlBuilder>());
-        }
-
-        protected virtual void RegisterIFieldsExpressionParser(IWindsorContainer container)
-        {
-            // TODO: Remove with ODS-2973, deprecated by CompositesFeatureInstaller
-            container.Register(
-                Component
-                   .For<IFieldsExpressionParser>()
-                   .ImplementedBy<FieldsExpressionParser>());
         }
 
         protected virtual void RegisterIPagedAggregateIdsCriteriaProvider(IWindsorContainer container)

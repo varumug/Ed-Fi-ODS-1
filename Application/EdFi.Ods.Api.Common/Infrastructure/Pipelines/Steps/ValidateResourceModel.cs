@@ -10,13 +10,10 @@ using System.Threading.Tasks;
 using EdFi.Ods.Common;
 using EdFi.Ods.Common.Extensions;
 using EdFi.Ods.Common.Validation;
-using EdFi.Ods.Pipelines;
-using EdFi.Ods.Pipelines.Common;
 
-namespace EdFi.Ods.Api.Pipelines.Steps
+namespace EdFi.Ods.Api.Common.Infrastructure.Pipelines.Steps
 {
-    public class ValidateResourceModel<TContext, TResult, TResourceModel, TEntityModel> 
-        : IStep<TContext, TResult>
+    public class ValidateResourceModel<TContext, TResult, TResourceModel, TEntityModel> : IStep<TContext, TResult>
         where TContext : IHasResource<TResourceModel>
         where TResourceModel : IHasETag
         where TEntityModel : class
@@ -29,16 +26,21 @@ namespace EdFi.Ods.Api.Pipelines.Steps
             _validators = validators;
         }
 
-        public Task ExecuteAsync(TContext context, TResult result, CancellationToken cancellationToken)
+        public void Execute(TContext context, TResult result)
         {
+            // NOTE this talk will always run synchronously, therefore we are not moving it to the async method
             var validationResults = _validators.ValidateObject(context.Resource);
 
             if (!validationResults.IsValid())
             {
                 result.Exception = new ValidationException(
-                    $"Validation of '{context.Resource.GetType().Name}' failed.\n{string.Join("\n", validationResults.GetAllMessages(indentLevel: 1))}");
+                    $"Validation of '{((object) context.Resource).GetType().Name}' failed.\n{string.Join("\n", validationResults.GetAllMessages(indentLevel: 1))}");
             }
+        }
 
+        public Task ExecuteAsync(TContext context, TResult result, CancellationToken cancellationToken)
+        {
+            Execute(context, result);
             return Task.CompletedTask;
         }
     }

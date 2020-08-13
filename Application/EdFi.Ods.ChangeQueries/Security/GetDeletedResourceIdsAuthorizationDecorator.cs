@@ -4,7 +4,8 @@
 // See the LICENSE and NOTICES files in the project root for more information.
 
 using System.Collections.Generic;
-using EdFi.Ods.Api.ChangeQueries;
+using EdFi.Ods.Api.Common.Infrastructure.Pipelines.Steps;
+using EdFi.Ods.Api.Common.Models;
 using EdFi.Ods.Common;
 using EdFi.Ods.Common.Security.Claims;
 using EdFi.Ods.Security.Authorization.Repositories;

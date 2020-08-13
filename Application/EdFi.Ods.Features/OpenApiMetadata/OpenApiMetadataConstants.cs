@@ -3,11 +3,13 @@
 // The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
 // See the LICENSE and NOTICES files in the project root for more information.
 
-namespace EdFi.Ods.Api.Startup.Features
+using EdFi.Ods.Api.Common.Constants;
+
+namespace EdFi.Ods.Features.OpenApiMetadata
 {
     public class OpenApiMetadataConstants
     {
-        public const string FeatureName = "OpenApiMetadata";
+        public static string FeatureName = ApiFeature.OpenApiMetadata.GetConfigKeyName();
         public const string FeatureVersion = "1";
     }
 }

@@ -3,18 +3,20 @@
 // The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
 // See the LICENSE and NOTICES files in the project root for more information.
 
-using System;
+#if NETFRAMEWORK
 using System.Web.Http;
-using Castle.Windsor;
-using EdFi.Ods.Api.Startup.ContainerBuilders;
-using EdFi.Ods.Api.Startup.ExternalTasks;
-using EdFi.Ods.Api.Startup.Middleware;
+using EdFi.Ods.Api.Common.ExternalTasks;
+using EdFi.Ods.Api.ContainerBuilders;
+using EdFi.Ods.Api.Middleware;
+using EdFi.Ods.Api.Startup;
 using log4net;
 using log4net.Config;
 using Microsoft.Owin.Logging;
 using Owin;
+using System;
+using Castle.Windsor;
 
-namespace EdFi.Ods.Api.Startup
+namespace EdFi.Ods.Api
 {
     public abstract class StartupBase : IDisposable
     {
@@ -94,3 +96,4 @@ namespace EdFi.Ods.Api.Startup
         protected virtual void ConfigurationSpecificRegistration() { }
     }
 }
+#endif

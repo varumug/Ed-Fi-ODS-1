@@ -6,17 +6,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+#if NETFRAMEWORK
 using EdFi.Ods.Api.ChangeQueries;
-using EdFi.Ods.Api.Services.Metadata.Models;
-using EdFi.Ods.Api.Services.Metadata.Strategies.FactoryStrategies;
+#endif
 using EdFi.Ods.Common.Extensions;
 using EdFi.Ods.Common.Models.Domain;
 using EdFi.Ods.Common.Utils.Extensions;
 using EdFi.Ods.Common.Utils.Profiles;
-using Swashbuckle.Swagger;
-using Schema = Swashbuckle.Swagger.Schema;
+using EdFi.Ods.Features.OpenApiMetadata.Dtos;
+using EdFi.Ods.Features.OpenApiMetadata.Models;
+using EdFi.Ods.Features.OpenApiMetadata.Strategies.FactoryStrategies;
 
-namespace EdFi.Ods.Api.Services.Metadata.Factories
+namespace EdFi.Ods.Features.OpenApiMetadata.Factories
 {
     public class SwaggerPathsFactory
     {
@@ -64,7 +65,9 @@ namespace EdFi.Ods.Api.Services.Metadata.Factories
                                     Path = $"{resourcePath}/{{id}}",
                                     PathItem = CreatePathItemForAccessByIdsOperations(r)
                                 }
-                                : null,
+                                : null
+#if NETFRAMEWORK
+                            ,
                             ChangeQueryFeature.IsEnabled && !r.Name.Equals(ChangeQueryFeature.SchoolYearTypesResourceName) && !isCompositeContext
                                 ? new
                                 {
@@ -72,6 +75,7 @@ namespace EdFi.Ods.Api.Services.Metadata.Factories
                                     PathItem = CreatePathItemForChangeQueryOperation(r)
                                 }
                                 : null
+#endif
                         };
 
                         return paths.Where(p => p != null);
@@ -131,7 +135,8 @@ namespace EdFi.Ods.Api.Services.Metadata.Factories
                 produces = new[] {_contentTypeStrategy.GetOperationContentType(swaggerResource, ContentTypeUsage.Readable)},
                 parameters = CreateGetByExampleParameters(swaggerResource, isCompositeContext),
                 responses = SwaggerDocumentHelper.GetReadOperationResponses(
-                    _pathsFactoryNamingStrategy.GetResourceName(swaggerResource, ContentTypeUsage.Readable), true)
+                    _pathsFactoryNamingStrategy.GetResourceName(swaggerResource, ContentTypeUsage.Readable),
+                    true)
             };
 
             return operation;
@@ -162,7 +167,8 @@ namespace EdFi.Ods.Api.Services.Metadata.Factories
                     .ToList(),
                 responses =
                     SwaggerDocumentHelper.GetReadOperationResponses(
-                        _pathsFactoryNamingStrategy.GetResourceName(swaggerResource, ContentTypeUsage.Readable), false)
+                        _pathsFactoryNamingStrategy.GetResourceName(swaggerResource, ContentTypeUsage.Readable),
+                        false)
             };
         }
 
@@ -174,6 +180,7 @@ namespace EdFi.Ods.Api.Services.Metadata.Factories
                 new Parameter {@ref = SwaggerDocumentHelper.GetParameterReference("limit")}
             };
 
+#if NETFRAMEWORK
             if (ChangeQueryFeature.IsEnabled && !isCompositeContext)
             {
                 parameterList.Add(
@@ -182,6 +189,7 @@ namespace EdFi.Ods.Api.Services.Metadata.Factories
                 parameterList.Add(
                     new Parameter { @ref = SwaggerDocumentHelper.GetParameterReference("MaxChangeVersion") });
             }
+#endif
 
             if (_swaggerPathsFactorySelectorStrategy.HasTotalCount)
             {
@@ -307,7 +315,8 @@ namespace EdFi.Ods.Api.Services.Metadata.Factories
                     new Parameter {@ref = SwaggerDocumentHelper.GetParameterReference("MaxChangeVersion")}
                 },
                 responses = SwaggerDocumentHelper.GetReadOperationResponses(
-                    _pathsFactoryNamingStrategy.GetResourceName(swaggerResource, ContentTypeUsage.Readable), true)
+                    _pathsFactoryNamingStrategy.GetResourceName(swaggerResource, ContentTypeUsage.Readable),
+                    true)
             };
         }
 
@@ -360,7 +369,7 @@ namespace EdFi.Ods.Api.Services.Metadata.Factories
                     $"The JSON representation of the \"{camelCaseName}\" resource to be created or updated.",
                 @in = "body",
                 required = true,
-                schema = new Schema {@ref = SwaggerDocumentHelper.GetDefinitionReference(referenceName)}
+                schema = new Models.Schema { @ref = SwaggerDocumentHelper.GetDefinitionReference(referenceName)}
             };
         }
     }

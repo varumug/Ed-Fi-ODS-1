@@ -4,9 +4,9 @@
 // See the LICENSE and NOTICES files in the project root for more information.
 
 using System.Collections.Generic;
-using EdFi.Ods.Api.Services.Metadata.Models;
+using EdFi.Ods.Features.OpenApiMetadata.Dtos;
 
-namespace EdFi.Ods.Api.Services.Metadata.Strategies.ResourceStrategies
+namespace EdFi.Ods.Features.OpenApiMetadata.Strategies.ResourceStrategies
 {
     public interface IOpenApiMetadataResourceStrategy
     {

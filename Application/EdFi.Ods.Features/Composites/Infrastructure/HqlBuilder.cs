@@ -9,11 +9,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using EdFi.Ods.Api.NHibernate.Architecture;
-using EdFi.Ods.Api.NHibernate.Extensions;
+using EdFi.Ods.Api.Common.Extensions;
+using EdFi.Ods.Api.Common.Infrastructure.Architecture.Activities;
 using EdFi.Ods.Common;
 using EdFi.Ods.Common.Caching;
-using EdFi.Ods.Common.Composites;
 using EdFi.Ods.Common.Exceptions;
 using EdFi.Ods.Common.Extensions;
 using EdFi.Ods.Common.Models.Domain;
@@ -25,31 +24,23 @@ using NHibernate;
 using NHibernate.Exceptions;
 using NHibernate.Transform;
 
-namespace EdFi.Ods.Api.NHibernate.Composites
+namespace EdFi.Ods.Features.Composites.Infrastructure
 {
     public class HqlBuilder : ICompositeItemBuilder<HqlBuilderContext, CompositeQuery>
     {
         private const string BaseEntityIdName = "__BaseEntityId__";
 
         private static readonly Dictionary<string, string> RangeOperatorBySymbol = new Dictionary<string, string>
-                                                                                   {
-                                                                                       {
-                                                                                           "[", ">="
-                                                                                       },
-                                                                                       {
-                                                                                           "{", ">"
-                                                                                       },
-                                                                                       {
-                                                                                           "]", "<="
-                                                                                       },
-                                                                                       {
-                                                                                           "}", "<"
-                                                                                       }
-                                                                                   };
+        {
+            {"[", ">="},
+            {"{", ">"},
+            {"]", "<="},
+            {"}", "<"}
+        };
 
         // Support date and numeric ranges (e.g. [2016-05-23..2016-06-30])
         private static readonly Regex _rangeRegex = new Regex(
-            @"(?<PropertyName>\w+):(?<BeginRangeSymbol>[\[\{])((?<BeginValue>[0-9]{4}-[0-9]{1,2}-[0-9]{1,2})(\.\.\.|\.\.|…)(?<EndValue>[0-9]{4}-[0-9]{1,2}-[0-9]{1,2})|(?<BeginValue>[0-9\.]+?)(\.\.\.|\.\.|…)(?<EndValue>[0-9\.]+?))(?<EndRangeSymbol>[\}\]])",
+            @"(?<PropertyName>\w+):(?<BeginRangeSymbol>[\[\{])((?<BeginValue>[0-9]{4}-[0-9]{1,2}-[0-9]{1,2})(\.\.\.|\.\.|â€¦)(?<EndValue>[0-9]{4}-[0-9]{1,2}-[0-9]{1,2})|(?<BeginValue>[0-9\.]+?)(\.\.\.|\.\.|â€¦)(?<EndValue>[0-9\.]+?))(?<EndRangeSymbol>[\}\]])",
             RegexOptions.Compiled);
         private readonly IDescriptorsCache _descriptorsCache;
 
@@ -70,7 +61,10 @@ namespace EdFi.Ods.Api.NHibernate.Composites
             _sessionFactory = Preconditions.ThrowIfNull(sessionFactory, nameof(sessionFactory));
             _descriptorsCache = Preconditions.ThrowIfNull(descriptorsCache, nameof(descriptorsCache));
             _personUniqueIdToUsiCache = Preconditions.ThrowIfNull(personUniqueIdToUsiCache, nameof(personUniqueIdToUsiCache));
-            _resourceJoinPathExpressionProcessor = Preconditions.ThrowIfNull(resourceJoinPathExpressionProcessor, nameof(resourceJoinPathExpressionProcessor));
+
+            _resourceJoinPathExpressionProcessor = Preconditions.ThrowIfNull(
+                resourceJoinPathExpressionProcessor, nameof(resourceJoinPathExpressionProcessor));
+
             _parameterListSetter = Preconditions.ThrowIfNull(parameterListSetter, nameof(parameterListSetter));
         }
 
@@ -88,22 +82,35 @@ namespace EdFi.Ods.Api.NHibernate.Composites
             builderContext.SpecificationFrom = new StringBuilder();
             builderContext.SpecificationWhere = new StringBuilder();
 
+            bool isHierarchicalResource =
+                processorContext.ShouldUseHierarchy()
+                && processorContext.CurrentResourceClass.Entity.HasSelfReferencingAssociations;
+
+            // Prevent use of hierarchical resources as the BaseResource of a composite
+            // NOTE: To support this behavior, it will require a different approach involving the use of
+            // NHibernate <sql-query> entries in the mapping, with embedded server-specific SQL CTE queries
+            if (isHierarchicalResource)
+            {
+                throw new NotImplementedException(
+                    "Support for the use of hierarchical resources as the BaseResource of composite resources has not been implemented.");
+            }
+
             // Fully qualified entity name is required to perform hql queries for an entity
             // This requirement was added in phase 3 when multiple entity extensions were added to the same entity
             var properCaseName =
                 resource.Entity.DomainModel.SchemaNameMapProvider.GetSchemaMapByPhysicalName(
-                             resource.Entity.Schema)
-                        .ProperCaseName;
+                        resource.Entity.Schema)
+                    .ProperCaseName;
 
             // Root level queries start with the "Q" version of the model
             var aggregateNamespace = Namespaces.Entities.NHibernate.QueryModels
-                                               .GetAggregateNamespace(resource.Entity.Name, properCaseName);
+                .GetAggregateNamespace(resource.Entity.Name, properCaseName);
 
             builderContext.From
-                          .AppendFormat(
-                               "\r\n\t{0}Q {1}",
-                               $@"{aggregateNamespace}.{resource.Entity.Name}",
-                               builderContext.CurrentAlias);
+                .AppendFormat(
+                    "\r\n\t{0}Q {1}",
+                    $@"{aggregateNamespace}.{resource.Entity.Name}",
+                    builderContext.CurrentAlias);
 
             // Add the selection of the main query Id
             if (resource.IdentifyingProperties.Count > 1)
@@ -238,10 +245,18 @@ namespace EdFi.Ods.Api.NHibernate.Composites
         {
             builderContext.CurrentAlias = builderContext.AliasGenerator.GetNextAlias();
 
+            bool isHierarchicalResource =
+                processorContext.ShouldUseHierarchy()
+                && processorContext.CurrentResourceClass.Entity.HasSelfReferencingAssociations
+                || processorContext.ShouldUseReferenceHierarchy();
+
             builderContext.From.AppendFormat(
-                "\r\n\tjoin {0}.{1} {2}",
+                "\r\n\tjoin {0}.{1}{2} {3}",
                 builderContext.ParentAlias,
                 processorContext.EntityMemberName,
+                isHierarchicalResource
+                    ? "Hierarchy"
+                    : string.Empty,
                 builderContext.CurrentAlias);
 
             var collection = processorContext.CurrentResourceMember as Collection;
@@ -282,19 +297,19 @@ namespace EdFi.Ods.Api.NHibernate.Composites
                         // Set the parameter values
                         builderContext.CurrentQueryFilterParameterValueByName[parameterName]
                             = valueFilter.Values
-                                         .Select(x => _descriptorsCache.GetId(filterProperty.LookupTypeName, x))
-                                         .ToArray();
+                                .Select(x => _descriptorsCache.GetId(filterProperty.LookupTypeName, x))
+                                .ToArray();
                     }
                     else
                     {
                         // Concatenate the current filter's values to the existing parameter list
                         builderContext.CurrentQueryFilterParameterValueByName[parameterName]
                             = (parametersAsObject as int[])
-                             .Concat(
-                                  valueFilter.Values
-                                             .Select(x => _descriptorsCache.GetId(filterProperty.LookupTypeName, x))
-                              )
-                             .ToArray();
+                            .Concat(
+                                valueFilter.Values
+                                    .Select(x => _descriptorsCache.GetId(filterProperty.LookupTypeName, x))
+                            )
+                            .ToArray();
                     }
                 }
 
@@ -307,7 +322,7 @@ namespace EdFi.Ods.Api.NHibernate.Composites
         }
 
         /// <summary>
-        /// Builds a new context from the current builder context for use in processing a flattened reference.
+        /// Builds a new context from the curent builder context for use in processing a flattened reference.
         /// </summary>
         /// <param name="builderContext">The builder context.</param>
         /// <returns>The new builder context for use in processing a flattened reference.</returns>
@@ -383,8 +398,29 @@ namespace EdFi.Ods.Api.NHibernate.Composites
                         (char) (processorContext.ChildIndex + 'a'));
                 });
 
+            IEnumerable<EntityProperty> orderByProperties;
+
+            if (processorContext.ShouldUseHierarchy()
+                && processorContext.CurrentResourceClass.Entity.HasSelfReferencingAssociations)
+            {
+                var selfReferencingAssociation =
+                    processorContext.CurrentResourceClass.Entity.OutgoingAssociations
+                        .Single(x => x.IsSelfReferencing);
+
+                var safelySortableProperties =
+                    selfReferencingAssociation.ThisProperties
+                        .Intersect(selfReferencingAssociation.OtherProperties);
+
+                orderByProperties = locallyDefinedIdentifyingProperties
+                    .Intersect(safelySortableProperties);
+            }
+            else
+            {
+                orderByProperties = locallyDefinedIdentifyingProperties;
+            }
+
             // Add ORDER BY for the primary keys
-            locallyDefinedIdentifyingProperties.ForEach(
+            orderByProperties.ForEach(
                 pk =>
                     builderContext.OrderBy.AppendFormat(
                         "{0}{1}.{2}",
@@ -394,12 +430,48 @@ namespace EdFi.Ods.Api.NHibernate.Composites
         }
 
         /// <summary>
+        /// Applies properties necessary to support self-referencing association behavior.
+        /// </summary>
+        /// <param name="selfReferencingAssociations">The relevant self-referencing associations.</param>
+        /// <param name="builderContext">The current builder context.</param>
+        /// <param name="processorContext">The composite definition processor context.</param>
+        /// <remarks>The associations supplied may not be from the current resource class.  In cases where the self-referencing
+        /// behavior is obtained through a referenced resource, the associations will be from the referenced resource.</remarks>
+        public void ApplySelfReferencingProperties(
+            IReadOnlyList<AssociationView> selfReferencingAssociations,
+            HqlBuilderContext builderContext,
+            CompositeDefinitionProcessorContext processorContext)
+        {
+            // Multiple self-recursive relationships are not yet supported.  Need additional metadata to determine which self-recursive relationship to use.
+            if (selfReferencingAssociations.Count() > 1)
+            {
+                throw new NotSupportedException(
+                    string.Format(
+                        "The '{0}' resource has multiple self-recursive relationships.  Recursion is not supported for this scenario.",
+                        processorContext.CurrentResourceClass.Name));
+            }
+
+            var association = selfReferencingAssociations.Single();
+
+            association.SelfReferencingPropertyMappings.Select(m => m.OtherProperty)
+                .ForEach(
+                    p =>
+                    {
+                        builderContext.Select.AppendFormat(
+                            "{0}{1}.{2} as H_{2}",
+                            CommaIfNeeded(builderContext.Select),
+                            builderContext.CurrentAlias,
+                            p.PropertyName);
+                    });
+        }
+
+        /// <summary>
         /// Captures context from the current builder context to be used as the baseline for processing children
         /// while allowing additional changes to be made to the current context.
         /// </summary>
         /// <seealso cref="CreateParentingContext"/>
         /// <param name="builderContext">The current build context.</param>
-        /// <remarks>Implementations should use this as a means for preserving part of the current 
+        /// <remarks>Implementations should use this as a means for preserving part of the current
         /// context for future use by storing the snapshotted context within the current context.</remarks>
         public void SnapshotParentingContext(HqlBuilderContext builderContext)
         {
@@ -492,7 +564,7 @@ namespace EdFi.Ods.Api.NHibernate.Composites
         }
 
         /// <summary>
-        /// Apply the provided property projections onto the build result with the provided builder and composite 
+        /// Apply the provided property projections onto the build result with the provided builder and composite
         /// definition processor contexts.
         /// </summary>
         /// <param name="propertyProjections">A list of property projections to be applied to the build result.</param>
@@ -512,7 +584,7 @@ namespace EdFi.Ods.Api.NHibernate.Composites
             if (processorContext.ShouldIncludeResourceSubtype())
             {
                 string discriminatorDisplayName = processorContext.CurrentResourceClass.Name.ToCamelCase() + "Type";
-            
+
                 builderContext.Select.AppendFormat(
                     "{0}{1}.{2} as {3}__PassThrough",
                     CommaIfNeeded(builderContext.Select),
@@ -522,7 +594,7 @@ namespace EdFi.Ods.Api.NHibernate.Composites
             }
 
             propertyProjections
-               .ForEach(
+                .ForEach(
                     p =>
                     {
                         builderContext.PropertyProjections.Add(p);
@@ -585,7 +657,8 @@ namespace EdFi.Ods.Api.NHibernate.Composites
                           + "\r\nfrom " + builderContext.From + builderContext.SpecificationFrom
                           + (builderContext.SpecificationWhere.Length > 0 || builderContext.Where.Length > 0
                               ? "\r\nwhere " + builderContext.SpecificationWhere
-                                             + ConnectingAndIfNeeded(builderContext.SpecificationWhere, builderContext.Where) + builderContext.Where
+                                             + ConnectingAndIfNeeded(builderContext.SpecificationWhere, builderContext.Where) +
+                                             builderContext.Where
                               : string.Empty)
                           + (builderContext.OrderBy.Length > 0
                               ? "\r\norder by " + builderContext.OrderBy
@@ -595,7 +668,8 @@ namespace EdFi.Ods.Api.NHibernate.Composites
             {
                 object correlationId;
 
-                if (builderContext.QueryStringParameters.TryGetValue(SpecialQueryStringParameters.CorrelationId, out correlationId))
+                if (builderContext.QueryStringParameters.TryGetValue(
+                    SpecialQueryStringParameters.CorrelationId, out correlationId))
                 {
                     _logger.DebugFormat("HQL[{0}]:\r\n{1}", correlationId, hql);
                 }
@@ -656,7 +730,7 @@ namespace EdFi.Ods.Api.NHibernate.Composites
                     AndIfNeeded(builderContext.ParentingContext.Where),
                     builderContext.CurrentAlias,
                     processorContext.CurrentResourceClass.Entity.Identifier.Properties.Single()
-                                    .PropertyName);
+                        .PropertyName);
             }
 
             // This is the main/base query, so execute the query and get the Ids and use as criteria for child queries.
@@ -666,8 +740,8 @@ namespace EdFi.Ods.Api.NHibernate.Composites
             try
             {
                 queryResults = query
-                              .SetResultTransformer(Transformers.AliasToEntityMap)
-                              .List<object>();
+                    .SetResultTransformer(Transformers.AliasToEntityMap)
+                    .List<object>();
             }
             catch (GenericADOException ex)
             {
@@ -677,8 +751,8 @@ namespace EdFi.Ods.Api.NHibernate.Composites
 
             // Get the Ids and assign to the parameters
             var mainQueryIds = queryResults.Cast<Hashtable>()
-                                           .Select(ht => ht[BaseEntityIdName])
-                                           .ToList();
+                .Select(ht => ht[BaseEntityIdName])
+                .ToList();
 
             if (!mainQueryIds.Any())
             {
@@ -689,8 +763,9 @@ namespace EdFi.Ods.Api.NHibernate.Composites
 
             var thisQuery = new CompositeQuery(
                 processorContext.MemberDisplayName,
-                builderContext.PropertyProjections.Select(x => x.DisplayName.ToCamelCase() ?? x.ResourceProperty.PropertyName.ToCamelCase())
-                              .ToArray(),
+                builderContext.PropertyProjections.Select(
+                        x => x.DisplayName.ToCamelCase() ?? x.ResourceProperty.PropertyName.ToCamelCase())
+                    .ToArray(),
                 queryResults,
                 builderContext.IsSingleItemResult);
 
@@ -722,7 +797,8 @@ namespace EdFi.Ods.Api.NHibernate.Composites
             {
                 object correlationId;
 
-                if (builderContext.QueryStringParameters.TryGetValue(SpecialQueryStringParameters.CorrelationId, out correlationId))
+                if (builderContext.QueryStringParameters.TryGetValue(
+                    SpecialQueryStringParameters.CorrelationId, out correlationId))
                 {
                     _logger.DebugFormat("HQL[{0}]:\r\n{1}", correlationId, hql);
                 }
@@ -745,26 +821,46 @@ namespace EdFi.Ods.Api.NHibernate.Composites
             // Apply current query's filter parameters.
             SetQueryParameters(query, builderContext.CurrentQueryFilterParameterValueByName);
 
-            bool isSingleItemResult =
-                processorContext.IsReferenceResource()
-                || processorContext.IsEmbeddedObject();
+            CompositeQuery thisQuery;
 
-            var thisQuery = new CompositeQuery(
-                parentResult,
-                processorContext.MemberDisplayName.ToCamelCase(),
-                builderContext.PropertyProjections.Select(x => x.DisplayName.ToCamelCase() ?? x.ResourceProperty.PropertyName.ToCamelCase())
-                              .ToArray(),
-                query
-                   .SetResultTransformer(Transformers.AliasToEntityMap)
-                   .Future<object>(),
-                isSingleItemResult);
+            if (processorContext.ShouldUseHierarchy())
+            {
+                thisQuery = CreateHierarchicalCompositeQuery(parentResult, processorContext, builderContext, query);
+            }
+            else if (processorContext.ShouldUseReferenceHierarchy())
+            {
+                thisQuery = CreateReferencedHierarchicalCompositeQuery(
+                    parentResult,
+                    processorContext,
+                    builderContext,
+                    query,
+                    processorContext.AttributeValue("hierarchicalReferenceName"));
+            }
+            else
+            {
+                bool isSingleItemResult =
+                    processorContext.IsReferenceResource()
+                    || processorContext.IsEmbeddedObject();
+
+                thisQuery = new CompositeQuery(
+                    parentResult,
+                    processorContext.MemberDisplayName.ToCamelCase(),
+                    builderContext.PropertyProjections.Select(
+                            x => x.DisplayName.ToCamelCase() ?? x.ResourceProperty.PropertyName.ToCamelCase())
+                        .ToArray(),
+                    query
+                        .SetResultTransformer(Transformers.AliasToEntityMap)
+                        .Future<object>(),
+                    isSingleItemResult);
+            }
 
             parentResult.ChildQueries.Add(thisQuery);
 
             return thisQuery;
         }
 
-        private void ProcessQueryStringParameters(HqlBuilderContext builderContext, CompositeDefinitionProcessorContext processorContext)
+        private void ProcessQueryStringParameters(HqlBuilderContext builderContext,
+            CompositeDefinitionProcessorContext processorContext)
         {
             // Get all non "special" query string parameter for property value equality processing
             var queryStringParameters = GetCriteriaQueryStringParameters(builderContext);
@@ -774,7 +870,8 @@ namespace EdFi.Ods.Api.NHibernate.Composites
                 ResourceProperty targetProperty;
 
                 // TODO: Embedded convention. Types and descriptors at the top level
-                if (processorContext.CurrentResourceClass.AllPropertyByName.TryGetValue(queryStringParameter.Key, out targetProperty))
+                if (processorContext.CurrentResourceClass.AllPropertyByName.TryGetValue(
+                    queryStringParameter.Key, out targetProperty))
                 {
                     string criteriaPropertyName;
                     object parameterValue;
@@ -843,8 +940,8 @@ namespace EdFi.Ods.Api.NHibernate.Composites
         private static List<KeyValuePair<string, object>> GetCriteriaQueryStringParameters(HqlBuilderContext builderContext)
         {
             var queryStringParameters = builderContext.QueryStringParameters
-                                                      .Where(p => !SpecialQueryStringParameters.Names.Contains(p.Key))
-                                                      .ToList();
+                .Where(p => !SpecialQueryStringParameters.Names.Contains(p.Key))
+                .ToList();
 
             return queryStringParameters;
         }
@@ -913,7 +1010,7 @@ namespace EdFi.Ods.Api.NHibernate.Composites
                 }
 
                 string targetPropertyName = rangeQueryMatch.Groups["PropertyName"]
-                                                           .Value;
+                    .Value;
 
                 ResourceProperty targetProperty;
 
@@ -931,14 +1028,14 @@ namespace EdFi.Ods.Api.NHibernate.Composites
                     ConvertParameterValueForProperty(
                         targetProperty,
                         rangeQueryMatch.Groups["BeginValue"]
-                                       .Value));
+                            .Value));
 
                 builderContext.CurrentQueryFilterParameterValueByName.Add(
                     rangeEndParameterName,
                     ConvertParameterValueForProperty(
                         targetProperty,
                         rangeQueryMatch.Groups["EndValue"]
-                                       .Value));
+                            .Value));
 
                 // Add the query criteria to the HQL query
                 builderContext.SpecificationWhere.AppendFormat(
@@ -947,10 +1044,10 @@ namespace EdFi.Ods.Api.NHibernate.Composites
                     builderContext.CurrentAlias,
                     targetProperty.PropertyName,
                     RangeOperatorBySymbol[rangeQueryMatch.Groups["BeginRangeSymbol"]
-                                                         .Value],
+                        .Value],
                     rangeBeginParameterName,
                     RangeOperatorBySymbol[rangeQueryMatch.Groups["EndRangeSymbol"]
-                                                         .Value],
+                        .Value],
                     rangeEndParameterName);
 
                 n++;
@@ -978,6 +1075,151 @@ namespace EdFi.Ods.Api.NHibernate.Composites
                     query.SetParameter(parameterName, value);
                 }
             }
+        }
+
+        private static CompositeQuery CreateHierarchicalCompositeQuery(
+            CompositeQuery parentResult,
+            CompositeDefinitionProcessorContext processorContext,
+            HqlBuilderContext builderContext,
+            IQuery query)
+        {
+            var selfReferencingAssociations =
+                processorContext.CurrentResourceClass.Entity.OutgoingAssociations
+                    .Where(a => a.IsSelfReferencing)
+                    .ToList();
+
+            // Can't recurse without self-recursive relationships
+            if (!selfReferencingAssociations.Any())
+            {
+                throw new Exception(
+                    string.Format(
+                        "Unable to recurse on resource '{0}' because it does not have any self-referencing relationships.",
+                        processorContext.CurrentResourceClass.Name));
+            }
+
+            // Multiple self-recursive relationships are not yet supported.  Need additional metadata to determine which self-recursive relationship to use.
+            if (selfReferencingAssociations.Count() > 1)
+            {
+                throw new NotSupportedException(
+                    string.Format(
+                        "The '{0}' resource has multiple self-recursive relationships.  Recursion is not supported for this scenario.",
+                        processorContext.CurrentResourceClass.Name));
+            }
+
+            var recursiveAssociation = selfReferencingAssociations.Single();
+
+            // Create the map for the parent/child instance join
+            var recursiveChildKeyMap = recursiveAssociation
+                .ThisProperties.Select(
+                    (p, i) =>
+                        new
+                        {
+                            ParentName = p.PropertyName,
+                            ChildName = recursiveAssociation.OtherProperties[i]
+                                .PropertyName
+                        })
+                .ToDictionary(
+                    x => x.ParentName,
+                    x => x.ChildName);
+
+            // Create a composite query with the required self-recursive details
+            var orderedFieldNames = builderContext.PropertyProjections.Select(
+                    x => x.DisplayName.ToCamelCase() ?? x.ResourceProperty.PropertyName.ToCamelCase())
+                .ToList();
+
+            // add support for discriminator values
+            if (processorContext.ShouldIncludeResourceSubtype())
+            {
+                orderedFieldNames.Add(processorContext.CurrentResourceClass.Name.ToCamelCase() + "Type");
+            }
+
+            CompositeQuery thisQuery = new CompositeQuery(
+                parentResult,
+                processorContext.MemberDisplayName.ToCamelCase(),
+                orderedFieldNames.ToArray(),
+                query
+                    .SetResultTransformer(Transformers.AliasToEntityMap)
+                    .Future<object>(),
+                isSingleItemResult: false,
+                recursiveChildKeyMap: recursiveChildKeyMap);
+
+            return thisQuery;
+        }
+
+        private static CompositeQuery CreateReferencedHierarchicalCompositeQuery(
+            CompositeQuery parentResult,
+            CompositeDefinitionProcessorContext processorContext,
+            HqlBuilderContext builderContext,
+            IQuery query,
+            string referenceName)
+        {
+            var referenceAssociation =
+                processorContext.CurrentResourceClass
+                    .ReferenceByName[referenceName]
+                    .Association;
+
+            var selfReferencingAssociations =
+                referenceAssociation.OtherEntity.OutgoingAssociations
+                    .Where(a => a.IsSelfReferencing)
+                    .ToList();
+
+            // Can't recurse without self-recursive relationships
+            if (!selfReferencingAssociations.Any())
+            {
+                throw new Exception(
+                    string.Format(
+                        "Unable to recurse on reference '{0}' of resource '{1}' because it does not have any self-referencing relationships.",
+                        referenceName,
+                        processorContext.CurrentResourceClass.Name));
+            }
+
+            // Multiple self-recursive relationships are not yet supported.  Need additional metadata to determine which self-recursive relationship to use.
+            if (selfReferencingAssociations.Count() > 1)
+            {
+                throw new NotSupportedException(
+                    string.Format(
+                        "The resource referenced by '{0}' on resource '{1}' has multiple self-recursive relationships.  Recursion is not supported for this scenario.",
+                        referenceName,
+                        processorContext.CurrentResourceClass.Name));
+            }
+
+            var recursiveAssociation = selfReferencingAssociations.Single();
+
+            // Create the map for the parent/child instance join
+            var recursiveChildKeyMap = recursiveAssociation
+                .PropertyMappingByThisName
+                .ToDictionary(
+                    x => x.Value.ThisProperty.PropertyName,
+                    x => x.Value.OtherProperty.PropertyName
+                );
+
+            // Augment the recursive child key map with the missing primary key fields of the main resource
+            processorContext.CurrentResourceClass.Entity.Identifier.Properties
+                .Where(p => !recursiveChildKeyMap.ContainsKey(p.PropertyName))
+                .Select(p => new KeyValuePair<string, string>(p.PropertyName, p.PropertyName))
+                .ForEach(kvp => recursiveChildKeyMap.Add(kvp.Key, kvp.Value));
+
+            // Create a composite query with the required self-recursive details
+            var orderedFieldNames = builderContext.PropertyProjections
+                .Select(x => x.DisplayName.ToCamelCase() ?? x.ResourceProperty.PropertyName.ToCamelCase()).ToList();
+
+            // add support for discriminator values
+            if (processorContext.ShouldIncludeResourceSubtype())
+            {
+                orderedFieldNames.Add(processorContext.CurrentResourceClass.Name.ToCamelCase() + "Type");
+            }
+
+            CompositeQuery thisQuery = new CompositeQuery(
+                parentResult,
+                processorContext.MemberDisplayName.ToCamelCase(),
+                orderedFieldNames.ToArray(),
+                query
+                    .SetResultTransformer(Transformers.AliasToEntityMap)
+                    .Future<object>(),
+                isSingleItemResult: false,
+                recursiveChildKeyMap: recursiveChildKeyMap);
+
+            return thisQuery;
         }
 
         private static string AndIfNeeded(StringBuilder where)

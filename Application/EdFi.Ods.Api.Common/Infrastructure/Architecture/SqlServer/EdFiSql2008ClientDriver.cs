@@ -9,7 +9,7 @@ using System.Data.Common;
 using System.Data.SqlClient;
 using NHibernate.Driver;
 
-namespace EdFi.Ods.Api.NHibernate.Architecture
+namespace EdFi.Ods.Api.Common.Infrastructure.Architecture.SqlServer
 {
     /// <summary>
     /// Overrides the NHibernate SQL client driver's OnBeforePrepare method to modify

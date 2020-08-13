@@ -6,7 +6,7 @@
 using System.Collections.Generic;
 using EdFi.Ods.Common;
 
-namespace EdFi.Ods.Pipelines
+namespace EdFi.Ods.Api.Common.Infrastructure.Pipelines
 {
     public interface IHasResources<TResourceModel>
         where TResourceModel : IHasETag

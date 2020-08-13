@@ -7,7 +7,7 @@ using System.Collections;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
-namespace EdFi.Ods.Api.Validation
+namespace EdFi.Ods.Api.Common.Attributes
 {
     public class RequiredCollectionAttribute : ValidationAttribute
     {

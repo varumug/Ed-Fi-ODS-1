@@ -8,14 +8,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
-using EdFi.Ods.Api.NHibernate.Architecture;
+using EdFi.Ods.Api.Common.Infrastructure.Architecture.SqlServer;
 using NHibernate;
 using NHibernate.Criterion;
 using NHibernate.Engine;
 using NHibernate.SqlCommand;
 using NHibernate.Type;
 
-namespace EdFi.Ods.Api.NHibernate.Filtering
+namespace EdFi.Ods.Api.Common.Infrastructure.Filtering
 {
     /// <summary>
     /// Provides details for how to apply a filter, including an NHibernate FilterDefinition and a predicate function for identifying which entity mappings are to be impacted.

@@ -6,14 +6,12 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using EdFi.Ods.Api.Common.Infrastructure.Pipelines.GetMany;
 using EdFi.Ods.Common;
 using EdFi.Ods.Common.Extensions;
 using EdFi.Ods.Common.Repositories;
-using EdFi.Ods.Pipelines;
-using EdFi.Ods.Pipelines.Common;
-using EdFi.Ods.Pipelines.GetMany;
 
-namespace EdFi.Ods.Api.Pipelines.Steps
+namespace EdFi.Ods.Api.Common.Infrastructure.Pipelines.Steps
 {
     public class GetEntityModelsBySpecification<TContext, TResult, TResourceModel, TEntityModel> 
         : IStep<TContext, TResult>

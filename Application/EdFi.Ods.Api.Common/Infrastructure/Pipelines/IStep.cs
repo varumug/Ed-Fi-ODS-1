@@ -6,7 +6,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace EdFi.Ods.Pipelines.Common
+namespace EdFi.Ods.Api.Common.Infrastructure.Pipelines
 {
     public interface IStep<in TContext, in TResult>
     {

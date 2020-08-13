@@ -7,6 +7,8 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using EdFi.Ods.Api.Common.Dtos;
+using EdFi.Ods.Api.Common.Infrastructure.Architecture;
 using EdFi.Ods.Common;
 using EdFi.Ods.Common.Exceptions;
 using EdFi.Ods.Common.Extensions;
@@ -15,7 +17,7 @@ using NHibernate;
 using NHibernate.Id;
 using NHibernate.Persister.Entity;
 
-namespace EdFi.Ods.Api.NHibernate.Architecture
+namespace EdFi.Ods.Api.Common.Infrastructure.Repositories
 {
     public class CreateEntity<TEntity> : ValidatingNHibernateRepositoryOperationBase, ICreateEntity<TEntity>
         where TEntity : AggregateRootWithCompositeKey
