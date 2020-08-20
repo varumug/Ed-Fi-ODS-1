@@ -88,7 +88,6 @@
     <ProjectReference Include="..\EdFi.Ods.ChangeQueries\EdFi.Ods.ChangeQueries.csproj" />
     <ProjectReference Include="..\EdFi.Ods.Composites.Test\EdFi.Ods.Composites.Test.csproj" />
     <ProjectReference Include="..\EdFi.Ods.Profiles.Test\EdFi.Ods.Profiles.Test.csproj" />
-    <ProjectReference Include="..\EdFi.Ods.Admin\EdFi.Ods.Admin.csproj" />
     <ProjectReference Include="..\EdFi.Ods.Api\EdFi.Ods.Api.csproj" />
     <ProjectReference Include="..\EdFi.Ods.Common\EdFi.Ods.Common.csproj" />
     <ProjectReference Include="..\EdFi.Ods.Security\EdFi.Ods.Security.csproj" />
