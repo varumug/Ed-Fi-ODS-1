@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net48</TargetFramework>
-    <AssemblyName>EdFi.Ods.Tests</AssemblyName>
     <RootNamespace>EdFi.Ods.Tests</RootNamespace>
+    <AssemblyName>EdFi.Ods.Tests</AssemblyName>
     <Copyright>Copyright © 2019 Ed-Fi Alliance, LLC and Contributors</Copyright>
     <TreatErrorsAsWarning>true</TreatErrorsAsWarning>
     <RestorePackages>true</RestorePackages>
