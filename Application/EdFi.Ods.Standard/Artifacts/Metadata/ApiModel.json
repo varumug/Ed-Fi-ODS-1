@@ -10419,6 +10419,40 @@
           }
         },
         {
+          "propertyName": "CourseCode",
+          "propertyType": {
+            "dbType": "String",
+            "maxLength": 60,
+            "precision": 0,
+            "scale": 0,
+            "isNullable": false
+          },
+          "description": "A unique alphanumeric code assigned to a course.",
+          "isIdentifying": true,
+          "isServerAssigned": false,
+          "columnNames": {
+            "sqlServer": "CourseCode",
+            "postgreSql": "CourseCode"
+          }
+        },
+        {
+          "propertyName": "CourseEducationOrganizationId",
+          "propertyType": {
+            "dbType": "Int32",
+            "maxLength": 0,
+            "precision": 10,
+            "scale": 0,
+            "isNullable": false
+          },
+          "description": "The identifier assigned to an education organization.",
+          "isIdentifying": true,
+          "isServerAssigned": false,
+          "columnNames": {
+            "sqlServer": "CourseEducationOrganizationId",
+            "postgreSql": "CourseEducationOrganizationId"
+          }
+        },
+        {
           "propertyName": "CourseTitle",
           "propertyType": {
             "dbType": "String",
@@ -53776,99 +53810,6 @@
       "constraintNames": {
         "sqlServer": "FK_CourseRepeatCodeDescriptor_Descriptor",
         "postgreSql": "FK_bc4d3c_Descriptor"
-      }
-    },
-    {
-      "fullName": {
-        "schema": "edfi",
-        "name": "FK_CourseTranscript_Course"
-      },
-      "cardinality": "OneToZeroOrMore",
-      "primaryEntityFullName": {
-        "schema": "edfi",
-        "name": "Course"
-      },
-      "primaryEntityProperties": [
-        {
-          "propertyName": "CourseCode",
-          "propertyType": {
-            "dbType": "String",
-            "maxLength": 60,
-            "precision": 0,
-            "scale": 0,
-            "isNullable": false
-          },
-          "description": "A unique alphanumeric code assigned to a course.",
-          "isIdentifying": true,
-          "isServerAssigned": false,
-          "columnNames": {
-            "sqlServer": "CourseCode",
-            "postgreSql": "CourseCode"
-          }
-        },
-        {
-          "propertyName": "EducationOrganizationId",
-          "propertyType": {
-            "dbType": "Int32",
-            "maxLength": 0,
-            "precision": 10,
-            "scale": 0,
-            "isNullable": false
-          },
-          "description": "The identifier assigned to an education organization.",
-          "isIdentifying": true,
-          "isServerAssigned": false,
-          "columnNames": {
-            "sqlServer": "EducationOrganizationId",
-            "postgreSql": "EducationOrganizationId"
-          }
-        }
-      ],
-      "secondaryEntityFullName": {
-        "schema": "edfi",
-        "name": "CourseTranscript"
-      },
-      "secondaryEntityProperties": [
-        {
-          "propertyName": "CourseCode",
-          "propertyType": {
-            "dbType": "String",
-            "maxLength": 60,
-            "precision": 0,
-            "scale": 0,
-            "isNullable": false
-          },
-          "description": "A unique alphanumeric code assigned to a course.",
-          "isIdentifying": true,
-          "isServerAssigned": false,
-          "columnNames": {
-            "sqlServer": "CourseCode",
-            "postgreSql": "CourseCode"
-          }
-        },
-        {
-          "propertyName": "CourseEducationOrganizationId",
-          "propertyType": {
-            "dbType": "Int32",
-            "maxLength": 0,
-            "precision": 10,
-            "scale": 0,
-            "isNullable": false
-          },
-          "description": "The identifier assigned to an education organization.",
-          "isIdentifying": true,
-          "isServerAssigned": false,
-          "columnNames": {
-            "sqlServer": "CourseEducationOrganizationId",
-            "postgreSql": "CourseEducationOrganizationId"
-          }
-        }
-      ],
-      "isIdentifying": true,
-      "isRequired": true,
-      "constraintNames": {
-        "sqlServer": "FK_CourseTranscript_Course",
-        "postgreSql": "FK_6acf2b_Course"
       }
     },
     {

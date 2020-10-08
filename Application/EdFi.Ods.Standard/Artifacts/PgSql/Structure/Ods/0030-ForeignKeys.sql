@@ -985,13 +985,6 @@ REFERENCES edfi.Descriptor (DescriptorId)
 ON DELETE CASCADE
 ;
 
-ALTER TABLE edfi.CourseTranscript ADD CONSTRAINT FK_6acf2b_Course FOREIGN KEY (CourseCode, CourseEducationOrganizationId)
-REFERENCES edfi.Course (CourseCode, EducationOrganizationId)
-;
-
-CREATE INDEX FK_6acf2b_Course
-ON edfi.CourseTranscript (CourseCode ASC, CourseEducationOrganizationId ASC);
-
 ALTER TABLE edfi.CourseTranscript ADD CONSTRAINT FK_6acf2b_CourseAttemptResultDescriptor FOREIGN KEY (CourseAttemptResultDescriptorId)
 REFERENCES edfi.CourseAttemptResultDescriptor (CourseAttemptResultDescriptorId)
 ;

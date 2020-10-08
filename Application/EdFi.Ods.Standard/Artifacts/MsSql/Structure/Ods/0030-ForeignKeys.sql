@@ -1088,14 +1088,6 @@ REFERENCES [edfi].[Descriptor] ([DescriptorId])
 ON DELETE CASCADE
 GO
 
-ALTER TABLE [edfi].[CourseTranscript] WITH CHECK ADD CONSTRAINT [FK_CourseTranscript_Course] FOREIGN KEY ([CourseCode], [CourseEducationOrganizationId])
-REFERENCES [edfi].[Course] ([CourseCode], [EducationOrganizationId])
-GO
-
-CREATE NONCLUSTERED INDEX [FK_CourseTranscript_Course]
-ON [edfi].[CourseTranscript] ([CourseCode] ASC, [CourseEducationOrganizationId] ASC)
-GO
-
 ALTER TABLE [edfi].[CourseTranscript] WITH CHECK ADD CONSTRAINT [FK_CourseTranscript_CourseAttemptResultDescriptor] FOREIGN KEY ([CourseAttemptResultDescriptorId])
 REFERENCES [edfi].[CourseAttemptResultDescriptor] ([CourseAttemptResultDescriptorId])
 GO
