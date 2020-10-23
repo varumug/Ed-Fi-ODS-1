@@ -22,7 +22,7 @@ namespace EdFi.Ods.Repositories.NHibernate.Tests.Modules
         {
             builder.RegisterType<SandboxDatabaseNameReplacementTokenProvider>()
                 .As<IDatabaseNameReplacementTokenProvider>()
-                .SingleInstance();
+                .InstancePerLifetimeScope();
         }
     }
 }

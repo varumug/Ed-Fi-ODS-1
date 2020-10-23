@@ -25,7 +25,7 @@ namespace EdFi.Ods.Security.Container.Modules
         {
             builder.RegisterType<AuthorizationContextProvider>()
                 .As<IAuthorizationContextProvider>()
-                .SingleInstance();
+                .InstancePerLifetimeScope();
 
             builder.RegisterType<AuthorizationFilterContextProvider>()
                 .As<IAuthorizationFilterContextProvider>()
@@ -41,7 +41,7 @@ namespace EdFi.Ods.Security.Container.Modules
 
             builder.RegisterType<ResourceAuthorizationMetadataProvider>()
                 .As<IResourceAuthorizationMetadataProvider>()
-                .InstancePerLifetimeScope();
+                .SingleInstance();
 
             builder.RegisterType<AuthorizationSegmentsToFiltersConverter>()
                 .As<IAuthorizationSegmentsToFiltersConverter>()
@@ -82,7 +82,7 @@ namespace EdFi.Ods.Security.Container.Modules
 
             builder.RegisterType<ClaimsIdentityProvider>()
                 .As<IClaimsIdentityProvider>()
-                .SingleInstance();
+                .InstancePerLifetimeScope();
 
             builder.RegisterType<ResourceClaimUriProvider>()
                 .As<IResourceClaimUriProvider>()
@@ -112,19 +112,19 @@ namespace EdFi.Ods.Security.Container.Modules
 
             builder.RegisterGeneric(typeof(SetAuthorizationContextForGet<,,,>))
                 .AsSelf()
-                .SingleInstance();
+                .InstancePerLifetimeScope();
 
             builder.RegisterGeneric(typeof(SetAuthorizationContextForPut<,,,>))
                 .AsSelf()
-                .SingleInstance();
+                .InstancePerLifetimeScope();
 
             builder.RegisterGeneric(typeof(SetAuthorizationContextForDelete<,,,>))
                 .AsSelf()
-                .SingleInstance();
+                .InstancePerLifetimeScope();
 
             builder.RegisterGeneric(typeof(SetAuthorizationContextForPost<,,,>))
                 .AsSelf()
-                .SingleInstance();
+                .InstancePerLifetimeScope();
         }
     }
 }
