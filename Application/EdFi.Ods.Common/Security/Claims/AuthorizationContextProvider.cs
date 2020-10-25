@@ -18,15 +18,19 @@ namespace EdFi.Ods.Common.Security.Claims
         void SetAction(string actionUri);
 
         void VerifyAuthorizationContextExists();
+
+        void SetApiKeyContext(ApiKeyContext apiKeyContext);
     }
 
     public class AuthorizationContextProvider : IAuthorizationContextProvider
     {
         private readonly IContextStorage _contextStorage;
+        private readonly IApiKeyContextProvider _apiKeyContextProvider;
 
-        public AuthorizationContextProvider(IContextStorage contextStorage)
+        public AuthorizationContextProvider(IContextStorage contextStorage, IApiKeyContextProvider apiKeyContextProvider)
         {
             _contextStorage = contextStorage;
+            _apiKeyContextProvider = apiKeyContextProvider;
         }
 
         public string[] GetResourceUris()
@@ -49,12 +53,17 @@ namespace EdFi.Ods.Common.Security.Claims
             }
 
             string[] resourceUris = GetResourceUris();
-            
+
             if (resourceUris == null || resourceUris.Length == 0)
             {
                 throw new AuthorizationContextException(
                     "Authorization cannot be performed because no resource has been stored in the current context.");
             }
+        }
+
+        public void SetApiKeyContext(ApiKeyContext apiKeyContext)
+        {
+            _apiKeyContextProvider.SetApiKeyContext(apiKeyContext);
         }
 
         public void SetResourceUris(string[] resourceUris)
