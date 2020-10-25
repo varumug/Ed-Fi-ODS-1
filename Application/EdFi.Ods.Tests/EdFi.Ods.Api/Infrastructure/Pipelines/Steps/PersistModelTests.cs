@@ -10,6 +10,7 @@ using EdFi.Ods.Api.Infrastructure.Pipelines.Put;
 using EdFi.Ods.Api.Infrastructure.Pipelines.Steps;
 using EdFi.Ods.Common;
 using EdFi.Ods.Common.Extensions;
+using EdFi.Ods.Common.Security;
 using EdFi.Ods.Tests.EdFi.Ods.Common._Stubs.Repositories;
 using EdFi.Ods.Tests._Builders;
 using NUnit.Framework;
@@ -56,7 +57,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Pipelines.Steps
                 var resource = new AccountResource();
                 var persistentModel = new AccountEntity();
 
-                var context = new PutContext<AccountResource, AccountEntity>(resource, new ValidationState())
+                var context = new PutContext<AccountResource, AccountEntity>(resource, new ValidationState(), A.Dummy<ApiKeyContext>())
                 {
                     PersistentModel = persistentModel
                 };
@@ -103,7 +104,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Pipelines.Steps
                 var resource = new AccountResource();
                 var persistentModel = new AccountEntity();
 
-                var context = new PutContext<AccountResource, AccountEntity>(resource, new ValidationState())
+                var context = new PutContext<AccountResource, AccountEntity>(resource, new ValidationState(), A.Dummy<ApiKeyContext>())
                 {
                     PersistentModel = persistentModel
                 };
@@ -150,7 +151,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Pipelines.Steps
                 var resource = new AccountResource();
                 var persistentModel = new AccountEntity();
 
-                var context = new PutContext<AccountResource, AccountEntity>(resource, new ValidationState())
+                var context = new PutContext<AccountResource, AccountEntity>(resource, new ValidationState(), A.Dummy<ApiKeyContext>())
                 {
                     PersistentModel = persistentModel
                 };
@@ -197,7 +198,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Pipelines.Steps
                 var resource = new AccountResource();
                 var persistentModel = new AccountEntity();
 
-                var context = new PutContext<AccountResource, AccountEntity>(resource, new ValidationState())
+                var context = new PutContext<AccountResource, AccountEntity>(resource, new ValidationState(), A.Dummy<ApiKeyContext>())
                 {
                     PersistentModel = persistentModel
                 };
@@ -232,7 +233,7 @@ namespace EdFi.Ods.Tests.EdFi.Ods.Pipelines.Steps
                 var resource = new AccountResource();
                 var persistentModel = new AccountEntity();
 
-                var context = new PutContext<AccountResource, AccountEntity>(resource, new ValidationState())
+                var context = new PutContext<AccountResource, AccountEntity>(resource, new ValidationState(), A.Dummy<ApiKeyContext>())
                 {
                     PersistentModel = persistentModel
                 };
