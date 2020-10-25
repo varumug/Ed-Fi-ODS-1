@@ -6,8 +6,9 @@
 using System.Threading;
 using System.Threading.Tasks;
 using EdFi.Common.Extensions;
-using EdFi.Ods.Common.Extensions;
 using EdFi.Ods.Common.Infrastructure.Pipelines;
+using EdFi.Ods.Security.Authorization;
+using EdFi.Ods.Security.Authorization.Pipeline;
 
 namespace EdFi.Ods.Api.Infrastructure.Pipelines
 {
@@ -19,13 +20,13 @@ namespace EdFi.Ods.Api.Infrastructure.Pipelines
     }
 
     public abstract class PipelineBase<TContext, TResult> : IPipeline
+        where TContext : IAuthorizationPipelineContext
         where TResult : PipelineResultBase, new()
     {
-        private readonly IStep<TContext, TResult>[] steps;
-
+        private readonly IStep<TContext, TResult>[] _steps;
         protected PipelineBase(IStep<TContext, TResult>[] steps)
         {
-            this.steps = steps;
+            _steps = steps;
         }
 
         public object Process(object context) => ProcessAsync((TContext) context, CancellationToken.None).GetResultSafely();
@@ -39,7 +40,7 @@ namespace EdFi.Ods.Api.Infrastructure.Pipelines
         {
             var result = new TResult();
 
-            foreach (var step in steps)
+            foreach (var step in _steps)
             {
                 await step.ExecuteAsync(context, result, cancellationToken);
 
