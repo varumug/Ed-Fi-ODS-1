@@ -112,19 +112,19 @@ namespace EdFi.Ods.Security.Container.Modules
 
             builder.RegisterGeneric(typeof(SetAuthorizationContextForGet<,,,>))
                 .AsSelf()
-                .InstancePerLifetimeScope();
+                .SingleInstance();
 
             builder.RegisterGeneric(typeof(SetAuthorizationContextForPut<,,,>))
                 .AsSelf()
-                .InstancePerLifetimeScope();
+                .SingleInstance();
 
             builder.RegisterGeneric(typeof(SetAuthorizationContextForDelete<,,,>))
                 .AsSelf()
-                .InstancePerLifetimeScope();
+                .SingleInstance();
 
             builder.RegisterGeneric(typeof(SetAuthorizationContextForPost<,,,>))
                 .AsSelf()
-                .InstancePerLifetimeScope();
+                .SingleInstance();
         }
     }
 }

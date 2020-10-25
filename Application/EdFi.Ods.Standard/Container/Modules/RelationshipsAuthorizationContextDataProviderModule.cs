@@ -50,7 +50,9 @@ namespace EdFi.Ods.Standard.Container.Modules
                     providerType
                         .MakeGenericType(GetRelationshipBasedAuthorizationStrategyContextDataType());
 
-                builder.RegisterType(closedServiceType).As(closedInterfaceType);
+                builder.RegisterType(closedServiceType)
+                    .As(closedInterfaceType)
+                    .InstancePerLifetimeScope();
             }
 
             Type GetRelationshipBasedAuthorizationStrategyContextDataType() => typeof(RelationshipsAuthorizationContextData);

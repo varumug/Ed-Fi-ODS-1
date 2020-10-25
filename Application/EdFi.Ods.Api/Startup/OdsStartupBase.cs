@@ -160,7 +160,7 @@ namespace EdFi.Ods.Api.Startup
             // For pipelines we need a service locator. Note this is an anti-pattern
             builder.Register(c => new AutofacServiceLocator(new Lazy<ILifetimeScope>(() => Container)))
                 .As<IServiceLocator>()
-                .SingleInstance();
+                .InstancePerDependency();
 
             RegisterModulesDynamically();
 

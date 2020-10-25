@@ -55,7 +55,7 @@ namespace EdFi.Ods.Api.Container.Modules
         {
             builder.RegisterType<SchoolYearContextFilter>()
                 .As<IFilterMetadata>()
-                .SingleInstance();
+                .InstancePerLifetimeScope();
 
             builder.RegisterType<EnterpriseApiVersionProvider>()
                 .As<IApiVersionProvider>()
@@ -73,16 +73,16 @@ namespace EdFi.Ods.Api.Container.Modules
             builder.RegisterType<ApiKeyContextProvider>()
                 .As<IApiKeyContextProvider>()
                 .As<IHttpContextStorageTransferKeys>()
-                .SingleInstance();
+                .InstancePerLifetimeScope();
 
             builder.RegisterType<SchoolYearContextProvider>()
                 .As<ISchoolYearContextProvider>()
                 .As<IHttpContextStorageTransferKeys>()
-                .SingleInstance();
+                .InstancePerLifetimeScope();
 
             builder.RegisterType<CallContextStorage>()
                 .As<IContextStorage>()
-                .SingleInstance();
+                .InstancePerLifetimeScope();
 
             builder.RegisterType<DescriptorLookupProvider>()
                 .As<IDescriptorLookupProvider>()
@@ -110,7 +110,7 @@ namespace EdFi.Ods.Api.Container.Modules
             // Validator for the domain model provider
             builder.RegisterType<FluentValidationObjectValidator>()
                 .As<IExplicitObjectValidator>()
-                .InstancePerLifetimeScope();
+                .SingleInstance();
 
             // Domain Models definitions provider
             builder.RegisterType<DomainModelDefinitionsJsonEmbeddedResourceProvider>()
@@ -135,7 +135,7 @@ namespace EdFi.Ods.Api.Container.Modules
 
             builder.RegisterType<DefaultPageSizeLimitProvider>()
                 .As<IDefaultPageSizeLimitProvider>()
-                .InstancePerLifetimeScope();
+                .SingleInstance();
 
             builder.RegisterType<SystemDateProvider>()
                 .As<ISystemDateProvider>()
@@ -156,32 +156,32 @@ namespace EdFi.Ods.Api.Container.Modules
 
             builder.RegisterType<ETagProvider>()
                 .As<IETagProvider>()
-                .InstancePerLifetimeScope();
+                .SingleInstance();
 
             builder.RegisterType<RESTErrorProvider>()
                 .As<IRESTErrorProvider>()
-                .InstancePerLifetimeScope();
+                .SingleInstance();
 
             // All exception translators
             builder.RegisterAssemblyTypes(ThisAssembly)
                 .Where(t => typeof(IExceptionTranslator).IsAssignableFrom(t))
                 .As<IExceptionTranslator>()
                 .AsSelf()
-                .InstancePerLifetimeScope();
+                .SingleInstance();
 
             builder.RegisterType<ClientCredentialsTokenRequestProvider>()
                 .As<ITokenRequestProvider>()
-                .InstancePerLifetimeScope();
+                .SingleInstance();
 
             builder.RegisterType<OAuthTokenValidator>()
                 .As<IOAuthTokenValidator>()
-                .InstancePerLifetimeScope();
+                .SingleInstance();
 
             builder.RegisterDecorator<CachingOAuthTokenValidatorDecorator, IOAuthTokenValidator>();
 
             builder.RegisterType<AuthenticationProvider>()
                 .As<IAuthenticationProvider>()
-                .SingleInstance();
+                .InstancePerLifetimeScope();
 
             builder.RegisterType<PersonIdentifiersProvider>()
                 .As<IPersonIdentifiersProvider>()
@@ -189,48 +189,48 @@ namespace EdFi.Ods.Api.Container.Modules
 
             builder.RegisterType<PipelineFactory>()
                 .As<IPipelineFactory>()
-                .SingleInstance();
+                .InstancePerLifetimeScope();
 
             builder.RegisterType<ApiClientAuthenticator>()
                 .As<IApiClientAuthenticator>()
-                .InstancePerLifetimeScope();
+                .SingleInstance();
 
             builder.RegisterType<EdFiAdminApiClientIdentityProvider>()
                 .As<IApiClientIdentityProvider>()
                 .As<IApiClientSecretProvider>()
-                .InstancePerLifetimeScope();
+                .SingleInstance();
 
             builder.RegisterType<PackedHashConverter>()
                 .As<IPackedHashConverter>()
-                .InstancePerLifetimeScope();
+                .SingleInstance();
 
             builder.RegisterType<SecurePackedHashProvider>()
                 .As<ISecurePackedHashProvider>()
-                .InstancePerLifetimeScope();
+                .SingleInstance();
 
             builder.RegisterType<DefaultHashConfigurationProvider>()
                 .As<IHashConfigurationProvider>()
-                .InstancePerLifetimeScope();
+                .SingleInstance();
 
             builder.RegisterType<Pbkdf2HmacSha1SecureHasher>()
                 .As<ISecureHasher>()
-                .InstancePerLifetimeScope();
+                .SingleInstance();
 
             builder.RegisterType<DataAnnotationsEntityValidator>()
                 .As<IEntityValidator>()
-                .InstancePerLifetimeScope();
+                .SingleInstance();
 
             builder.RegisterType<DescriptorNamespaceValidator>()
                 .As<IValidator<IEdFiDescriptor>>()
-                .InstancePerLifetimeScope();
+                .SingleInstance();
 
             builder.RegisterType<FluentValidationPutPostRequestResourceValidator>()
                 .As<IResourceValidator>()
-                .InstancePerLifetimeScope();
+                .SingleInstance();
 
             builder.RegisterType<DataAnnotationsResourceValidator>()
                 .As<IResourceValidator>()
-                .InstancePerLifetimeScope();
+                .SingleInstance();
 
             builder.RegisterType<NoEntityExtensionsFactory>()
                 .As<IEntityExtensionsFactory>()
@@ -246,93 +246,93 @@ namespace EdFi.Ods.Api.Container.Modules
             {
                 builder.RegisterGeneric(typeof(GetResult<>))
                     .AsSelf()
-                    .InstancePerLifetimeScope();
+                    .SingleInstance();
 
                 builder.RegisterGeneric(typeof(GetManyResult<>))
                     .AsSelf()
-                    .InstancePerLifetimeScope();
+                    .SingleInstance();
 
                 builder.RegisterType<GetDeletedResourceResult>()
                     .AsSelf()
-                    .InstancePerLifetimeScope();
+                    .SingleInstance();
 
                 builder.RegisterType<PutResult>()
                     .AsSelf()
-                    .InstancePerLifetimeScope();
+                    .SingleInstance();
 
                 builder.RegisterType<DeleteResult>()
                     .AsSelf()
-                    .InstancePerLifetimeScope();
+                    .SingleInstance();
             }
 
             void RegisterContexts()
             {
                 builder.RegisterGeneric(typeof(GetContext<>))
                     .AsSelf()
-                    .InstancePerLifetimeScope();
+                    .SingleInstance();
 
                 builder.RegisterGeneric(typeof(GetManyContext<,>))
                     .AsSelf()
-                    .InstancePerLifetimeScope();
+                    .SingleInstance();
 
                 builder.RegisterGeneric(typeof(GetDeletedResourceContext<>))
                     .AsSelf()
-                    .InstancePerLifetimeScope();
+                    .SingleInstance();
 
                 builder.RegisterGeneric(typeof(PutContext<,>))
                     .AsSelf()
-                    .InstancePerLifetimeScope();
+                    .SingleInstance();
 
                 builder.RegisterType<DeleteContext>()
                     .AsSelf()
-                    .InstancePerLifetimeScope();
+                    .SingleInstance();
             }
 
             void RegisterModels()
             {
                 builder.RegisterGeneric(typeof(GetEntityModelById<,,,>))
                     .AsSelf()
-                    .InstancePerLifetimeScope();
+                    .SingleInstance();
 
                 builder.RegisterGeneric(typeof(DetectUnmodifiedEntityModel<,,,>))
                     .AsSelf()
-                    .InstancePerLifetimeScope();
+                    .SingleInstance();
 
                 builder.RegisterGeneric(typeof(MapEntityModelToResourceModel<,,,>))
                     .AsSelf()
-                    .InstancePerLifetimeScope();
+                    .SingleInstance();
 
                 builder.RegisterGeneric(typeof(MapResourceModelToEntityModel<,,,>))
                     .AsSelf()
-                    .InstancePerLifetimeScope();
+                    .SingleInstance();
 
                 builder.RegisterGeneric(typeof(GetEntityModelsBySpecification<,,,>))
                     .AsSelf()
-                    .InstancePerLifetimeScope();
+                    .SingleInstance();
 
                 builder.RegisterGeneric(typeof(GetDeletedResourceModelByIds<,,>))
                     .AsSelf()
-                    .InstancePerLifetimeScope();
+                    .SingleInstance();
 
                 builder.RegisterGeneric(typeof(ValidateResourceModel<,,,>))
                     .AsSelf()
-                    .InstancePerLifetimeScope();
+                    .SingleInstance();
 
                 builder.RegisterGeneric(typeof(DeleteEntityModel<,,,>))
                     .AsSelf()
-                    .InstancePerLifetimeScope();
+                    .SingleInstance();
 
                 builder.RegisterGeneric(typeof(MapResourceModelToEntityModel<,,,>))
                     .AsSelf()
-                    .InstancePerLifetimeScope();
+                    .SingleInstance();
 
                 builder.RegisterGeneric(typeof(MapEntityModelsToResourceModels<,,,>))
                     .AsSelf()
-                    .InstancePerLifetimeScope();
+                    .SingleInstance();
 
                 builder.RegisterGeneric(typeof(PersistEntityModel<,,,>))
                     .AsSelf()
-                    .InstancePerLifetimeScope();
+                    .SingleInstance();
             }
 
             void RegisterPipeLineStepProviders()
@@ -340,27 +340,27 @@ namespace EdFi.Ods.Api.Container.Modules
                 builder.RegisterType<GetPipelineStepsProvider>()
                     .As<IGetPipelineStepsProvider>()
                     .As<IPipelineStepsProvider>()
-                    .SingleInstance();
+                    .InstancePerLifetimeScope();
 
                 builder.RegisterType<GetBySpecificationPipelineStepsProvider>()
                     .As<IGetBySpecificationPipelineStepsProvider>()
                     .As<IPipelineStepsProvider>()
-                    .SingleInstance();
+                    .InstancePerLifetimeScope();
 
                 builder.RegisterType<GetDeletedResourceIdsPipelineStepsProvider>()
                     .As<IGetDeletedResourceIdsPipelineStepsProvider>()
                     .As<IPipelineStepsProvider>()
-                    .SingleInstance();
+                    .InstancePerLifetimeScope();
 
                 builder.RegisterType<PutPipelineStepsProvider>()
                     .As<IPutPipelineStepsProvider>()
                     .As<IPipelineStepsProvider>()
-                    .SingleInstance();
+                    .InstancePerLifetimeScope();
 
                 builder.RegisterType<DeletePipelineStepsProvider>()
                     .As<IDeletePipelineStepsProvider>()
                     .As<IPipelineStepsProvider>()
-                    .SingleInstance();
+                    .InstancePerLifetimeScope();
             }
         }
     }
