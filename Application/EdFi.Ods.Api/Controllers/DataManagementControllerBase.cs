@@ -24,6 +24,7 @@ using EdFi.Ods.Common.Exceptions;
 using EdFi.Ods.Common.Infrastructure.Pipelines.Delete;
 using EdFi.Ods.Common.Infrastructure.Pipelines.GetMany;
 using EdFi.Ods.Common.Models.Queries;
+using EdFi.Ods.Common.Security;
 using log4net;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -68,17 +69,20 @@ namespace EdFi.Ods.Api.Controllers
         protected Lazy<PutPipeline<TResourceWriteModel, TAggregateRoot>> PutPipeline;
 
         //protected IRepository<TAggregateRoot> repository;
-        protected ISchoolYearContextProvider SchoolYearContextProvider;
+        protected readonly ISchoolYearContextProvider SchoolYearContextProvider;
+        protected readonly IApiKeyContextProvider ApiKeyContextProvider;
 
         protected DataManagementControllerBase(
             IPipelineFactory pipelineFactory,
             ISchoolYearContextProvider schoolYearContextProvider,
             IRESTErrorProvider restErrorProvider,
-            IDefaultPageSizeLimitProvider defaultPageSizeLimitProvider)
+            IDefaultPageSizeLimitProvider defaultPageSizeLimitProvider,
+            IApiKeyContextProvider apiKeyContextProvider)
         {
             //this.repository = repository;
             SchoolYearContextProvider = schoolYearContextProvider;
             _restErrorProvider = restErrorProvider;
+            ApiKeyContextProvider = apiKeyContextProvider;
             _defaultPageLimitSize = defaultPageSizeLimitProvider.GetDefaultPageSizeLimit();
 
             GetByIdPipeline = new Lazy<GetPipeline<TResourceReadModel, TAggregateRoot>>
@@ -165,7 +169,7 @@ namespace EdFi.Ods.Api.Controllers
             // Execute the pipeline (synchronously)
             var result = await GetManyPipeline.Value
                 .ProcessAsync(
-                    new GetManyContext<TResourceReadModel, TAggregateRoot>(internalRequestAsResource, queryParameters),
+                    new GetManyContext<TResourceReadModel, TAggregateRoot>(internalRequestAsResource, queryParameters, ApiKeyContextProvider.GetApiKeyContext()),
                     new CancellationToken());
 
             // Handle exception result
@@ -196,7 +200,7 @@ namespace EdFi.Ods.Api.Controllers
 
             // Execute the pipeline (synchronously)
             var result = await GetByIdPipeline.Value.ProcessAsync(
-                new GetContext<TAggregateRoot>(id, etagValue), CancellationToken.None);
+                new GetContext<TAggregateRoot>(id, etagValue, ApiKeyContextProvider.GetApiKeyContext()), CancellationToken.None);
 
             // Handle exception result
             if (result.Exception != null)
@@ -235,7 +239,7 @@ namespace EdFi.Ods.Api.Controllers
 
             // Execute the pipeline (synchronously)
             var result = await PutPipeline.Value.ProcessAsync(
-                new PutContext<TResourceWriteModel, TAggregateRoot>(request, validationState), CancellationToken.None);
+                new PutContext<TResourceWriteModel, TAggregateRoot>(request, validationState, ApiKeyContextProvider.GetApiKeyContext()), CancellationToken.None);
 
             // Check for exceptions
             if (result.Exception != null)
@@ -271,7 +275,7 @@ namespace EdFi.Ods.Api.Controllers
             else
             {
                 result = await PutPipeline.Value.ProcessAsync(
-                    new PutContext<TResourceWriteModel, TAggregateRoot>(request, validationState), CancellationToken.None);
+                    new PutContext<TResourceWriteModel, TAggregateRoot>(request, validationState, ApiKeyContextProvider.GetApiKeyContext()), CancellationToken.None);
             }
 
             // Throw an exceptions that occurred for global exception handling
@@ -300,8 +304,8 @@ namespace EdFi.Ods.Api.Controllers
             etag = Unquoted(etag);
 
             var deleteContext = enforceOptimisticLock
-                ? new DeleteContext(id, etag)
-                : new DeleteContext(id);
+                ? new DeleteContext(id, ApiKeyContextProvider.GetApiKeyContext(), etag)
+                : new DeleteContext(id, ApiKeyContextProvider.GetApiKeyContext());
 
             // Manual binding of Id to main request model
             var result = await DeletePipeline.Value.ProcessAsync(deleteContext, CancellationToken.None);

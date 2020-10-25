@@ -5,20 +5,25 @@
 
 using System;
 using EdFi.Ods.Common;
-using EdFi.Ods.Common.Infrastructure.Pipelines;
+using EdFi.Ods.Common.Security;
+using EdFi.Ods.Security.Authorization;
+using EdFi.Ods.Security.Authorization.Pipeline;
 
 namespace EdFi.Ods.Api.Infrastructure.Pipelines.Get
 {
-    public class GetContext<TEntityModel> : IHasPersistentModel<TEntityModel>, IHasETag, IHasIdentifier
+    public class GetContext<TEntityModel> : IAuthorizationPipelineContext, IHasPersistentModel<TEntityModel>, IHasETag, IHasIdentifier
         where TEntityModel : class
     {
-        public GetContext(Guid id, string etag)
+        public GetContext(Guid id, string etag, ApiKeyContext apiKeyContext)
         {
             Id = id;
             ETag = etag;
+            ApiKeyContext = apiKeyContext;
         }
 
         public string ETag { get; set; }
+
+        public ApiKeyContext ApiKeyContext { get; set; }
 
         public Guid Id { get; set; }
 

@@ -5,14 +5,18 @@
 
 using System;
 using EdFi.Ods.Api.Infrastructure.Pipelines;
+using EdFi.Ods.Common.Security;
+using EdFi.Ods.Security.Authorization;
+using EdFi.Ods.Security.Authorization.Pipeline;
 
 namespace EdFi.Ods.Common.Infrastructure.Pipelines.GetDeletedResource
 {
-    public class GetDeletedResourceContext<TEntityModel> : IHasIdentifier, IHasPersistentModel<TEntityModel>
+    public class GetDeletedResourceContext<TEntityModel> : IAuthorizationPipelineContext, IHasIdentifier, IHasPersistentModel<TEntityModel>
         where TEntityModel : class
     {
-        public GetDeletedResourceContext(IQueryParameters queryParameters)
+        public GetDeletedResourceContext(IQueryParameters queryParameters, ApiKeyContext apiKeyContext)
         {
+            ApiKeyContext = apiKeyContext;
             QueryParameters = queryParameters;
         }
 
@@ -21,5 +25,7 @@ namespace EdFi.Ods.Common.Infrastructure.Pipelines.GetDeletedResource
         public TEntityModel PersistentModel { get; set; }
 
         public IQueryParameters QueryParameters { get; }
+
+        public ApiKeyContext ApiKeyContext { get; set; }
     }
 }

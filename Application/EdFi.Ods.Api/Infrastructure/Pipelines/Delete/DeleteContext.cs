@@ -4,19 +4,19 @@
 // See the LICENSE and NOTICES files in the project root for more information.
 
 using System;
+using EdFi.Ods.Api.Infrastructure.Pipelines;
+using EdFi.Ods.Common.Security;
+using EdFi.Ods.Security.Authorization;
+using EdFi.Ods.Security.Authorization.Pipeline;
 
 namespace EdFi.Ods.Common.Infrastructure.Pipelines.Delete
 {
-    public class DeleteContext : IHasIdentifier
+    public class DeleteContext : IAuthorizationPipelineContext, IHasIdentifier
     {
-        public DeleteContext(Guid identifier)
+        public DeleteContext(Guid identifier, ApiKeyContext apiKeyContext, string etagValue = null)
         {
             Id = identifier;
-        }
-
-        public DeleteContext(Guid identifier, string etagValue)
-        {
-            Id = identifier;
+            ApiKeyContext = apiKeyContext;
 
             if (!string.IsNullOrWhiteSpace(etagValue))
             {
@@ -27,5 +27,7 @@ namespace EdFi.Ods.Common.Infrastructure.Pipelines.Delete
         public string ETag { get; set; }
 
         public Guid Id { get; set; }
+
+        public ApiKeyContext ApiKeyContext { get; set; }
     }
 }

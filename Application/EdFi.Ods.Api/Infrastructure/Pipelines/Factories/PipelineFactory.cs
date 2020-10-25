@@ -16,6 +16,7 @@ using EdFi.Ods.Common.Infrastructure.Pipelines;
 using EdFi.Ods.Common.Infrastructure.Pipelines.Delete;
 using EdFi.Ods.Common.Infrastructure.Pipelines.GetDeletedResource;
 using EdFi.Ods.Common.Infrastructure.Pipelines.GetMany;
+using EdFi.Ods.Common.Security;
 
 namespace EdFi.Ods.Api.Infrastructure.Pipelines.Factories
 {
@@ -23,6 +24,7 @@ namespace EdFi.Ods.Api.Infrastructure.Pipelines.Factories
     {
         private readonly IServiceLocator _locator;
         private readonly IDeletePipelineStepsProvider deletePipelineStepsProvider;
+        private readonly IApiKeyContextProvider _apiKeyContextProvider;
         private readonly IGetBySpecificationPipelineStepsProvider getBySpecificationPipelineStepsProvider;
         private readonly IGetPipelineStepsProvider getPipelineStepsProvider;
         private readonly IGetDeletedResourceIdsPipelineStepsProvider getDeletedResourceIdsPipelineStepsProvider;
@@ -34,7 +36,8 @@ namespace EdFi.Ods.Api.Infrastructure.Pipelines.Factories
             IGetBySpecificationPipelineStepsProvider getBySpecificationPipelineStepsProvider,
             IGetDeletedResourceIdsPipelineStepsProvider getDeletedResourceIdsPipelineStepsProvider,
             IPutPipelineStepsProvider putPipelineStepsProvider,
-            IDeletePipelineStepsProvider deletePipelineStepsProvider)
+            IDeletePipelineStepsProvider deletePipelineStepsProvider,
+            IApiKeyContextProvider apiKeyContextProvider)
         {
             _locator = locator;
             this.getPipelineStepsProvider = getPipelineStepsProvider;
@@ -42,6 +45,7 @@ namespace EdFi.Ods.Api.Infrastructure.Pipelines.Factories
             this.getDeletedResourceIdsPipelineStepsProvider = getDeletedResourceIdsPipelineStepsProvider;
             this.putPipelineStepsProvider = putPipelineStepsProvider;
             this.deletePipelineStepsProvider = deletePipelineStepsProvider;
+            _apiKeyContextProvider = apiKeyContextProvider;
         }
 
         public GetPipeline<TResourceModel, TEntityModel> CreateGetPipeline<TResourceModel, TEntityModel>()

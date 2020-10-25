@@ -5,23 +5,23 @@
 
 using System;
 using EdFi.Ods.Common;
-using EdFi.Ods.Common.Infrastructure.Pipelines;
+using EdFi.Ods.Common.Security;
+using EdFi.Ods.Security.Authorization;
+using EdFi.Ods.Security.Authorization.Pipeline;
 
 namespace EdFi.Ods.Api.Infrastructure.Pipelines.Put
 {
-    public class PutContext<TResourceModel, TEntityModel> : IHasPersistentModel<TEntityModel>, IHasResource<TResourceModel>, IHasIdentifier
+    public class PutContext<TResourceModel, TEntityModel> : IAuthorizationPipelineContext, IHasPersistentModel<TEntityModel>, IHasResource<TResourceModel>, IHasIdentifier
         where TResourceModel : IHasETag
         where TEntityModel : class, IHasIdentifier
     {
         private readonly ValidationState validationState;
 
-        public PutContext(TResourceModel resource, ValidationState validationState)
-            : this(resource, validationState, null) { }
-
-        public PutContext(TResourceModel resource, ValidationState validationState, string etagValue)
+        public PutContext(TResourceModel resource, ValidationState validationState, ApiKeyContext apiKeyContext, string etagValue = null)
         {
             this.validationState = validationState;
             Resource = resource;
+            ApiKeyContext = apiKeyContext;
             ETagValue = etagValue;
         }
 
@@ -47,5 +47,7 @@ namespace EdFi.Ods.Api.Infrastructure.Pipelines.Put
         public TEntityModel PersistentModel { get; set; }
 
         public TResourceModel Resource { get; set; }
+
+        public ApiKeyContext ApiKeyContext { get; set; }
     }
 }

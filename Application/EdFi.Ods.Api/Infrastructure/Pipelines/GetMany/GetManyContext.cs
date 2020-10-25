@@ -5,18 +5,22 @@
 
 using System.Collections.Generic;
 using EdFi.Ods.Api.Infrastructure.Pipelines;
+using EdFi.Ods.Common.Security;
+using EdFi.Ods.Security.Authorization;
+using EdFi.Ods.Security.Authorization.Pipeline;
 
 namespace EdFi.Ods.Common.Infrastructure.Pipelines.GetMany
 {
     public class GetManyContext<TResourceModel, TEntityModel>
-        : IHasPersistentModel<TEntityModel>, IHasPersistentModels<TEntityModel>, IHasResource<TResourceModel> // IHasETag, IHasIdentifier 
+        : IAuthorizationPipelineContext, IHasPersistentModel<TEntityModel>, IHasPersistentModels<TEntityModel>, IHasResource<TResourceModel> // IHasETag, IHasIdentifier
         where TResourceModel : IHasETag
         where TEntityModel : class
     {
-        public GetManyContext(TResourceModel resourceSpecification, IQueryParameters queryParameters)
+        public GetManyContext(TResourceModel resourceSpecification, IQueryParameters queryParameters, ApiKeyContext apiKeyContext)
         {
             Resource = resourceSpecification;
             QueryParameters = queryParameters;
+            ApiKeyContext = apiKeyContext;
         }
 
         /// <summary>
@@ -38,5 +42,7 @@ namespace EdFi.Ods.Common.Infrastructure.Pipelines.GetMany
         ///     Gets or sets the resource model to be used as a specification for the query.
         /// </summary>
         public TResourceModel Resource { get; set; }
+
+        public ApiKeyContext ApiKeyContext { get; set; }
     }
 }
