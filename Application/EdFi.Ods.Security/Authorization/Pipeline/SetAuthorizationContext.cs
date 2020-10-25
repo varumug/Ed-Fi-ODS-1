@@ -9,6 +9,7 @@ using EdFi.Common;
 using EdFi.Ods.Common;
 using EdFi.Ods.Common.Extensions;
 using EdFi.Ods.Common.Infrastructure.Pipelines;
+using EdFi.Ods.Common.Security;
 using EdFi.Ods.Common.Security.Claims;
 using EdFi.Security.DataAccess.Models;
 using EdFi.Security.DataAccess.Repositories;
@@ -24,7 +25,7 @@ namespace EdFi.Ods.Security.Authorization.Pipeline
     /// <typeparam name="TEntityModel"></typeparam>
     public abstract class SetAuthorizationContextBase<TContext, TResult, TResourceModel, TEntityModel>
         : IStep<TContext, TResult>
-        where TContext : class
+        where TContext : class, IAuthorizationPipelineContext
         where TResult : class
     {
         protected readonly IAuthorizationContextProvider AuthorizationContextProvider;
@@ -36,7 +37,9 @@ namespace EdFi.Ods.Security.Authorization.Pipeline
             ISecurityRepository securityRepository,
             IResourceClaimUriProvider resourceClaimUriProvider)
         {
-            AuthorizationContextProvider = Preconditions.ThrowIfNull(authorizationContextProvider, nameof(authorizationContextProvider));
+            AuthorizationContextProvider = Preconditions.ThrowIfNull(
+                authorizationContextProvider, nameof(authorizationContextProvider));
+
             SecurityRepository = Preconditions.ThrowIfNull(securityRepository, nameof(securityRepository));
             ResourceClaimUriProvider = Preconditions.ThrowIfNull(resourceClaimUriProvider, nameof(resourceClaimUriProvider));
         }
@@ -53,6 +56,8 @@ namespace EdFi.Ods.Security.Authorization.Pipeline
 
             AuthorizationContextProvider.SetAction(Action);
 
+            AuthorizationContextProvider.SetApiKeyContext(context.ApiKeyContext);
+
             return Task.CompletedTask;
         }
     }
@@ -66,7 +71,7 @@ namespace EdFi.Ods.Security.Authorization.Pipeline
     /// <typeparam name="TEntityModel"></typeparam>
     public class SetAuthorizationContextForGet<TContext, TResult, TResourceModel, TEntityModel>
         : SetAuthorizationContextBase<TContext, TResult, TResourceModel, TEntityModel>
-        where TContext : class
+        where TContext : class, IAuthorizationPipelineContext
         where TResult : class
     {
         public SetAuthorizationContextForGet(
@@ -86,7 +91,7 @@ namespace EdFi.Ods.Security.Authorization.Pipeline
     /// </summary>
     public class SetAuthorizationContextForPut<TContext, TResult, TResourceModel, TEntityModel>
         : SetAuthorizationContextBase<TContext, TResult, TResourceModel, TEntityModel>
-        where TContext : class
+        where TContext : class, IAuthorizationPipelineContext
         where TResult : class
     {
         public SetAuthorizationContextForPut(
@@ -106,7 +111,7 @@ namespace EdFi.Ods.Security.Authorization.Pipeline
     /// </summary>
     public class SetAuthorizationContextForPost<TContext, TResult, TResourceModel, TEntityModel>
         : SetAuthorizationContextBase<TContext, TResult, TResourceModel, TEntityModel>
-        where TContext : class
+        where TContext : class, IAuthorizationPipelineContext
         where TResult : class
     {
         public SetAuthorizationContextForPost(
@@ -126,7 +131,7 @@ namespace EdFi.Ods.Security.Authorization.Pipeline
     /// </summary>
     public class SetAuthorizationContextForDelete<TContext, TResult, TResourceModel, TEntityModel>
         : SetAuthorizationContextBase<TContext, TResult, TResourceModel, TEntityModel>
-        where TContext : class
+        where TContext : class, IAuthorizationPipelineContext
         where TResult : class
     {
         public SetAuthorizationContextForDelete(
@@ -143,7 +148,7 @@ namespace EdFi.Ods.Security.Authorization.Pipeline
 
     public class SetAuthorizationContextForGetDeletedResourceIds<TContext, TResult, TResourceModel, TEntityModel>
         : SetAuthorizationContextBase<TContext, TResult, TResourceModel, TEntityModel>
-        where TContext : class
+        where TContext : class, IAuthorizationPipelineContext
         where TResult : class
     {
         public SetAuthorizationContextForGetDeletedResourceIds(
