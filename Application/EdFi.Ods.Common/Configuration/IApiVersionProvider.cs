@@ -13,6 +13,6 @@ namespace EdFi.Ods.Common.Configuration
 
         string Build { get; }
 
-        string Suite { get; }       
+        string Suite { get; }
     }
 }
