@@ -82,7 +82,7 @@ namespace EdFi.LoadTools.SmokeTest.SdkTests
                     Log.Debug(@params);
 
                     // we want to continue testing thus we are swallowing the exception.
-                    Log.Error($"Exception: {e}");
+                    Log.Error("Exception: ", e);
 
                     Log.Debug("----- END EXCEPTION INFORMATION -----");
 
