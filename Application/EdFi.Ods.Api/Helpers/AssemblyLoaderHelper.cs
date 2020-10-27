@@ -155,6 +155,8 @@ namespace EdFi.Ods.Api.Helpers
                 // return no plugins to load if the folder does not exist
                 pluginFolder = Path.GetFullPath(pluginFolder);
 
+                Console.WriteLine($"Path: {pluginFolder}");
+
                 if (!Directory.Exists(pluginFolder))
                 {
                     _logger.Debug($"Plugin folder '{pluginFolder}' does not exist. No plugins will be loaded.");

@@ -285,6 +285,7 @@ namespace EdFi.Ods.Api.Startup
         private void LoadPlugins()
         {
             _logger.Debug($"Loading plugins from folder {Plugin.Folder}.");
+            Plugin.Folder = @"D:\src-oss\Ed-Fi-ODS-Implementation\Plugin";
             AssemblyLoaderHelper.LoadPluginAssemblies(Plugin.Folder);
 
             // LoadPluginAssemblies method creates a pluginFinderAssemblyContext and loads assembles in it to
