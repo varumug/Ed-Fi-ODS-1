@@ -247,8 +247,8 @@ namespace EdFi.Ods.Api.Controllers
             Response.GetTypedHeaders().ETag = GetEtag(result.ETag);
 
             return result.ResourceWasCreated
-                ? (IActionResult)Created(new Uri(GetResourceUrl(result.ResourceId.GetValueOrDefault())), null)
-                : Ok();
+                ? (IActionResult)Created(new Uri(GetResourceUrl(result.ResourceId.GetValueOrDefault())), result.ResourceId)
+                : Ok(result.ResourceId);
         }
 
         [CheckModelForNull]
@@ -285,8 +285,8 @@ namespace EdFi.Ods.Api.Controllers
             Response.GetTypedHeaders().Location = new Uri(GetResourceUrl(result.ResourceId.GetValueOrDefault()));
 
             return result.ResourceWasCreated
-                ? (IActionResult)Created(new Uri(GetResourceUrl(result.ResourceId.GetValueOrDefault())), null)
-                : Ok();
+                ? (IActionResult)Created(new Uri(GetResourceUrl(result.ResourceId.GetValueOrDefault())), result.ResourceId)
+                : Ok(result.ResourceId);
         }
 
         [CheckModelForNull]
