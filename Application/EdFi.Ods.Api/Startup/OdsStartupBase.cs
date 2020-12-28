@@ -215,8 +215,7 @@ namespace EdFi.Ods.Api.Startup
 
             if (!string.IsNullOrEmpty(apiSettings.PathBase))
             {
-                var pathBase = apiSettings.PathBase.Replace("/", "");
-                pathBase = "/" + pathBase;
+                var pathBase = NormalizePathBase(apiSettings.PathBase);
                 app.UsePathBase(pathBase);
             }
 
@@ -306,6 +305,12 @@ namespace EdFi.Ods.Api.Startup
 
                 // Set NHibernate to use Autofac to resolve its dependencies
                 NHibernate.Cfg.Environment.ObjectsFactory = new NHibernateAutofacObjectsFactory(Container);
+            }
+
+            string NormalizePathBase(string pathBase)
+            {
+                pathBase = pathBase.TrimStart(new[] { '/' }).TrimEnd(new[] { '/' });
+                return "/" + pathBase;
             }
         }
 
