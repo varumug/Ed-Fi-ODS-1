@@ -16,6 +16,7 @@ using Shouldly;
 namespace EdFi.Ods.CodeGen.Tests.UnitTests.Providers
 {
     [TestFixture]
+    [Explicit("")]
     public class DomainModelDefinitionProvidersProviderTests
     {
         public class When_loading_domain_model_definitions : TestFixtureBase

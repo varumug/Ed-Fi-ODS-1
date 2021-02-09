@@ -15,6 +15,7 @@ using Shouldly;
 namespace EdFi.Ods.CodeGen.Tests.IntegrationTests.Providers
 {
     [TestFixture]
+    [Explicit("")]
     [LocalTestOnly]
     public class AssemblyDataProviderTests
     {
